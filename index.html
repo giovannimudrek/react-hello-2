@@ -1,26 +1,1885 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello World</title>
+    <title>Task View — Kanban Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body {
-        margin: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background-color: #f0f4f8;
-        font-family: Arial, sans-serif;
+      /* ── Design Tokens ─────────────────────────────────────────────── */
+      :root {
+        --color-brand-primary: #7f56d9;
+        --color-brand-light: #f4ebff;
+        --color-brand-gradient-start: #f4ebff;
+        --color-brand-gradient-end: #7f56d9;
+
+        --color-neutral-900: #0a0d12;
+        --color-neutral-800: #1a1f2e;
+        --color-neutral-700: #2d3748;
+        --color-neutral-400: #9ca3af;
+        --color-neutral-200: #e9eaeb;
+        --color-neutral-100: #f3f4f6;
+        --color-neutral-50: #f9fafb;
+
+        --color-success: #12b76a;
+        --color-error: #f04438;
+        --color-warning: #f79009;
+
+        --color-surface: #f0f4f8;
+        --color-white: #ffffff;
+
+        --border-radius-sm: 8px;
+        --border-radius-md: 12px;
+        --border-radius-lg: 16px;
+        --border-radius-full: 9999px;
+
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+
+        --font-family: "Inter", sans-serif;
+        --font-size-xs: 11px;
+        --font-size-sm: 13px;
+        --font-size-base: 14px;
+        --font-size-md: 16px;
+        --font-size-lg: 18px;
+
+        --sidebar-width: 220px;
+        --header-height: 60px;
+        --column-width: 320px;
+        --column-gap: 16px;
       }
-      h1 {
-        font-size: 3rem;
-        color: #2d3748;
+
+      /* ── Reset ─────────────────────────────────────────────────────── */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-family);
+        font-size: var(--font-size-base);
+        color: var(--color-neutral-900);
+        background-color: var(--color-surface);
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      button {
+        cursor: pointer;
+        border: none;
+        background: none;
+        font-family: inherit;
+      }
+
+      input,
+      textarea {
+        font-family: inherit;
+      }
+
+      /* ── Layout ────────────────────────────────────────────────────── */
+      .app {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      /* ── Header ────────────────────────────────────────────────────── */
+      .header {
+        height: var(--header-height);
+        background: var(--color-white);
+        border-bottom: 1px solid var(--color-neutral-200);
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        gap: 16px;
+        flex-shrink: 0;
+        z-index: 10;
+      }
+
+      .header__brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+        text-decoration: none;
+      }
+
+      .header__logo {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--border-radius-sm);
+        background: linear-gradient(
+          135deg,
+          var(--color-brand-gradient-start),
+          var(--color-brand-gradient-end)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .header__logo svg {
+        width: 18px;
+        height: 18px;
+        fill: var(--color-white);
+      }
+
+      .header__title {
+        font-size: var(--font-size-md);
+        font-weight: 600;
+        color: var(--color-neutral-900);
+      }
+
+      .header__search {
+        flex: 1;
+        max-width: 480px;
+        position: relative;
+      }
+
+      .header__search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--color-neutral-400);
+        pointer-events: none;
+        display: flex;
+      }
+
+      .header__search-input {
+        width: 100%;
+        height: 36px;
+        padding: 0 12px 0 36px;
+        border: 1px solid var(--color-neutral-200);
+        border-radius: var(--border-radius-full);
+        background: var(--color-neutral-50);
+        font-size: var(--font-size-sm);
+        color: var(--color-neutral-900);
+        outline: none;
+        transition: border-color 0.15s, box-shadow 0.15s;
+      }
+
+      .header__search-input:focus {
+        border-color: var(--color-brand-primary);
+        box-shadow: 0 0 0 3px rgba(127, 86, 217, 0.12);
+        background: var(--color-white);
+      }
+
+      .header__search-input::placeholder {
+        color: var(--color-neutral-400);
+      }
+
+      .header__actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        flex-shrink: 0;
+      }
+
+      .btn-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--border-radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-neutral-700);
+        transition: background 0.15s;
+      }
+
+      .btn-icon:hover {
+        background: var(--color-neutral-100);
+      }
+
+      .btn-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .notification-btn {
+        position: relative;
+      }
+
+      .notification-badge {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 8px;
+        height: 8px;
+        background: var(--color-error);
+        border-radius: 50%;
+        border: 2px solid var(--color-white);
+      }
+
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--color-brand-primary),
+          #9b8afb
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-white);
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        flex-shrink: 0;
+        cursor: pointer;
+      }
+
+      .avatar--sm {
+        width: 32px;
+        height: 32px;
+        font-size: var(--font-size-xs);
+      }
+
+      /* ── Body (sidebar + main) ─────────────────────────────────────── */
+      .body {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      /* ── Sidebar ───────────────────────────────────────────────────── */
+      .sidebar {
+        width: var(--sidebar-width);
+        background: var(--color-white);
+        border-right: 1px solid var(--color-neutral-200);
+        display: flex;
+        flex-direction: column;
+        padding: 16px 12px;
+        flex-shrink: 0;
+        overflow-y: auto;
+      }
+
+      .sidebar__nav {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: var(--border-radius-sm);
+        color: var(--color-neutral-700);
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+      }
+
+      .nav-item:hover {
+        background: var(--color-neutral-100);
+        color: var(--color-neutral-900);
+      }
+
+      .nav-item.active {
+        background: var(--color-brand-light);
+        color: var(--color-brand-primary);
+      }
+
+      .nav-item svg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+      }
+
+      /* ── Main ──────────────────────────────────────────────────────── */
+      .main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      /* ── Board header ──────────────────────────────────────────────── */
+      .board-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 24px;
+        background: var(--color-white);
+        border-bottom: 1px solid var(--color-neutral-200);
+        flex-shrink: 0;
+      }
+
+      .board-header__members {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .avatar-group {
+        display: flex;
+        align-items: center;
+      }
+
+      .avatar-group .avatar--sm {
+        margin-left: -8px;
+        border: 2px solid var(--color-white);
+      }
+
+      .avatar-group .avatar--sm:first-child {
+        margin-left: 0;
+      }
+
+      .avatar-overflow {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--color-neutral-200);
+        color: var(--color-neutral-700);
+        font-size: var(--font-size-xs);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: -8px;
+        border: 2px solid var(--color-white);
+      }
+
+      .btn-add-member {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--border-radius-full);
+        border: 2px dashed var(--color-brand-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-brand-primary);
+        transition: background 0.15s;
+      }
+
+      .btn-add-member:hover {
+        background: var(--color-brand-light);
+      }
+
+      .btn-add-member svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .board-header__filters {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: var(--color-neutral-100);
+        border-radius: var(--border-radius-full);
+        padding: 4px;
+      }
+
+      .filter-tab {
+        padding: 6px 16px;
+        border-radius: var(--border-radius-full);
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        color: var(--color-neutral-700);
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .filter-tab.active {
+        background: var(--color-white);
+        color: var(--color-brand-primary);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .filter-tab:hover:not(.active) {
+        color: var(--color-neutral-900);
+      }
+
+      /* ── Board ─────────────────────────────────────────────────────── */
+      .board {
+        flex: 1;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 24px;
+        display: flex;
+        gap: var(--column-gap);
+        align-items: flex-start;
+      }
+
+      /* ── Column ────────────────────────────────────────────────────── */
+      .column {
+        width: var(--column-width);
+        min-width: var(--column-width);
+        display: flex;
+        flex-direction: column;
+        max-height: 100%;
+        background: var(--color-white);
+        border: 1px solid var(--color-neutral-200);
+        border-radius: var(--border-radius-lg);
+        overflow: hidden;
+        transition: box-shadow 0.15s;
+      }
+
+      .column.drag-over {
+        box-shadow: 0 0 0 2px var(--color-brand-primary);
+      }
+
+      .column.drag-over-invalid {
+        box-shadow: 0 0 0 2px var(--color-error);
+      }
+
+      .column__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--color-neutral-200);
+        flex-shrink: 0;
+      }
+
+      .column__header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .column__badge {
+        padding: 4px 12px;
+        border-radius: var(--border-radius-full);
+        font-size: var(--font-size-xs);
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      .column__count {
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        color: var(--color-neutral-400);
+      }
+
+      .column__add-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--border-radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-brand-primary);
+        border: 1px solid var(--color-brand-primary);
+        transition: background 0.15s;
+      }
+
+      .column__add-btn:hover {
+        background: var(--color-brand-light);
+      }
+
+      .column__add-btn svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .column__cards {
+        flex: 1;
+        overflow-y: auto;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-height: 80px;
+      }
+
+      .column__footer {
+        padding: 10px 16px;
+        border-top: 1px solid var(--color-neutral-200);
+        flex-shrink: 0;
+      }
+
+      .column__add-card-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border-radius: var(--border-radius-sm);
+        color: var(--color-neutral-400);
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .column__add-card-btn:hover {
+        background: var(--color-neutral-100);
+        color: var(--color-neutral-700);
+      }
+
+      .column__add-card-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* ── Card ──────────────────────────────────────────────────────── */
+      .card {
+        background: var(--color-white);
+        border: 1px solid var(--color-neutral-200);
+        border-radius: var(--border-radius-lg);
+        padding: 16px;
+        cursor: grab;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        transition: box-shadow 0.15s, opacity 0.15s, transform 0.15s;
+        user-select: none;
+      }
+
+      .card:hover {
+        box-shadow: var(--shadow-md);
+      }
+
+      .card:active {
+        cursor: grabbing;
+      }
+
+      .card.dragging {
+        opacity: 0.45;
+        transform: rotate(2deg);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .card__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .card__labels {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .label {
+        padding: 3px 10px;
+        border-radius: var(--border-radius-full);
+        font-size: var(--font-size-xs);
+        font-weight: 600;
+      }
+
+      .label--filled {
+        background: var(--color-brand-primary);
+        color: var(--color-white);
+      }
+
+      .label--outline {
+        border: 1.5px solid var(--color-brand-primary);
+        color: var(--color-brand-primary);
+      }
+
+      .label--success {
+        background: #ecfdf3;
+        color: var(--color-success);
+      }
+
+      .label--warning {
+        background: #fffaeb;
+        color: var(--color-warning);
+      }
+
+      .label--error {
+        background: #fef3f2;
+        color: var(--color-error);
+      }
+
+      .card__menu-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: var(--border-radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-neutral-400);
+        flex-shrink: 0;
+        transition: background 0.15s, color 0.15s;
+        position: relative;
+      }
+
+      .card__menu-btn:hover {
+        background: var(--color-neutral-100);
+        color: var(--color-neutral-700);
+      }
+
+      .card__menu-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .card__title {
+        font-size: var(--font-size-base);
+        font-weight: 600;
+        color: var(--color-neutral-900);
+        line-height: 1.4;
+      }
+
+      .card__description {
+        font-size: var(--font-size-sm);
+        color: var(--color-neutral-400);
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .card__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .card__meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .card__meta-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: var(--font-size-xs);
+        color: var(--color-neutral-400);
+      }
+
+      .card__meta-item svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .card__assignees {
+        display: flex;
+        align-items: center;
+      }
+
+      .card__assignees .avatar--sm {
+        margin-left: -6px;
+        border: 2px solid var(--color-white);
+        width: 26px;
+        height: 26px;
+        font-size: 10px;
+      }
+
+      .card__assignees .avatar--sm:first-child {
+        margin-left: 0;
+      }
+
+      /* ── Context Menu ──────────────────────────────────────────────── */
+      .context-menu {
+        position: fixed;
+        background: var(--color-white);
+        border: 1px solid var(--color-neutral-200);
+        border-radius: var(--border-radius-md);
+        box-shadow: var(--shadow-lg);
+        padding: 6px;
+        z-index: 100;
+        min-width: 160px;
+        display: none;
+      }
+
+      .context-menu.visible {
+        display: block;
+      }
+
+      .context-menu__item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: var(--border-radius-sm);
+        font-size: var(--font-size-sm);
+        color: var(--color-neutral-700);
+        cursor: pointer;
+        transition: background 0.15s;
+        width: 100%;
+        text-align: left;
+      }
+
+      .context-menu__item:hover {
+        background: var(--color-neutral-100);
+      }
+
+      .context-menu__item--danger {
+        color: var(--color-error);
+      }
+
+      .context-menu__item--danger:hover {
+        background: #fef3f2;
+      }
+
+      .context-menu__item svg {
+        width: 15px;
+        height: 15px;
+      }
+
+      .context-menu__divider {
+        height: 1px;
+        background: var(--color-neutral-200);
+        margin: 4px 0;
+      }
+
+      /* ── Toast ─────────────────────────────────────────────────────── */
+      .toast-container {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 200;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+        pointer-events: none;
+      }
+
+      .toast {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--color-neutral-900);
+        color: var(--color-white);
+        padding: 12px 16px;
+        border-radius: var(--border-radius-md);
+        box-shadow: var(--shadow-lg);
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        pointer-events: all;
+        animation: slideUp 0.2s ease-out;
+        max-width: 400px;
+      }
+
+      .toast--error {
+        background: var(--color-error);
+      }
+
+      .toast__undo {
+        padding: 4px 10px;
+        border-radius: var(--border-radius-sm);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: var(--color-white);
+        font-size: var(--font-size-xs);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+        flex-shrink: 0;
+      }
+
+      .toast__undo:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ── Modal ─────────────────────────────────────────────────────── */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 150;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.15s;
+      }
+
+      .modal-overlay.visible {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .modal {
+        background: var(--color-white);
+        border-radius: var(--border-radius-lg);
+        padding: 24px;
+        width: 100%;
+        max-width: 480px;
+        box-shadow: var(--shadow-lg);
+        transform: translateY(8px);
+        transition: transform 0.15s;
+      }
+
+      .modal-overlay.visible .modal {
+        transform: translateY(0);
+      }
+
+      .modal__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+
+      .modal__title {
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+      }
+
+      .modal__close {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--border-radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-neutral-400);
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .modal__close:hover {
+        background: var(--color-neutral-100);
+        color: var(--color-neutral-700);
+      }
+
+      .modal__close svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+
+      .form-label {
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        color: var(--color-neutral-700);
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--color-neutral-200);
+        border-radius: var(--border-radius-sm);
+        font-size: var(--font-size-base);
+        color: var(--color-neutral-900);
+        outline: none;
+        transition: border-color 0.15s, box-shadow 0.15s;
+      }
+
+      .form-input:focus {
+        border-color: var(--color-brand-primary);
+        box-shadow: 0 0 0 3px rgba(127, 86, 217, 0.12);
+      }
+
+      textarea.form-input {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .modal__actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+      }
+
+      .btn {
+        padding: 10px 18px;
+        border-radius: var(--border-radius-sm);
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        transition: background 0.15s, box-shadow 0.15s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .btn--primary {
+        background: var(--color-brand-primary);
+        color: var(--color-white);
+      }
+
+      .btn--primary:hover {
+        background: #6941c6;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .btn--secondary {
+        background: var(--color-neutral-100);
+        color: var(--color-neutral-700);
+      }
+
+      .btn--secondary:hover {
+        background: var(--color-neutral-200);
+      }
+
+      .btn--danger {
+        background: var(--color-error);
+        color: var(--color-white);
+      }
+
+      .btn--danger:hover {
+        background: #c0392b;
+      }
+
+      /* ── Add column button ─────────────────────────────────────────── */
+      .add-column-btn {
+        width: var(--column-width);
+        min-width: var(--column-width);
+        height: 56px;
+        border: 2px dashed var(--color-neutral-200);
+        border-radius: var(--border-radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: var(--color-neutral-400);
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        transition: border-color 0.15s, color 0.15s, background 0.15s;
+        flex-shrink: 0;
+      }
+
+      .add-column-btn:hover {
+        border-color: var(--color-brand-primary);
+        color: var(--color-brand-primary);
+        background: var(--color-brand-light);
+      }
+
+      .add-column-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      /* ── Drop indicator ────────────────────────────────────────────── */
+      .drop-indicator {
+        height: 4px;
+        background: var(--color-brand-primary);
+        border-radius: var(--border-radius-full);
+        margin: 2px 0;
+        opacity: 0;
+        transition: opacity 0.15s;
+      }
+
+      .drop-indicator.visible {
+        opacity: 1;
+      }
+
+      /* ── Empty state ───────────────────────────────────────────────── */
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 16px;
+        color: var(--color-neutral-400);
+        text-align: center;
+        gap: 8px;
+      }
+
+      .empty-state svg {
+        width: 36px;
+        height: 36px;
+        opacity: 0.4;
+      }
+
+      .empty-state p {
+        font-size: var(--font-size-sm);
+      }
+
+      /* ── Scrollbar ─────────────────────────────────────────────────── */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--color-neutral-200);
+        border-radius: var(--border-radius-full);
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-neutral-400);
       }
     </style>
   </head>
   <body>
-    <h1>Hello World</h1>
+    <div class="app" id="app">
+      <!-- Header -->
+      <header class="header">
+        <a class="header__brand" href="#">
+          <div class="header__logo">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="2" width="6" height="6" rx="1.5" fill="white" />
+              <rect x="10" y="2" width="6" height="6" rx="1.5" fill="white" opacity="0.7" />
+              <rect x="2" y="10" width="6" height="6" rx="1.5" fill="white" opacity="0.7" />
+              <rect x="10" y="10" width="6" height="6" rx="1.5" fill="white" opacity="0.4" />
+            </svg>
+          </div>
+          <span class="header__title">Task View</span>
+        </a>
+
+        <div class="header__search">
+          <span class="header__search-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input
+            type="text"
+            class="header__search-input"
+            placeholder="Buscar cards..."
+            id="searchInput"
+          />
+        </div>
+
+        <div class="header__actions">
+          <button class="btn-icon notification-btn" id="notificationBtn" aria-label="Notificações">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span class="notification-badge" id="notifBadge"></span>
+          </button>
+          <div class="avatar" id="userAvatar" title="Meu perfil">MU</div>
+        </div>
+      </header>
+
+      <!-- Body -->
+      <div class="body">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <nav class="sidebar__nav">
+            <button class="nav-item active" data-filter="all">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              Home
+            </button>
+            <button class="nav-item" data-filter="notification">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              Notificação
+            </button>
+            <button class="nav-item" data-filter="all">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+              Tarefas
+            </button>
+            <button class="nav-item" data-filter="analytics">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+              Analytics
+            </button>
+            <button class="nav-item" data-filter="pending">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              Pendentes
+            </button>
+            <button class="nav-item" data-filter="done">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Concluídas
+            </button>
+          </nav>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+          <!-- Board header -->
+          <div class="board-header">
+            <div class="board-header__members">
+              <div class="avatar-group" id="memberAvatars"></div>
+              <button class="btn-add-member" id="addMemberBtn" aria-label="Adicionar membro">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
+            </div>
+
+            <div class="board-header__filters">
+              <button class="filter-tab active" data-tab="all">Todos</button>
+              <button class="filter-tab" data-tab="pending">Pendentes</button>
+              <button class="filter-tab" data-tab="done">Concluídas</button>
+            </div>
+          </div>
+
+          <!-- Board -->
+          <div class="board" id="board"></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div class="context-menu" id="contextMenu">
+      <button class="context-menu__item" id="ctxEdit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        Editar card
+      </button>
+      <div class="context-menu__divider"></div>
+      <button class="context-menu__item context-menu__item--danger" id="ctxDelete">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6l-1 14H6L5 6"></path>
+          <path d="M10 11v6"></path>
+          <path d="M14 11v6"></path>
+          <path d="M9 6V4h6v2"></path>
+        </svg>
+        Excluir card
+      </button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <div class="modal__header">
+          <h2 class="modal__title" id="modalTitle">Novo Card</h2>
+          <button class="modal__close" id="modalClose" aria-label="Fechar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cardTitle">Título *</label>
+          <input type="text" class="form-input" id="cardTitle" placeholder="Título do card" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cardDesc">Descrição</label>
+          <textarea class="form-input" id="cardDesc" placeholder="Descreva o que precisa ser feito..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cardDue">Data de vencimento</label>
+          <input type="date" class="form-input" id="cardDue" />
+        </div>
+        <div class="modal__actions">
+          <button class="btn btn--secondary" id="modalCancel">Cancelar</button>
+          <button class="btn btn--primary" id="modalSave">Salvar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+      // ── State ──────────────────────────────────────────────────────────────
+
+      /** @type {{ id: string; title: string; description: string; due: string; labels: {text:string;style:string}[]; assignees: string[] }[]} */
+      let cards = [];
+
+      /** @type {{ id: string; title: string; color: string; textColor: string; badgeBg: string; filter: string; limit: number|null }[]} */
+      let columns = [];
+
+      let nextCardId = 1;
+      let nextColId = 4;
+
+      // Drag state
+      let dragCardId = null;
+      let dragSourceColId = null;
+      let dragTargetColId = null;
+
+      // Modal state
+      let modalMode = "create"; // "create" | "edit"
+      let modalTargetColId = null;
+      let modalTargetCardId = null;
+
+      // Context menu state
+      let ctxCardId = null;
+
+      // Filter state
+      let activeFilter = "all";
+      let activeTabFilter = "all";
+      let searchQuery = "";
+
+      // Members
+      const members = [
+        { initials: "MU", color: "#7f56d9" },
+        { initials: "AS", color: "#2e90fa" },
+        { initials: "JB", color: "#12b76a" },
+      ];
+
+      // ── Initialise data ───────────────────────────────────────────────────
+
+      function initData() {
+        columns = [
+          {
+            id: "col-1",
+            title: "A Fazer",
+            color: "#7f56d9",
+            textColor: "#ffffff",
+            badgeBg: "#f4ebff",
+            badgeText: "#7f56d9",
+            filter: "pending",
+            limit: null,
+          },
+          {
+            id: "col-2",
+            title: "Em Andamento",
+            color: "#2e90fa",
+            textColor: "#ffffff",
+            badgeBg: "#eff8ff",
+            badgeText: "#1570ef",
+            filter: "pending",
+            limit: 5,
+          },
+          {
+            id: "col-3",
+            title: "Concluído",
+            color: "#12b76a",
+            textColor: "#ffffff",
+            badgeBg: "#ecfdf3",
+            badgeText: "#027a48",
+            filter: "done",
+            limit: null,
+          },
+        ];
+
+        cards = [
+          {
+            id: "c1",
+            colId: "col-1",
+            title: "Criar protótipo inicial do design",
+            description: "Desenvolver wireframes de baixa fidelidade para aprovação do cliente.",
+            due: "2026-03-28",
+            labels: [{ text: "Urgente", style: "filled" }, { text: "Design", style: "outline" }],
+            assignees: ["MU", "AS"],
+          },
+          {
+            id: "c2",
+            colId: "col-1",
+            title: "Configurar ambiente de desenvolvimento",
+            description: "Instalar dependências e configurar variáveis de ambiente.",
+            due: "2026-03-25",
+            labels: [{ text: "Setup", style: "success" }],
+            assignees: ["JB"],
+          },
+          {
+            id: "c3",
+            colId: "col-2",
+            title: "Implementar autenticação de usuários",
+            description: "Login, logout, recuperação de senha e proteção de rotas.",
+            due: "2026-04-02",
+            labels: [{ text: "Backend", style: "warning" }, { text: "Segurança", style: "filled" }],
+            assignees: ["MU"],
+          },
+          {
+            id: "c4",
+            colId: "col-2",
+            title: "Desenvolver componentes de UI",
+            description: "Botões, inputs, modais e componentes reutilizáveis do design system.",
+            due: "2026-03-30",
+            labels: [{ text: "Frontend", style: "outline" }],
+            assignees: ["AS", "JB"],
+          },
+          {
+            id: "c5",
+            colId: "col-3",
+            title: "Documentação da API REST",
+            description: "Swagger/OpenAPI para todos os endpoints do backend.",
+            due: "2026-03-20",
+            labels: [{ text: "Docs", style: "success" }],
+            assignees: ["MU"],
+          },
+          {
+            id: "c6",
+            colId: "col-3",
+            title: "Setup do CI/CD",
+            description: "Pipeline de integração e entrega contínua configurado.",
+            due: "2026-03-18",
+            labels: [{ text: "DevOps", style: "warning" }],
+            assignees: ["JB"],
+          },
+        ];
+        nextCardId = 7;
+      }
+
+      // ── Helpers ───────────────────────────────────────────────────────────
+
+      function uid() {
+        return `c${nextCardId++}`;
+      }
+
+      function colUid() {
+        return `col-${nextColId++}`;
+      }
+
+      function formatDate(iso) {
+        if (!iso) return "";
+        const d = new Date(iso + "T00:00:00");
+        return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+      }
+
+      function isOverdue(iso) {
+        if (!iso) return false;
+        return new Date(iso + "T00:00:00") < new Date();
+      }
+
+      function colCards(colId) {
+        return cards.filter((c) => c.colId === colId);
+      }
+
+      function visibleCards(colId) {
+        let result = colCards(colId);
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          result = result.filter(
+            (c) =>
+              c.title.toLowerCase().includes(q) ||
+              c.description.toLowerCase().includes(q)
+          );
+        }
+        if (activeTabFilter === "pending") {
+          const col = columns.find((cl) => cl.id === colId);
+          if (col && col.filter === "done") return [];
+        }
+        if (activeTabFilter === "done") {
+          const col = columns.find((cl) => cl.id === colId);
+          if (col && col.filter !== "done") return [];
+        }
+        return result;
+      }
+
+      // ── Render ────────────────────────────────────────────────────────────
+
+      function renderMembers() {
+        const el = document.getElementById("memberAvatars");
+        const visible = members.slice(0, 3);
+        const overflow = members.length - visible.length;
+        el.innerHTML =
+          visible
+            .map(
+              (m) =>
+                `<div class="avatar avatar--sm" style="background:${m.color}" title="${m.initials}">${m.initials}</div>`
+            )
+            .join("") +
+          (overflow > 0
+            ? `<div class="avatar-overflow">+${overflow}</div>`
+            : "");
+      }
+
+      function labelClass(style) {
+        const map = { filled: "label--filled", outline: "label--outline", success: "label--success", warning: "label--warning", error: "label--error" };
+        return map[style] || "label--outline";
+      }
+
+      function renderCard(card) {
+        const overdue = isOverdue(card.due);
+        return `
+          <div
+            class="card"
+            id="card-${card.id}"
+            draggable="true"
+            data-card-id="${card.id}"
+            data-col-id="${card.colId}"
+          >
+            <div class="card__header">
+              <div class="card__labels">
+                ${card.labels.map((l) => `<span class="label ${labelClass(l.style)}">${l.text}</span>`).join("")}
+              </div>
+              <button class="card__menu-btn" data-card-id="${card.id}" aria-label="Opções">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="5" r="1"></circle>
+                  <circle cx="12" cy="12" r="1"></circle>
+                  <circle cx="12" cy="19" r="1"></circle>
+                </svg>
+              </button>
+            </div>
+            <div class="card__title">${escHtml(card.title)}</div>
+            ${card.description ? `<div class="card__description">${escHtml(card.description)}</div>` : ""}
+            <div class="card__footer">
+              <div class="card__meta">
+                ${
+                  card.due
+                    ? `<div class="card__meta-item" style="${overdue ? "color:var(--color-error)" : ""}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                          <line x1="16" y1="2" x2="16" y2="6"></line>
+                          <line x1="8" y1="2" x2="8" y2="6"></line>
+                          <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        ${formatDate(card.due)}
+                      </div>`
+                    : ""
+                }
+              </div>
+              <div class="card__assignees">
+                ${card.assignees
+                  .slice(0, 3)
+                  .map((a) => {
+                    const m = members.find((mb) => mb.initials === a);
+                    return `<div class="avatar avatar--sm" style="background:${m ? m.color : "#9b8afb"}" title="${a}">${a}</div>`;
+                  })
+                  .join("")}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderColumn(col) {
+        const visible = visibleCards(col.id);
+        const total = colCards(col.id).length;
+        const cardsHtml =
+          visible.length > 0
+            ? visible.map(renderCard).join('<div class="drop-indicator"></div>')
+            : `<div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                  <line x1="9" y1="9" x2="15" y2="9"></line>
+                  <line x1="9" y1="13" x2="12" y2="13"></line>
+                </svg>
+                <p>Nenhum card aqui</p>
+              </div>`;
+
+        return `
+          <div class="column" id="col-${col.id}" data-col-id="${col.id}">
+            <div class="column__header">
+              <div class="column__header-left">
+                <span class="column__badge" style="background:${col.badgeBg};color:${col.badgeText}">${escHtml(col.title)}</span>
+                <span class="column__count">${total}</span>
+              </div>
+              <button class="column__add-btn" data-col-id="${col.id}" aria-label="Adicionar card">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
+            </div>
+            <div class="column__cards" id="cards-${col.id}" data-col-id="${col.id}">
+              ${cardsHtml}
+            </div>
+            <div class="column__footer">
+              <button class="column__add-card-btn" data-col-id="${col.id}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Adicionar card
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderBoard() {
+        const board = document.getElementById("board");
+        const colsHtml = columns.map(renderColumn).join("");
+        const addColBtn = `
+          <button class="add-column-btn" id="addColumnBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Nova coluna
+          </button>
+        `;
+        board.innerHTML = colsHtml + addColBtn;
+        bindBoardEvents();
+      }
+
+      function escHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      // ── Drag and Drop ─────────────────────────────────────────────────────
+
+      function bindBoardEvents() {
+        // Card drag events
+        document.querySelectorAll(".card").forEach((el) => {
+          el.addEventListener("dragstart", onCardDragStart);
+          el.addEventListener("dragend", onCardDragEnd);
+        });
+
+        // Column drop zones
+        document.querySelectorAll(".column__cards").forEach((el) => {
+          el.addEventListener("dragover", onColDragOver);
+          el.addEventListener("dragleave", onColDragLeave);
+          el.addEventListener("drop", onColDrop);
+        });
+
+        // Card menu buttons
+        document.querySelectorAll(".card__menu-btn").forEach((el) => {
+          el.addEventListener("click", onCardMenuClick);
+        });
+
+        // Add card buttons (header + footer)
+        document.querySelectorAll(".column__add-btn, .column__add-card-btn").forEach((el) => {
+          el.addEventListener("click", (e) => {
+            const colId = e.currentTarget.dataset.colId;
+            openModal("create", colId);
+          });
+        });
+
+        // Add column button
+        const addColBtn = document.getElementById("addColumnBtn");
+        if (addColBtn) {
+          addColBtn.addEventListener("click", openAddColumnPrompt);
+        }
+      }
+
+      function onCardDragStart(e) {
+        dragCardId = e.currentTarget.dataset.cardId;
+        dragSourceColId = e.currentTarget.dataset.colId;
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain", dragCardId);
+        setTimeout(() => {
+          e.currentTarget.classList.add("dragging");
+        }, 0);
+      }
+
+      function onCardDragEnd(e) {
+        e.currentTarget.classList.remove("dragging");
+        // Clear all column highlights
+        document.querySelectorAll(".column").forEach((el) => {
+          el.classList.remove("drag-over", "drag-over-invalid");
+        });
+        dragCardId = null;
+        dragSourceColId = null;
+        dragTargetColId = null;
+      }
+
+      function onColDragOver(e) {
+        e.preventDefault();
+        const colId = e.currentTarget.dataset.colId;
+        const col = columns.find((c) => c.id === colId);
+        const colEl = document.getElementById(`col-${colId}`);
+
+        // Check capacity limit
+        if (col.limit !== null && colCards(colId).length >= col.limit && colId !== dragSourceColId) {
+          colEl.classList.remove("drag-over");
+          colEl.classList.add("drag-over-invalid");
+          e.dataTransfer.dropEffect = "none";
+        } else {
+          colEl.classList.add("drag-over");
+          colEl.classList.remove("drag-over-invalid");
+          e.dataTransfer.dropEffect = "move";
+        }
+        dragTargetColId = colId;
+      }
+
+      function onColDragLeave(e) {
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+          const colId = e.currentTarget.dataset.colId;
+          const colEl = document.getElementById(`col-${colId}`);
+          colEl.classList.remove("drag-over", "drag-over-invalid");
+        }
+      }
+
+      function onColDrop(e) {
+        e.preventDefault();
+        const targetColId = e.currentTarget.dataset.colId;
+        const colEl = document.getElementById(`col-${targetColId}`);
+        colEl.classList.remove("drag-over", "drag-over-invalid");
+
+        if (!dragCardId || targetColId === dragSourceColId) return;
+
+        const col = columns.find((c) => c.id === targetColId);
+
+        // Validate limit
+        if (col.limit !== null && colCards(targetColId).length >= col.limit) {
+          showToast(
+            `A coluna "${col.title}" atingiu o limite de ${col.limit} cards.`,
+            "error"
+          );
+          return;
+        }
+
+        const card = cards.find((c) => c.id === dragCardId);
+        if (!card) return;
+
+        const prevColId = card.colId;
+        const prevColTitle = columns.find((c) => c.id === prevColId)?.title || "";
+        const targetColTitle = col.title;
+
+        card.colId = targetColId;
+        renderBoard();
+
+        showToast(
+          `"${card.title}" movido para ${targetColTitle}`,
+          "success",
+          "Desfazer",
+          () => {
+            card.colId = prevColId;
+            renderBoard();
+            showToast(`Movimento desfeito — card voltou para ${prevColTitle}`);
+          }
+        );
+      }
+
+      // ── Toast ─────────────────────────────────────────────────────────────
+
+      function showToast(message, type = "success", undoLabel = null, undoFn = null, duration = 4500) {
+        const container = document.getElementById("toastContainer");
+        const toast = document.createElement("div");
+        toast.className = `toast${type === "error" ? " toast--error" : ""}`;
+        toast.innerHTML =
+          `<span>${escHtml(message)}</span>` +
+          (undoLabel && undoFn
+            ? `<button class="toast__undo">${escHtml(undoLabel)}</button>`
+            : "");
+
+        container.appendChild(toast);
+
+        if (undoFn) {
+          toast.querySelector(".toast__undo").addEventListener("click", () => {
+            undoFn();
+            toast.remove();
+          });
+        }
+
+        setTimeout(() => {
+          toast.style.opacity = "0";
+          toast.style.transition = "opacity 0.3s";
+          setTimeout(() => toast.remove(), 300);
+        }, duration);
+      }
+
+      // ── Context Menu ──────────────────────────────────────────────────────
+
+      function onCardMenuClick(e) {
+        e.stopPropagation();
+        ctxCardId = e.currentTarget.dataset.cardId;
+        const menu = document.getElementById("contextMenu");
+        const rect = e.currentTarget.getBoundingClientRect();
+        menu.style.top = `${rect.bottom + 4}px`;
+        menu.style.left = `${rect.left - 120}px`;
+        menu.classList.add("visible");
+      }
+
+      document.getElementById("ctxEdit").addEventListener("click", () => {
+        closeContextMenu();
+        const card = cards.find((c) => c.id === ctxCardId);
+        if (card) openModal("edit", card.colId, ctxCardId);
+      });
+
+      document.getElementById("ctxDelete").addEventListener("click", () => {
+        closeContextMenu();
+        const card = cards.find((c) => c.id === ctxCardId);
+        if (!card) return;
+        const title = card.title;
+        const idx = cards.indexOf(card);
+        const snapshot = { ...card };
+        cards.splice(idx, 1);
+        renderBoard();
+        showToast(
+          `Card "${title}" excluído`,
+          "success",
+          "Desfazer",
+          () => {
+            cards.splice(idx, 0, snapshot);
+            renderBoard();
+            showToast(`Card "${title}" restaurado`);
+          }
+        );
+      });
+
+      function closeContextMenu() {
+        document.getElementById("contextMenu").classList.remove("visible");
+      }
+
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".context-menu") && !e.target.closest(".card__menu-btn")) {
+          closeContextMenu();
+        }
+      });
+
+      // ── Modal ─────────────────────────────────────────────────────────────
+
+      function openModal(mode, colId, cardId = null) {
+        modalMode = mode;
+        modalTargetColId = colId;
+        modalTargetCardId = cardId;
+
+        const title = document.getElementById("modalTitle");
+        const titleInput = document.getElementById("cardTitle");
+        const descInput = document.getElementById("cardDesc");
+        const dueInput = document.getElementById("cardDue");
+
+        if (mode === "edit" && cardId) {
+          const card = cards.find((c) => c.id === cardId);
+          title.textContent = "Editar Card";
+          titleInput.value = card.title;
+          descInput.value = card.description;
+          dueInput.value = card.due;
+        } else {
+          title.textContent = "Novo Card";
+          titleInput.value = "";
+          descInput.value = "";
+          dueInput.value = "";
+        }
+
+        document.getElementById("modalOverlay").classList.add("visible");
+        titleInput.focus();
+      }
+
+      function closeModal() {
+        document.getElementById("modalOverlay").classList.remove("visible");
+      }
+
+      document.getElementById("modalClose").addEventListener("click", closeModal);
+      document.getElementById("modalCancel").addEventListener("click", closeModal);
+      document.getElementById("modalOverlay").addEventListener("click", (e) => {
+        if (e.target === document.getElementById("modalOverlay")) closeModal();
+      });
+
+      document.getElementById("modalSave").addEventListener("click", () => {
+        const titleVal = document.getElementById("cardTitle").value.trim();
+        if (!titleVal) {
+          document.getElementById("cardTitle").focus();
+          return;
+        }
+        const descVal = document.getElementById("cardDesc").value.trim();
+        const dueVal = document.getElementById("cardDue").value;
+
+        if (modalMode === "create") {
+          const newCard = {
+            id: uid(),
+            colId: modalTargetColId,
+            title: titleVal,
+            description: descVal,
+            due: dueVal,
+            labels: [],
+            assignees: ["MU"],
+          };
+          cards.push(newCard);
+          showToast(`Card "${titleVal}" criado com sucesso`);
+        } else {
+          const card = cards.find((c) => c.id === modalTargetCardId);
+          if (card) {
+            card.title = titleVal;
+            card.description = descVal;
+            card.due = dueVal;
+          }
+          showToast(`Card "${titleVal}" atualizado`);
+        }
+
+        closeModal();
+        renderBoard();
+      });
+
+      // Enter key submits modal
+      document.getElementById("cardTitle").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") document.getElementById("modalSave").click();
+      });
+
+      // ── Filters ───────────────────────────────────────────────────────────
+
+      // Sidebar nav
+      document.querySelectorAll(".nav-item").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          document.querySelectorAll(".nav-item").forEach((b) => b.classList.remove("active"));
+          e.currentTarget.classList.add("active");
+          activeFilter = e.currentTarget.dataset.filter;
+          renderBoard();
+        });
+      });
+
+      // Tab filters
+      document.querySelectorAll(".filter-tab").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          document.querySelectorAll(".filter-tab").forEach((b) => b.classList.remove("active"));
+          e.currentTarget.classList.add("active");
+          activeTabFilter = e.currentTarget.dataset.tab;
+          renderBoard();
+        });
+      });
+
+      // Search
+      document.getElementById("searchInput").addEventListener("input", (e) => {
+        searchQuery = e.target.value.trim();
+        renderBoard();
+      });
+
+      // ── Add Column ────────────────────────────────────────────────────────
+
+      function openAddColumnPrompt() {
+        const name = prompt("Nome da nova coluna:");
+        if (!name || !name.trim()) return;
+        const palettes = [
+          { badgeBg: "#fff7ed", badgeText: "#c05621" },
+          { badgeBg: "#eff8ff", badgeText: "#1570ef" },
+          { badgeBg: "#fdf4ff", badgeText: "#9333ea" },
+          { badgeBg: "#fef3f2", badgeText: "#b42318" },
+        ];
+        const p = palettes[columns.length % palettes.length];
+        columns.push({
+          id: colUid(),
+          title: name.trim(),
+          ...p,
+          filter: "pending",
+          limit: null,
+        });
+        renderBoard();
+        showToast(`Coluna "${name.trim()}" criada`);
+      }
+
+      // ── Notifications ─────────────────────────────────────────────────────
+
+      document.getElementById("notificationBtn").addEventListener("click", () => {
+        document.getElementById("notifBadge").style.display = "none";
+        showToast("Nenhuma notificação nova");
+      });
+
+      // ── Init ──────────────────────────────────────────────────────────────
+
+      initData();
+      renderMembers();
+      renderBoard();
+    </script>
   </body>
 </html>
