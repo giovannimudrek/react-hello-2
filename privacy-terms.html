@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Leia nossa Política de Privacidade e Termos de Serviço. Saiba como coletamos, usamos e protegemos seus dados, e quais são suas obrigações ao utilizar a plataforma." />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content="Privacidade e Termos | Kanban App" />
+    <meta property="og:description" content="Política de Privacidade e Termos de Serviço da Kanban App." />
+    <meta property="og:type" content="website" />
+    <title>Privacidade e Termos | Kanban App</title>
+    <link rel="stylesheet" href="privacy-terms.css" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Privacidade e Termos",
+      "description": "Política de Privacidade e Termos de Serviço da Kanban App",
+      "url": "/privacy-terms.html"
+    }
+    </script>
+  </head>
+  <body>
+    <!-- Reading Progress Bar -->
+    <div class="progress-bar" role="progressbar" aria-label="Progresso de leitura" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+      <div class="progress-fill" id="readingProgress"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="site-header" role="banner">
+      <div class="container">
+        <a href="index.html" class="logo" aria-label="Kanban App - Página inicial">
+          <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="8" height="16" rx="2" fill="currentColor" opacity="0.9"/>
+            <rect x="10" width="8" height="22" rx="2" fill="currentColor"/>
+            <rect x="20" width="8" height="12" rx="2" fill="currentColor" opacity="0.7"/>
+          </svg>
+          <span>Kanban App</span>
+        </a>
+        <nav class="header-nav" aria-label="Navegação principal">
+          <a href="index.html">Início</a>
+          <a href="privacy-terms.html" aria-current="page">Privacidade e Termos</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-nav" aria-label="Localização na página">
+      <div class="container">
+        <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+          <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a href="index.html" itemprop="item"><span itemprop="name">Home</span></a>
+            <meta itemprop="position" content="1" />
+          </li>
+          <li class="separator" aria-hidden="true">/</li>
+          <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span itemprop="name" aria-current="page">Privacidade e Termos</span>
+            <meta itemprop="position" content="2" />
+          </li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content">
+      <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1 class="page-title">Privacidade e Termos</h1>
+          <p class="page-subtitle">
+            Transparência e conformidade legal para que você entenda como seus dados são protegidos
+            e quais são seus direitos ao utilizar nossa plataforma.
+          </p>
+          <div class="doc-meta">
+            <span class="doc-version" aria-label="Versão do documento">v2.1.0</span>
+            <button class="btn-print" onclick="window.print()" aria-label="Imprimir ou salvar como PDF">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+              </svg>
+              Imprimir / PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+          <div class="tabs-header" role="tablist" aria-label="Documentos de política">
+            <button
+              class="tab-btn active"
+              id="tab-privacy"
+              role="tab"
+              aria-selected="true"
+              aria-controls="panel-privacy"
+              data-tab="privacy"
+            >
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              Política de Privacidade
+            </button>
+            <button
+              class="tab-btn"
+              id="tab-terms"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-terms"
+              data-tab="terms"
+            >
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              Termos de Serviço
+            </button>
+          </div>
+
+          <!-- Privacy Policy Panel -->
+          <div
+            id="panel-privacy"
+            class="tab-panel active"
+            role="tabpanel"
+            aria-labelledby="tab-privacy"
+            tabindex="0"
+          >
+            <div class="doc-info-bar">
+              <span class="doc-update">
+                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Última atualização: <time datetime="2026-01-15">15 de janeiro de 2026</time>
+              </span>
+              <span class="doc-version-tag">Versão 2.1.0</span>
+            </div>
+
+            <div class="doc-content">
+              <section aria-labelledby="privacy-intro">
+                <h2 id="privacy-intro">1. Introdução e Objetivo</h2>
+                <p>
+                  A <strong>Kanban App</strong> está comprometida com a proteção da sua privacidade. Esta Política de
+                  Privacidade descreve como coletamos, utilizamos, armazenamos e compartilhamos suas informações pessoais
+                  ao utilizar nossa plataforma de gerenciamento de projetos.
+                </p>
+                <p>
+                  Esta política está em conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018)</strong>
+                  e demais regulamentos aplicáveis de proteção de dados pessoais.
+                </p>
+              </section>
+
+              <section aria-labelledby="privacy-data-collected">
+                <h2 id="privacy-data-collected">2. Informações Coletadas</h2>
+                <p>Coletamos diferentes tipos de informações para fornecer e melhorar nosso serviço:</p>
+                <h3>2.1 Dados fornecidos diretamente por você</h3>
+                <ul>
+                  <li>Nome completo e endereço de e-mail (durante o cadastro)</li>
+                  <li>Foto de perfil (opcional)</li>
+                  <li>Informações de contato (opcional)</li>
+                  <li>Conteúdo criado na plataforma (boards, colunas, cards e comentários)</li>
+                </ul>
+                <h3>2.2 Dados coletados automaticamente</h3>
+                <ul>
+                  <li>Endereço IP e informações de localização aproximada</li>
+                  <li>Tipo de navegador e sistema operacional</li>
+                  <li>Páginas visitadas e ações realizadas na plataforma</li>
+                  <li>Data e hora de acesso</li>
+                  <li>Cookies e tecnologias similares de rastreamento</li>
+                </ul>
+              </section>
+
+              <section aria-labelledby="privacy-data-use">
+                <h2 id="privacy-data-use">3. Como Utilizamos suas Informações</h2>
+                <p>Utilizamos as informações coletadas para as seguintes finalidades:</p>
+                <ul>
+                  <li><strong>Fornecer o serviço:</strong> criar e gerenciar sua conta, processar e exibir seu conteúdo</li>
+                  <li><strong>Melhorar a plataforma:</strong> analisar como os usuários interagem com nossos recursos</li>
+                  <li><strong>Comunicação:</strong> enviar notificações, atualizações importantes e respostas a solicitações de suporte</li>
+                  <li><strong>Segurança:</strong> detectar, investigar e prevenir fraudes e atividades suspeitas</li>
+                  <li><strong>Cumprimento legal:</strong> atender a obrigações legais e regulatórias aplicáveis</li>
+                  <li><strong>Personalização:</strong> adaptar a experiência do usuário com base nas preferências</li>
+                </ul>
+              </section>
+
+              <section aria-labelledby="privacy-sharing">
+                <h2 id="privacy-sharing">4. Compartilhamento de Dados</h2>
+                <p>
+                  Não vendemos, alugamos ou compartilhamos suas informações pessoais com terceiros para fins comerciais.
+                  Podemos compartilhar seus dados apenas nas seguintes circunstâncias:
+                </p>
+                <ul>
+                  <li><strong>Provedores de serviços:</strong> parceiros que auxiliam na operação da plataforma (hospedagem, análise) sob acordos de confidencialidade</li>
+                  <li><strong>Exigências legais:</strong> quando obrigados por lei, ordem judicial ou autoridade governamental competente</li>
+                  <li><strong>Proteção de direitos:</strong> para proteger os direitos, propriedade ou segurança da plataforma e de seus usuários</li>
+                  <li><strong>Transferência empresarial:</strong> em caso de fusão, aquisição ou venda de ativos, com aviso prévio a você</li>
+                </ul>
+              </section>
+
+              <section aria-labelledby="privacy-security">
+                <h2 id="privacy-security">5. Segurança de Dados</h2>
+                <p>
+                  Adotamos medidas técnicas e organizacionais adequadas para proteger suas informações pessoais contra
+                  acesso não autorizado, alteração, divulgação ou destruição, incluindo:
+                </p>
+                <ul>
+                  <li>Criptografia de dados em trânsito (HTTPS/TLS) e em repouso</li>
+                  <li>Controles de acesso baseados em função (RBAC)</li>
+                  <li>Monitoramento contínuo de segurança e alertas de incidentes</li>
+                  <li>Testes regulares de segurança e avaliações de vulnerabilidade</li>
+                  <li>Treinamento de segurança para toda a equipe</li>
+                </ul>
+                <p>
+                  Em caso de violação de dados que possa afetar seus direitos, notificaremos você e as autoridades competentes
+                  conforme exigido pela LGPD no prazo de 72 horas.
+                </p>
+              </section>
+
+              <section aria-labelledby="privacy-retention">
+                <h2 id="privacy-retention">6. Retenção de Dados</h2>
+                <p>
+                  Mantemos seus dados pessoais pelo tempo necessário para fornecer nossos serviços ou conforme exigido por lei.
+                  Os períodos de retenção incluem:
+                </p>
+                <ul>
+                  <li><strong>Dados da conta:</strong> mantidos enquanto sua conta estiver ativa e por 30 dias após o encerramento</li>
+                  <li><strong>Conteúdo criado:</strong> mantido enquanto a conta estiver ativa; excluído permanentemente após solicitação</li>
+                  <li><strong>Logs de acesso:</strong> retidos por 12 meses para fins de segurança</li>
+                  <li><strong>Dados fiscais e legais:</strong> retidos pelo período mínimo exigido pela legislação aplicável (geralmente 5 anos)</li>
+                </ul>
+                <p>
+                  Após o período de retenção, seus dados serão excluídos de forma segura ou anonimizados de modo irrevogável.
+                </p>
+              </section>
+
+              <section aria-labelledby="privacy-rights">
+                <h2 id="privacy-rights">7. Seus Direitos</h2>
+                <p>Nos termos da LGPD, você possui os seguintes direitos em relação aos seus dados pessoais:</p>
+                <ul>
+                  <li><strong>Acesso:</strong> solicitar confirmação e acesso aos dados que tratamos sobre você</li>
+                  <li><strong>Correção:</strong> solicitar a correção de dados incompletos, inexatos ou desatualizados</li>
+                  <li><strong>Exclusão:</strong> solicitar a eliminação dos seus dados pessoais desnecessários ou tratados em desconformidade</li>
+                  <li><strong>Portabilidade:</strong> receber seus dados em formato estruturado e interoperável</li>
+                  <li><strong>Revogação:</strong> revogar o consentimento para o tratamento de dados a qualquer momento</li>
+                  <li><strong>Oposição:</strong> opor-se ao tratamento de dados em determinadas circunstâncias</li>
+                  <li><strong>Informação:</strong> obter informações sobre entidades públicas e privadas com as quais compartilhamos seus dados</li>
+                </ul>
+                <p>
+                  Para exercer qualquer desses direitos, entre em contato conosco pelo e-mail
+                  <a href="mailto:privacidade@kanbanapp.com">privacidade@kanbanapp.com</a>.
+                  Responderemos em até 15 dias úteis.
+                </p>
+              </section>
+
+              <section aria-labelledby="privacy-contact">
+                <h2 id="privacy-contact">8. Contato — Privacidade</h2>
+                <p>
+                  Para dúvidas, solicitações ou reclamações relacionadas a esta Política de Privacidade ou ao tratamento
+                  dos seus dados pessoais, entre em contato com nosso Encarregado de Proteção de Dados (DPO):
+                </p>
+                <address class="contact-info">
+                  <p><strong>Encarregado de Dados (DPO):</strong> João da Silva</p>
+                  <p><strong>E-mail:</strong> <a href="mailto:dpo@kanbanapp.com">dpo@kanbanapp.com</a></p>
+                  <p><strong>Telefone:</strong> <a href="tel:+551140020202">+55 (11) 4002-0202</a></p>
+                  <p><strong>Horário de atendimento:</strong> Segunda a Sexta, das 9h às 18h (BRT)</p>
+                </address>
+                <p>
+                  Você também tem o direito de registrar uma reclamação junto à
+                  <a href="https://www.gov.br/anpd" target="_blank" rel="noopener noreferrer">Autoridade Nacional de Proteção de Dados (ANPD)</a>.
+                </p>
+              </section>
+            </div>
+          </div>
+
+          <!-- Terms of Service Panel -->
+          <div
+            id="panel-terms"
+            class="tab-panel"
+            role="tabpanel"
+            aria-labelledby="tab-terms"
+            tabindex="0"
+            hidden
+          >
+            <div class="doc-info-bar">
+              <span class="doc-update">
+                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Última atualização: <time datetime="2026-01-15">15 de janeiro de 2026</time>
+              </span>
+              <span class="doc-version-tag">Versão 2.1.0</span>
+            </div>
+
+            <div class="doc-content">
+              <section aria-labelledby="terms-acceptance">
+                <h2 id="terms-acceptance">1. Aceitação dos Termos</h2>
+                <p>
+                  Ao criar uma conta ou utilizar a <strong>Kanban App</strong>, você concorda com estes Termos de Serviço.
+                  Se você não concordar com qualquer parte destes termos, não utilize nosso serviço.
+                </p>
+                <p>
+                  Estes termos constituem um contrato legalmente vinculante entre você e a Kanban App. Reservamo-nos o
+                  direito de atualizar estes termos a qualquer momento, com aviso prévio de pelo menos 30 dias para
+                  alterações materiais.
+                </p>
+              </section>
+
+              <section aria-labelledby="terms-service">
+                <h2 id="terms-service">2. Descrição do Serviço</h2>
+                <p>
+                  A Kanban App é uma plataforma de gerenciamento de projetos baseada no método Kanban que oferece:
+                </p>
+                <ul>
+                  <li>Criação e gerenciamento de boards (quadros) de projetos</li>
+                  <li>Organização de tarefas em colunas customizáveis</li>
+                  <li>Criação e edição de cards (cartões) com detalhes das tarefas</li>
+                  <li>Colaboração entre membros de equipe</li>
+                  <li>Rastreamento de progresso de projetos</li>
+                </ul>
+                <p>
+                  O serviço é fornecido "no estado em que se encontra" e pode ser modificado, suspenso ou descontinuado
+                  a qualquer momento, com aviso prévio razoável aos usuários.
+                </p>
+              </section>
+
+              <section aria-labelledby="terms-rights">
+                <h2 id="terms-rights">3. Direitos e Responsabilidades do Usuário</h2>
+                <h3>3.1 Seus Direitos</h3>
+                <ul>
+                  <li>Utilizar a plataforma para fins legítimos de gerenciamento de projetos</li>
+                  <li>Criar, editar e excluir seu próprio conteúdo</li>
+                  <li>Convidar membros para seus boards (conforme plano contratado)</li>
+                  <li>Exportar seus dados em formatos suportados</li>
+                  <li>Cancelar sua conta a qualquer momento</li>
+                </ul>
+                <h3>3.2 Suas Responsabilidades</h3>
+                <ul>
+                  <li>Manter a confidencialidade das credenciais de acesso à sua conta</li>
+                  <li>Notificar imediatamente sobre qualquer uso não autorizado da sua conta</li>
+                  <li>Ser responsável por todo o conteúdo publicado em sua conta</li>
+                  <li>Cumprir todas as leis e regulamentos aplicáveis ao usar nosso serviço</li>
+                  <li>Não compartilhar informações confidenciais de terceiros na plataforma</li>
+                </ul>
+              </section>
+
+              <section aria-labelledby="terms-restrictions">
+                <h2 id="terms-restrictions">4. Restrições de Uso</h2>
+                <p>É expressamente proibido:</p>
+                <ul>
+                  <li>Utilizar o serviço para atividades ilegais ou que violem direitos de terceiros</li>
+                  <li>Realizar engenharia reversa, descompilar ou tentar extrair o código-fonte da plataforma</li>
+                  <li>Usar scripts automatizados, bots ou outros meios para acessar o serviço de forma abusiva</li>
+                  <li>Tentar obter acesso não autorizado a sistemas, contas ou dados de outros usuários</li>
+                  <li>Publicar conteúdo ofensivo, discriminatório, difamatório ou que viole direitos autorais</li>
+                  <li>Sobrecarregar intencionalmente a infraestrutura do serviço (ataques DDoS)</li>
+                  <li>Revender ou sublicenciar o acesso ao serviço sem autorização expressa</li>
+                  <li>Remover ou alterar avisos de direitos autorais ou marcas registradas</li>
+                </ul>
+                <p>
+                  O descumprimento dessas restrições pode resultar na suspensão ou encerramento imediato da sua conta,
+                  além de potenciais medidas legais.
+                </p>
+              </section>
+
+              <section aria-labelledby="terms-ip">
+                <h2 id="terms-ip">5. Propriedade Intelectual</h2>
+                <h3>5.1 Propriedade da Plataforma</h3>
+                <p>
+                  A Kanban App e todo o seu conteúdo original — incluindo software, design, logotipos, textos e marcas —
+                  são propriedade exclusiva da Kanban App e estão protegidos por leis de propriedade intelectual.
+                </p>
+                <h3>5.2 Conteúdo do Usuário</h3>
+                <p>
+                  Você retém todos os direitos sobre o conteúdo que cria na plataforma. Ao utilizar nosso serviço,
+                  você nos concede uma licença limitada, não exclusiva e revogável para hospedar, armazenar, processar
+                  e exibir seu conteúdo exclusivamente para fins de prestação do serviço.
+                </p>
+                <p>
+                  Ao excluir sua conta ou solicitar a remoção de conteúdo, revogaremos essa licença e removeremos
+                  seus dados conforme descrito na Política de Privacidade.
+                </p>
+              </section>
+
+              <section aria-labelledby="terms-liability">
+                <h2 id="terms-liability">6. Limitação de Responsabilidade</h2>
+                <p>
+                  Na extensão máxima permitida pela lei aplicável, a Kanban App não será responsável por danos indiretos,
+                  incidentais, especiais, consequenciais ou punitivos, incluindo:
+                </p>
+                <ul>
+                  <li>Perda de dados, receita, lucros ou negócios</li>
+                  <li>Danos causados por acesso não autorizado à sua conta</li>
+                  <li>Interrupção do serviço devido a manutenção ou falhas técnicas</li>
+                  <li>Conteúdo publicado por terceiros na plataforma</li>
+                </ul>
+                <p>
+                  A responsabilidade total da Kanban App, seja por contrato, garantia, ato ilícito ou qualquer outra
+                  teoria legal, está limitada ao valor pago por você nos últimos 12 meses pelo serviço.
+                </p>
+              </section>
+
+              <section aria-labelledby="terms-indemnification">
+                <h2 id="terms-indemnification">7. Indenização</h2>
+                <p>
+                  Você concorda em indenizar, defender e isentar a Kanban App, seus diretores, funcionários,
+                  parceiros e agentes de qualquer reivindicação, responsabilidade, dano, perda ou despesa
+                  (incluindo honorários advocatícios razoáveis) decorrentes de:
+                </p>
+                <ul>
+                  <li>Violação destes Termos de Serviço por você</li>
+                  <li>Seu uso indevido do serviço</li>
+                  <li>Violação de direitos de terceiros pelo seu conteúdo</li>
+                  <li>Qualquer atividade ilegal realizada através da sua conta</li>
+                </ul>
+              </section>
+
+              <section aria-labelledby="terms-termination">
+                <h2 id="terms-termination">8. Rescisão de Conta</h2>
+                <h3>8.1 Rescisão pelo Usuário</h3>
+                <p>
+                  Você pode encerrar sua conta a qualquer momento através das configurações da plataforma ou
+                  enviando uma solicitação para <a href="mailto:suporte@kanbanapp.com">suporte@kanbanapp.com</a>.
+                  Após o encerramento, seus dados serão tratados conforme a Política de Privacidade.
+                </p>
+                <h3>8.2 Rescisão pela Kanban App</h3>
+                <p>
+                  Podemos suspender ou encerrar sua conta imediatamente, sem aviso prévio, se:
+                </p>
+                <ul>
+                  <li>Você violar qualquer disposição destes Termos de Serviço</li>
+                  <li>Seu uso do serviço causar risco legal ou de segurança</li>
+                  <li>Sua conta ficar inativa por mais de 24 meses consecutivos</li>
+                  <li>Formos obrigados a fazê-lo por lei ou ordem judicial</li>
+                </ul>
+              </section>
+
+              <section aria-labelledby="terms-changes">
+                <h2 id="terms-changes">9. Alterações aos Termos</h2>
+                <p>
+                  Podemos atualizar estes Termos de Serviço periodicamente. Quando fizermos alterações materiais:
+                </p>
+                <ul>
+                  <li>Notificaremos você por e-mail com pelo menos 30 dias de antecedência</li>
+                  <li>Exibiremos um aviso destacado na plataforma</li>
+                  <li>Atualizaremos a data de "Última atualização" no início deste documento</li>
+                </ul>
+                <p>
+                  O uso continuado do serviço após a data de vigência das alterações constitui aceitação dos novos termos.
+                  Se não concordar, você poderá encerrar sua conta antes da data de vigência.
+                </p>
+              </section>
+
+              <section aria-labelledby="terms-contact">
+                <h2 id="terms-contact">10. Contato — Termos de Serviço</h2>
+                <p>
+                  Para dúvidas, reclamações ou questões jurídicas relacionadas a estes Termos de Serviço,
+                  entre em contato com nossa equipe jurídica:
+                </p>
+                <address class="contact-info">
+                  <p><strong>Equipe Jurídica:</strong> Maria Souza</p>
+                  <p><strong>E-mail:</strong> <a href="mailto:juridico@kanbanapp.com">juridico@kanbanapp.com</a></p>
+                  <p><strong>Endereço:</strong> Rua das Palmeiras, 100 — São Paulo, SP — CEP 01310-100</p>
+                  <p><strong>CNPJ:</strong> 12.345.678/0001-90</p>
+                </address>
+                <p>
+                  Estes termos são regidos pelas leis da República Federativa do Brasil. Fica eleito o foro da
+                  comarca de São Paulo, SP, para dirimir quaisquer controvérsias.
+                </p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="container">
+        <div class="footer-links">
+          <a href="privacy-terms.html#panel-privacy">Política de Privacidade</a>
+          <a href="privacy-terms.html#panel-terms">Termos de Serviço</a>
+          <a href="mailto:cookies@kanbanapp.com">Política de Cookies</a>
+          <a href="mailto:lgpd@kanbanapp.com">LGPD</a>
+        </div>
+        <p class="footer-copy">
+          &copy; 2026 Kanban App. Todos os direitos reservados. CNPJ: 12.345.678/0001-90
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Tab navigation
+      function activateTab(tabId) {
+        const allTabs = document.querySelectorAll('[role="tab"]');
+        const allPanels = document.querySelectorAll('[role="tabpanel"]');
+
+        allTabs.forEach(tab => {
+          tab.classList.remove('active');
+          tab.setAttribute('aria-selected', 'false');
+        });
+        allPanels.forEach(panel => {
+          panel.classList.remove('active');
+          panel.hidden = true;
+        });
+
+        const activeTab = document.getElementById('tab-' + tabId);
+        const activePanel = document.getElementById('panel-' + tabId);
+
+        activeTab.classList.add('active');
+        activeTab.setAttribute('aria-selected', 'true');
+        activePanel.classList.add('active');
+        activePanel.hidden = false;
+        activePanel.focus();
+
+        // Update URL hash without scrolling
+        history.replaceState(null, '', '#panel-' + tabId);
+      }
+
+      // Bind tab buttons
+      document.querySelectorAll('[role="tab"]').forEach(btn => {
+        btn.addEventListener('click', () => activateTab(btn.dataset.tab));
+
+        // Keyboard navigation (arrows)
+        btn.addEventListener('keydown', (e) => {
+          const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+          const idx = tabs.indexOf(btn);
+          if (e.key === 'ArrowRight') {
+            tabs[(idx + 1) % tabs.length].focus();
+          } else if (e.key === 'ArrowLeft') {
+            tabs[(idx - 1 + tabs.length) % tabs.length].focus();
+          } else if (e.key === 'Home') {
+            tabs[0].focus();
+          } else if (e.key === 'End') {
+            tabs[tabs.length - 1].focus();
+          }
+        });
+      });
+
+      // Check URL hash on load to activate the right tab
+      window.addEventListener('DOMContentLoaded', () => {
+        const hash = window.location.hash;
+        if (hash === '#panel-terms') {
+          activateTab('terms');
+        }
+      });
+
+      // Reading progress bar
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        const bar = document.getElementById('readingProgress');
+        bar.style.width = Math.min(progress, 100) + '%';
+        bar.parentElement.setAttribute('aria-valuenow', Math.round(progress));
+      });
+    </script>
+  </body>
+</html>
