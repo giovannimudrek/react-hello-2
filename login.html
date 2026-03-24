@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Acesse sua conta na Kanban App para gerenciar seus projetos e tarefas." />
+    <title>Entrar — Kanban App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+
+    <!-- ── Login Card ─────────────────────────────────────────────── -->
+    <main class="login-card" role="main" aria-labelledby="login-title">
+
+      <!-- Branding -->
+      <div class="login-header">
+        <a href="index.html" class="logo" aria-label="Kanban App — Ir para a página inicial">
+          <svg aria-hidden="true" width="32" height="32" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="8" height="16" rx="2" fill="currentColor" opacity="0.9"/>
+            <rect x="10" width="8" height="22" rx="2" fill="currentColor"/>
+            <rect x="20" width="8" height="12" rx="2" fill="currentColor" opacity="0.7"/>
+          </svg>
+          <span>Kanban App</span>
+        </a>
+        <h1 class="login-title" id="login-title">Bem-vindo de volta!</h1>
+        <p class="login-subtitle">Acesse sua conta para continuar gerenciando seus projetos.</p>
+      </div>
+
+      <!-- Feedback Banner (error / success) -->
+      <div
+        id="feedback-banner"
+        class="feedback-banner"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span id="feedback-text"></span>
+      </div>
+
+      <!-- Form -->
+      <form
+        id="login-form"
+        class="login-form"
+        novalidate
+        aria-label="Formulário de login"
+        autocomplete="on"
+      >
+
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label" for="email">
+            E-mail <span class="required" aria-hidden="true">*</span>
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-input"
+              placeholder="seu@email.com"
+              autocomplete="email"
+              required
+              aria-required="true"
+              aria-describedby="email-error"
+              inputmode="email"
+            />
+          </div>
+          <span id="email-error" class="field-error" role="alert" aria-live="polite">
+            <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span id="email-error-text"></span>
+          </span>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label" for="password">
+            Senha <span class="required" aria-hidden="true">*</span>
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-input"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              required
+              aria-required="true"
+              aria-describedby="password-error"
+              data-password
+            />
+            <button
+              type="button"
+              id="toggle-password"
+              class="toggle-password"
+              aria-label="Mostrar senha"
+              aria-controls="password"
+              title="Mostrar/ocultar senha"
+            >
+              <!-- Eye icon (password hidden) -->
+              <svg class="icon-eye" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <!-- Eye-off icon (password visible) -->
+              <svg class="icon-eye-off" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            </button>
+          </div>
+          <span id="password-error" class="field-error" role="alert" aria-live="polite">
+            <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span id="password-error-text"></span>
+          </span>
+        </div>
+
+        <!-- Options row -->
+        <div class="form-options">
+          <label class="checkbox-label">
+            <input type="checkbox" id="remember-me" name="remember" />
+            Lembrar de mim
+          </label>
+          <a href="#" class="forgot-link" id="forgot-password-link">Esqueci minha senha</a>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="btn-submit" class="btn-submit" aria-busy="false">
+          <span class="spinner" aria-hidden="true"></span>
+          <span class="btn-text">Entrar</span>
+        </button>
+
+      </form>
+
+      <!-- Divider -->
+      <div class="divider" aria-hidden="true">ou</div>
+
+      <!-- Register prompt -->
+      <p class="register-prompt">
+        Não tem uma conta?
+        <a href="register.html">Criar conta</a>
+      </p>
+
+    </main>
+
+    <!-- ── Footer ──────────────────────────────────────────────────── -->
+    <footer class="login-footer">
+      <p>
+        &copy; 2026 Kanban App &nbsp;·&nbsp;
+        <a href="privacy-terms.html">Privacidade e Termos</a>
+      </p>
+    </footer>
+
+    <!-- ── Toast ───────────────────────────────────────────────────── -->
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- ── Forgot Password Modal ───────────────────────────────────── -->
+    <div
+      id="forgot-modal-overlay"
+      class="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="forgot-modal-title"
+    >
+      <div class="modal" id="forgot-modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="forgot-modal-title">Redefinir senha</h2>
+          <button class="btn-close" id="close-modal" aria-label="Fechar modal">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <p class="modal-description">
+          Informe o e-mail cadastrado e enviaremos um link para você redefinir sua senha.
+        </p>
+        <div class="form-group">
+          <label class="form-label" for="forgot-email">E-mail</label>
+          <div class="input-wrapper">
+            <input
+              type="email"
+              id="forgot-email"
+              name="forgot-email"
+              class="form-input"
+              placeholder="seu@email.com"
+              autocomplete="email"
+              aria-required="true"
+            />
+          </div>
+        </div>
+        <button type="button" id="btn-reset-password" class="btn-modal-submit">
+          Enviar link de redefinição
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Scripts ─────────────────────────────────────────────────── -->
+    <script>
+      /* ── Mock Auth ──────────────────────────────────────────────── */
+      const MOCK_USERS = [
+        { email: 'admin@kanban.app', password: 'admin123', name: 'Admin' },
+        { email: 'user@kanban.app',  password: 'user123',  name: 'Usuário Demo' },
+        { email: 'demo@demo.com',    password: 'demo',     name: 'Demo User' },
+      ];
+
+      function mockLogin(email, password) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            const user = MOCK_USERS.find(
+              u => u.email.toLowerCase() === email.toLowerCase()
+            );
+            if (!user) {
+              reject({ code: 'USER_NOT_FOUND', message: 'Nenhuma conta encontrada com esse e-mail.' });
+            } else if (user.password !== password) {
+              reject({ code: 'WRONG_PASSWORD', message: 'Senha incorreta. Verifique e tente novamente.' });
+            } else {
+              resolve({ user: { email: user.email, name: user.name } });
+            }
+          }, 1200); // simulate network delay
+        });
+      }
+
+      /* ── DOM References ─────────────────────────────────────────── */
+      const form            = document.getElementById('login-form');
+      const emailInput      = document.getElementById('email');
+      const passwordInput   = document.getElementById('password');
+      const toggleBtn       = document.getElementById('toggle-password');
+      const btnSubmit       = document.getElementById('btn-submit');
+      const feedbackBanner  = document.getElementById('feedback-banner');
+      const feedbackText    = document.getElementById('feedback-text');
+      const emailError      = document.getElementById('email-error');
+      const emailErrorText  = document.getElementById('email-error-text');
+      const passwordError   = document.getElementById('password-error');
+      const passwordErrorText = document.getElementById('password-error-text');
+      const toast           = document.getElementById('toast');
+      const forgotLink      = document.getElementById('forgot-password-link');
+      const modalOverlay    = document.getElementById('forgot-modal-overlay');
+      const closeModal      = document.getElementById('close-modal');
+      const btnResetPwd     = document.getElementById('btn-reset-password');
+      const forgotEmail     = document.getElementById('forgot-email');
+
+      /* ── Helpers ────────────────────────────────────────────────── */
+      function isValidEmail(val) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
+      }
+
+      function showFieldError(inputEl, errorEl, errorTextEl, message) {
+        inputEl.classList.add('is-error');
+        inputEl.setAttribute('aria-invalid', 'true');
+        errorEl.classList.add('visible');
+        errorTextEl.textContent = message;
+      }
+
+      function clearFieldError(inputEl, errorEl, errorTextEl) {
+        inputEl.classList.remove('is-error');
+        inputEl.removeAttribute('aria-invalid');
+        errorEl.classList.remove('visible');
+        errorTextEl.textContent = '';
+      }
+
+      function showBanner(type, message) {
+        feedbackBanner.className = 'feedback-banner visible is-' + type;
+        feedbackBanner.querySelector('svg').setAttribute('stroke', type === 'error' ? '#f04438' : '#12b76a');
+        feedbackText.textContent = message;
+      }
+
+      function hideBanner() {
+        feedbackBanner.classList.remove('visible');
+      }
+
+      let toastTimer = null;
+      function showToast(message, duration = 4000) {
+        clearTimeout(toastTimer);
+        toast.textContent = message;
+        toast.classList.remove('hiding');
+        toast.classList.add('visible');
+        toastTimer = setTimeout(() => {
+          toast.classList.add('hiding');
+          setTimeout(() => toast.classList.remove('visible', 'hiding'), 260);
+        }, duration);
+      }
+
+      function setLoading(isLoading) {
+        btnSubmit.disabled = isLoading;
+        btnSubmit.setAttribute('aria-busy', String(isLoading));
+        btnSubmit.classList.toggle('loading', isLoading);
+      }
+
+      /* ── Real-time Validation ───────────────────────────────────── */
+      emailInput.addEventListener('blur', () => {
+        const val = emailInput.value.trim();
+        if (val && !isValidEmail(val)) {
+          showFieldError(emailInput, emailError, emailErrorText, 'Insira um e-mail válido.');
+        } else {
+          clearFieldError(emailInput, emailError, emailErrorText);
+        }
+      });
+
+      emailInput.addEventListener('input', () => {
+        if (emailInput.classList.contains('is-error')) {
+          if (isValidEmail(emailInput.value.trim())) {
+            clearFieldError(emailInput, emailError, emailErrorText);
+          }
+        }
+        hideBanner();
+      });
+
+      passwordInput.addEventListener('input', () => {
+        if (passwordInput.classList.contains('is-error') && passwordInput.value.length > 0) {
+          clearFieldError(passwordInput, passwordError, passwordErrorText);
+        }
+        hideBanner();
+      });
+
+      /* ── Toggle Password Visibility ─────────────────────────────── */
+      toggleBtn.addEventListener('click', () => {
+        const isVisible = passwordInput.type === 'text';
+        passwordInput.type = isVisible ? 'password' : 'text';
+        toggleBtn.classList.toggle('is-visible', !isVisible);
+        toggleBtn.setAttribute('aria-label', isVisible ? 'Mostrar senha' : 'Ocultar senha');
+        passwordInput.focus();
+      });
+
+      /* ── Form Submit ────────────────────────────────────────────── */
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        hideBanner();
+
+        const emailVal    = emailInput.value.trim();
+        const passwordVal = passwordInput.value;
+        let hasError      = false;
+
+        // Validate email
+        if (!emailVal) {
+          showFieldError(emailInput, emailError, emailErrorText, 'O e-mail é obrigatório.');
+          hasError = true;
+        } else if (!isValidEmail(emailVal)) {
+          showFieldError(emailInput, emailError, emailErrorText, 'Insira um e-mail válido.');
+          hasError = true;
+        } else {
+          clearFieldError(emailInput, emailError, emailErrorText);
+        }
+
+        // Validate password
+        if (!passwordVal) {
+          showFieldError(passwordInput, passwordError, passwordErrorText, 'A senha é obrigatória.');
+          hasError = true;
+        } else {
+          clearFieldError(passwordInput, passwordError, passwordErrorText);
+        }
+
+        if (hasError) {
+          // Focus first invalid field
+          const firstInvalid = form.querySelector('.is-error');
+          if (firstInvalid) firstInvalid.focus();
+          return;
+        }
+
+        // Attempt login
+        setLoading(true);
+        try {
+          const { user } = await mockLogin(emailVal, passwordVal);
+
+          // Success
+          emailInput.classList.add('is-success');
+          passwordInput.classList.add('is-success');
+          showBanner('success', `Login realizado com sucesso! Bem-vindo, ${user.name}.`);
+          btnSubmit.querySelector('.btn-text').textContent = 'Entrando…';
+
+          // Store session (mock)
+          const session = {
+            email: user.email,
+            name: user.name,
+            loggedAt: new Date().toISOString(),
+            remember: document.getElementById('remember-me').checked,
+          };
+          const storage = session.remember ? localStorage : sessionStorage;
+          storage.setItem('kanban_session', JSON.stringify(session));
+
+          // Redirect after brief delay
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1500);
+
+        } catch (err) {
+          setLoading(false);
+          showBanner('error', err.message || 'Ocorreu um erro. Tente novamente.');
+
+          if (err.code === 'USER_NOT_FOUND') {
+            showFieldError(emailInput, emailError, emailErrorText, 'E-mail não cadastrado.');
+            emailInput.focus();
+          } else if (err.code === 'WRONG_PASSWORD') {
+            showFieldError(passwordInput, passwordError, passwordErrorText, 'Senha incorreta.');
+            passwordInput.value = '';
+            passwordInput.focus();
+          }
+        }
+      });
+
+      /* ── Keyboard: submit on Enter ──────────────────────────────── */
+      form.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.target.tagName !== 'BUTTON') {
+          form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        }
+      });
+
+      /* ── Forgot Password Modal ──────────────────────────────────── */
+      function openModal() {
+        modalOverlay.classList.add('visible');
+        forgotEmail.value = emailInput.value.trim();
+        // Trap focus
+        setTimeout(() => forgotEmail.focus(), 50);
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModalFn() {
+        modalOverlay.classList.remove('visible');
+        document.body.style.overflow = '';
+        forgotLink.focus();
+      }
+
+      forgotLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal();
+      });
+
+      closeModal.addEventListener('click', closeModalFn);
+
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModalFn();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('visible')) {
+          closeModalFn();
+        }
+      });
+
+      // Focus trap inside modal
+      document.getElementById('forgot-modal').addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+        const focusable = document.getElementById('forgot-modal')
+          .querySelectorAll('button, input, [tabindex]:not([tabindex="-1"])');
+        const first = focusable[0];
+        const last  = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+        }
+      });
+
+      btnResetPwd.addEventListener('click', () => {
+        const val = forgotEmail.value.trim();
+        if (!val || !isValidEmail(val)) {
+          forgotEmail.classList.add('is-error');
+          forgotEmail.focus();
+          showToast('Insira um e-mail válido para redefinir a senha.');
+          return;
+        }
+        forgotEmail.classList.remove('is-error');
+        closeModalFn();
+        showToast(`📧 Link de redefinição enviado para ${val}`);
+      });
+
+      /* ── Session check (redirect if already logged in) ──────────── */
+      (function checkSession() {
+        const session =
+          JSON.parse(localStorage.getItem('kanban_session') || 'null') ||
+          JSON.parse(sessionStorage.getItem('kanban_session') || 'null');
+        if (session && session.loggedAt) {
+          // Already logged in, redirect
+          window.location.href = 'index.html';
+        }
+      })();
+    </script>
+
+  </body>
+</html>
