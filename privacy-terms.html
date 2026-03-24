@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacidade e Termos — Task View</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ── Design Tokens ─────────────────────────────────────────────── */
+      :root {
+        --color-brand-primary: #7f56d9;
+        --color-brand-light: #f4ebff;
+        --color-brand-hover: #6941c6;
+        --color-brand-gradient-start: #f4ebff;
+        --color-brand-gradient-end: #7f56d9;
+
+        --color-neutral-900: #0a0d12;
+        --color-neutral-800: #1a1f2e;
+        --color-neutral-700: #2d3748;
+        --color-neutral-500: #6b7280;
+        --color-neutral-400: #9ca3af;
+        --color-neutral-300: #d1d5db;
+        --color-neutral-200: #e9eaeb;
+        --color-neutral-100: #f3f4f6;
+        --color-neutral-50: #f9fafb;
+
+        --color-success: #12b76a;
+        --color-error: #f04438;
+        --color-error-light: #fef3f2;
+        --color-error-border: #fda29b;
+
+        --color-surface: #f0f4f8;
+        --color-white: #ffffff;
+
+        --border-radius-sm: 8px;
+        --border-radius-md: 12px;
+        --border-radius-lg: 16px;
+        --border-radius-full: 9999px;
+
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+
+        --font-family: "Inter", sans-serif;
+        --font-size-xs: 11px;
+        --font-size-sm: 13px;
+        --font-size-base: 14px;
+        --font-size-md: 16px;
+        --font-size-lg: 18px;
+        --font-size-xl: 22px;
+        --font-size-2xl: 28px;
+      }
+
+      /* ── Reset ─────────────────────────────────────────────────────── */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-family);
+        font-size: var(--font-size-base);
+        color: var(--color-neutral-900);
+        background-color: var(--color-surface);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── Layout ─────────────────────────────────────────────────────── */
+      .page {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      /* ── Header ─────────────────────────────────────────────────────── */
+      .header {
+        background: var(--color-white);
+        border-bottom: 1px solid var(--color-neutral-200);
+        padding: 0 24px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .header__logo {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(
+          135deg,
+          var(--color-brand-gradient-start),
+          var(--color-brand-gradient-end)
+        );
+        border-radius: var(--border-radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .header__logo svg {
+        width: 18px;
+        height: 18px;
+        fill: var(--color-white);
+      }
+
+      .header__title {
+        font-size: var(--font-size-md);
+        font-weight: 600;
+        color: var(--color-neutral-900);
+      }
+
+      /* ── Main Content ───────────────────────────────────────────────── */
+      .main {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        padding: 40px 16px 60px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      /* ── Page Header ────────────────────────────────────────────────── */
+      .page-header {
+        text-align: center;
+        padding: 8px 0 4px;
+      }
+
+      .page-header__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--color-brand-light);
+        color: var(--color-brand-primary);
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: var(--border-radius-full);
+        margin-bottom: 16px;
+      }
+
+      .page-header__title {
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        color: var(--color-neutral-900);
+        margin-bottom: 8px;
+        line-height: 1.3;
+      }
+
+      .page-header__subtitle {
+        font-size: var(--font-size-base);
+        color: var(--color-neutral-500);
+        max-width: 560px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* ── Document Card ──────────────────────────────────────────────── */
+      .doc-card {
+        background: var(--color-white);
+        border: 1px solid var(--color-neutral-200);
+        border-radius: var(--border-radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .doc-card__header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--color-neutral-200);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--color-neutral-50);
+      }
+
+      .doc-card__icon {
+        width: 36px;
+        height: 36px;
+        background: var(--color-brand-light);
+        border-radius: var(--border-radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .doc-card__icon svg {
+        width: 18px;
+        height: 18px;
+        stroke: var(--color-brand-primary);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .doc-card__meta {
+        flex: 1;
+      }
+
+      .doc-card__name {
+        font-size: var(--font-size-md);
+        font-weight: 600;
+        color: var(--color-neutral-900);
+        margin-bottom: 2px;
+      }
+
+      .doc-card__date {
+        font-size: var(--font-size-sm);
+        color: var(--color-neutral-400);
+      }
+
+      .doc-card__body {
+        height: 260px;
+        overflow-y: auto;
+        padding: 24px;
+        scroll-behavior: smooth;
+      }
+
+      .doc-card__body::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .doc-card__body::-webkit-scrollbar-track {
+        background: var(--color-neutral-100);
+      }
+
+      .doc-card__body::-webkit-scrollbar-thumb {
+        background: var(--color-neutral-300);
+        border-radius: 3px;
+      }
+
+      .doc-card__body::-webkit-scrollbar-thumb:hover {
+        background: var(--color-neutral-400);
+      }
+
+      .doc-content h2 {
+        font-size: var(--font-size-base);
+        font-weight: 700;
+        color: var(--color-neutral-900);
+        margin: 20px 0 8px;
+      }
+
+      .doc-content h2:first-child {
+        margin-top: 0;
+      }
+
+      .doc-content p {
+        font-size: var(--font-size-base);
+        color: var(--color-neutral-700);
+        line-height: 1.7;
+        margin-bottom: 12px;
+      }
+
+      .doc-content ul {
+        padding-left: 20px;
+        margin-bottom: 12px;
+      }
+
+      .doc-content ul li {
+        font-size: var(--font-size-base);
+        color: var(--color-neutral-700);
+        line-height: 1.7;
+        margin-bottom: 4px;
+      }
+
+      .doc-content strong {
+        color: var(--color-neutral-900);
+        font-weight: 600;
+      }
+
+      /* ── Acceptance Card ────────────────────────────────────────────── */
+      .acceptance-card {
+        background: var(--color-white);
+        border: 1px solid var(--color-neutral-200);
+        border-radius: var(--border-radius-lg);
+        padding: 24px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .acceptance-card__title {
+        font-size: var(--font-size-md);
+        font-weight: 600;
+        color: var(--color-neutral-900);
+        margin-bottom: 4px;
+      }
+
+      .acceptance-card__subtitle {
+        font-size: var(--font-size-sm);
+        color: var(--color-neutral-500);
+        margin-bottom: 20px;
+      }
+
+      /* ── Checkboxes ─────────────────────────────────────────────────── */
+      .checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .checkbox-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 16px;
+        border: 1.5px solid var(--color-neutral-200);
+        border-radius: var(--border-radius-md);
+        cursor: pointer;
+        transition: border-color 0.15s, background-color 0.15s;
+        user-select: none;
+      }
+
+      .checkbox-item:hover {
+        border-color: var(--color-brand-primary);
+        background-color: var(--color-brand-light);
+      }
+
+      .checkbox-item.is-checked {
+        border-color: var(--color-brand-primary);
+        background-color: var(--color-brand-light);
+      }
+
+      .checkbox-item__input {
+        width: 18px;
+        height: 18px;
+        appearance: none;
+        -webkit-appearance: none;
+        border: 2px solid var(--color-neutral-300);
+        border-radius: 4px;
+        flex-shrink: 0;
+        margin-top: 1px;
+        cursor: pointer;
+        transition: border-color 0.15s, background-color 0.15s;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .checkbox-item__input:checked {
+        background-color: var(--color-brand-primary);
+        border-color: var(--color-brand-primary);
+      }
+
+      .checkbox-item__input:checked::after {
+        content: "";
+        position: absolute;
+        width: 4px;
+        height: 8px;
+        border: 2px solid white;
+        border-top: none;
+        border-left: none;
+        transform: rotate(45deg) translate(-1px, -1px);
+      }
+
+      .checkbox-item__input:focus-visible {
+        outline: 2px solid var(--color-brand-primary);
+        outline-offset: 2px;
+      }
+
+      .checkbox-item__label {
+        flex: 1;
+        font-size: var(--font-size-base);
+        color: var(--color-neutral-700);
+        line-height: 1.5;
+        cursor: pointer;
+      }
+
+      .checkbox-item__label strong {
+        color: var(--color-neutral-900);
+        font-weight: 600;
+      }
+
+      /* ── Divider ────────────────────────────────────────────────────── */
+      .divider {
+        height: 1px;
+        background: var(--color-neutral-200);
+        margin: 4px 0 20px;
+      }
+
+      /* ── Actions ────────────────────────────────────────────────────── */
+      .actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      @media (max-width: 480px) {
+        .actions {
+          flex-direction: column-reverse;
+        }
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border-radius: var(--border-radius-sm);
+        font-size: var(--font-size-base);
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.15s, opacity 0.15s, box-shadow 0.15s;
+        text-decoration: none;
+      }
+
+      .btn:focus-visible {
+        outline: 2px solid var(--color-brand-primary);
+        outline-offset: 2px;
+      }
+
+      .btn--primary {
+        background-color: var(--color-brand-primary);
+        color: var(--color-white);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .btn--primary:hover:not(:disabled) {
+        background-color: var(--color-brand-hover);
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn--primary:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+
+      .btn--secondary {
+        background-color: var(--color-white);
+        color: var(--color-neutral-700);
+        border: 1.5px solid var(--color-neutral-200);
+      }
+
+      .btn--secondary:hover {
+        background-color: var(--color-neutral-50);
+        border-color: var(--color-neutral-300);
+      }
+
+      .btn svg {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+      }
+
+      /* ── Already Accepted Banner ─────────────────────────────────────── */
+      .already-accepted {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 20px;
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        border-radius: var(--border-radius-md);
+        color: #065f46;
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+      }
+
+      .already-accepted svg {
+        width: 18px;
+        height: 18px;
+        stroke: #059669;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+      }
+
+      .already-accepted.is-visible {
+        display: flex;
+      }
+
+      /* ── Decline Modal ──────────────────────────────────────────────── */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 200;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+
+      .modal-overlay.is-open {
+        display: flex;
+      }
+
+      .modal {
+        background: var(--color-white);
+        border-radius: var(--border-radius-lg);
+        padding: 28px 28px 24px;
+        max-width: 440px;
+        width: 100%;
+        box-shadow: var(--shadow-lg);
+        animation: modal-in 0.2s ease;
+      }
+
+      @keyframes modal-in {
+        from {
+          opacity: 0;
+          transform: scale(0.95) translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      .modal__icon {
+        width: 48px;
+        height: 48px;
+        background: var(--color-error-light);
+        border-radius: var(--border-radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+      }
+
+      .modal__icon svg {
+        width: 24px;
+        height: 24px;
+        stroke: var(--color-error);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .modal__title {
+        font-size: var(--font-size-lg);
+        font-weight: 700;
+        color: var(--color-neutral-900);
+        margin-bottom: 8px;
+      }
+
+      .modal__body {
+        font-size: var(--font-size-base);
+        color: var(--color-neutral-500);
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+
+      .modal__actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+      }
+
+      /* ── Toast ──────────────────────────────────────────────────────── */
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: var(--color-neutral-900);
+        color: var(--color-white);
+        padding: 12px 20px;
+        border-radius: var(--border-radius-sm);
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: var(--shadow-lg);
+        z-index: 300;
+        transition: transform 0.3s ease;
+        white-space: nowrap;
+      }
+
+      .toast.is-visible {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      .toast--success {
+        background: var(--color-success);
+      }
+
+      .toast svg {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+      }
+
+      /* ── Responsive ─────────────────────────────────────────────────── */
+      @media (max-width: 640px) {
+        .main {
+          padding: 24px 12px 48px;
+        }
+
+        .doc-card__header {
+          padding: 16px;
+        }
+
+        .doc-card__body {
+          height: 200px;
+          padding: 16px;
+        }
+
+        .acceptance-card {
+          padding: 16px;
+        }
+
+        .page-header__title {
+          font-size: var(--font-size-xl);
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .main {
+          padding: 48px 24px 80px;
+        }
+
+        .doc-card__body {
+          height: 300px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <!-- Header -->
+      <header class="header">
+        <div class="header__logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 11l3 3L22 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <span class="header__title">Task View</span>
+      </header>
+
+      <!-- Main -->
+      <main class="main" id="main">
+        <div class="container">
+
+          <!-- Page Header -->
+          <div class="page-header">
+            <span class="page-header__badge">
+              <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              Conformidade Legal
+            </span>
+            <h1 class="page-header__title">Privacidade e Termos de Serviço</h1>
+            <p class="page-header__subtitle">
+              Leia atentamente os documentos abaixo antes de prosseguir.
+              Para utilizar a plataforma você precisa aceitar ambos os documentos.
+            </p>
+          </div>
+
+          <!-- Already accepted banner -->
+          <div class="already-accepted" id="alreadyAccepted" role="status">
+            <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span>Você já aceitou os termos anteriormente. Seus checkboxes foram preenchidos automaticamente.</span>
+          </div>
+
+          <!-- Privacy Policy Document -->
+          <article class="doc-card" aria-labelledby="privacy-title">
+            <div class="doc-card__header">
+              <div class="doc-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="doc-card__meta">
+                <h2 class="doc-card__name" id="privacy-title">Política de Privacidade</h2>
+                <p class="doc-card__date">Última atualização: 1º de março de 2026</p>
+              </div>
+            </div>
+            <div class="doc-card__body" tabindex="0" role="region" aria-label="Texto completo da Política de Privacidade — role para ler">
+              <div class="doc-content">
+                <h2>1. Introdução</h2>
+                <p>
+                  A <strong>Task View</strong> ("nós", "nosso" ou "empresa") está comprometida em proteger a sua
+                  privacidade. Esta Política de Privacidade descreve como coletamos, usamos e protegemos suas
+                  informações pessoais quando você utiliza nossa plataforma de gerenciamento de tarefas.
+                </p>
+
+                <h2>2. Informações que Coletamos</h2>
+                <p>Podemos coletar os seguintes tipos de informações:</p>
+                <ul>
+                  <li><strong>Dados de cadastro:</strong> nome, endereço de e-mail e senha (armazenada de forma criptografada).</li>
+                  <li><strong>Dados de uso:</strong> boards criados, tarefas, colunas e interações na plataforma.</li>
+                  <li><strong>Dados técnicos:</strong> endereço IP, tipo de navegador, sistema operacional e logs de acesso.</li>
+                  <li><strong>Preferências:</strong> configurações salvas localmente no seu dispositivo via localStorage.</li>
+                </ul>
+
+                <h2>3. Como Utilizamos suas Informações</h2>
+                <p>Suas informações são utilizadas para:</p>
+                <ul>
+                  <li>Fornecer, operar e melhorar a plataforma Task View.</li>
+                  <li>Autenticar sua identidade e proteger sua conta.</li>
+                  <li>Comunicar atualizações, novidades e suporte técnico.</li>
+                  <li>Cumprir obrigações legais e regulatórias.</li>
+                </ul>
+
+                <h2>4. Compartilhamento de Dados</h2>
+                <p>
+                  Não vendemos, alugamos ou compartilhamos suas informações pessoais com terceiros para fins
+                  comerciais. Podemos compartilhar dados com prestadores de serviços que atuem em nosso nome,
+                  sujeitos a acordos de confidencialidade, e quando exigido por lei.
+                </p>
+
+                <h2>5. Armazenamento e Segurança</h2>
+                <p>
+                  Seus dados são armazenados em servidores seguros com criptografia em trânsito (TLS) e em
+                  repouso. Adotamos medidas técnicas e organizacionais para prevenir acesso não autorizado,
+                  alteração, divulgação ou destruição de suas informações.
+                </p>
+
+                <h2>6. Cookies e Armazenamento Local</h2>
+                <p>
+                  Utilizamos <strong>localStorage</strong> e <strong>sessionStorage</strong> para armazenar
+                  preferências e estado da sessão. Você pode limpar esses dados a qualquer momento nas
+                  configurações do seu navegador. O uso da plataforma pode ser limitado caso você desabilite
+                  o armazenamento local.
+                </p>
+
+                <h2>7. Seus Direitos</h2>
+                <p>De acordo com a <strong>LGPD (Lei nº 13.709/2018)</strong>, você tem direito a:</p>
+                <ul>
+                  <li>Acessar, corrigir ou excluir seus dados pessoais.</li>
+                  <li>Solicitar a portabilidade dos seus dados.</li>
+                  <li>Revogar seu consentimento a qualquer momento.</li>
+                  <li>Obter informações sobre o compartilhamento dos seus dados.</li>
+                </ul>
+                <p>Para exercer esses direitos, entre em contato pelo e-mail: <strong>privacidade@taskview.com.br</strong>.</p>
+
+                <h2>8. Retenção de Dados</h2>
+                <p>
+                  Mantemos seus dados pelo tempo necessário para a prestação do serviço. Após o encerramento
+                  da conta, os dados são anonimizados ou excluídos dentro do prazo de 90 dias, salvo obrigação
+                  legal em contrário.
+                </p>
+
+                <h2>9. Alterações nesta Política</h2>
+                <p>
+                  Podemos atualizar esta Política periodicamente. Notificaremos você sobre alterações
+                  significativas por e-mail ou aviso na plataforma. O uso contínuo após a notificação
+                  constitui aceitação das alterações.
+                </p>
+
+                <h2>10. Contato</h2>
+                <p>
+                  Dúvidas sobre esta Política podem ser enviadas para
+                  <strong>privacidade@taskview.com.br</strong> ou por correio para nosso endereço registrado.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Terms of Service Document -->
+          <article class="doc-card" aria-labelledby="terms-title">
+            <div class="doc-card__header">
+              <div class="doc-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              </div>
+              <div class="doc-card__meta">
+                <h2 class="doc-card__name" id="terms-title">Termos de Serviço</h2>
+                <p class="doc-card__date">Última atualização: 1º de março de 2026</p>
+              </div>
+            </div>
+            <div class="doc-card__body" tabindex="0" role="region" aria-label="Texto completo dos Termos de Serviço — role para ler">
+              <div class="doc-content">
+                <h2>1. Aceitação dos Termos</h2>
+                <p>
+                  Ao acessar e utilizar a plataforma <strong>Task View</strong>, você concorda com estes
+                  Termos de Serviço e com todas as leis e regulamentos aplicáveis. Se você não concordar com
+                  algum destes termos, está proibido de usar ou acessar este serviço.
+                </p>
+
+                <h2>2. Descrição do Serviço</h2>
+                <p>
+                  O Task View é uma plataforma web de gerenciamento de tarefas no estilo Kanban que permite
+                  criar boards, colunas e cards para organizar projetos e atividades. A plataforma é fornecida
+                  "como está", podendo sofrer alterações a qualquer momento.
+                </p>
+
+                <h2>3. Conta de Usuário</h2>
+                <p>Para utilizar a plataforma, você deve:</p>
+                <ul>
+                  <li>Ter pelo menos 13 anos de idade.</li>
+                  <li>Fornecer informações de cadastro precisas e atualizadas.</li>
+                  <li>Manter a confidencialidade de sua senha e credenciais.</li>
+                  <li>Notificar imediatamente qualquer uso não autorizado da sua conta.</li>
+                </ul>
+                <p>
+                  Você é responsável por todas as atividades realizadas sob sua conta.
+                </p>
+
+                <h2>4. Uso Aceitável</h2>
+                <p>Ao usar o Task View, você concorda em <strong>não</strong>:</p>
+                <ul>
+                  <li>Violar qualquer lei ou regulamento aplicável.</li>
+                  <li>Fazer upload de conteúdo ilegal, difamatório, ofensivo ou prejudicial.</li>
+                  <li>Tentar obter acesso não autorizado a outros sistemas ou contas.</li>
+                  <li>Utilizar o serviço para fins de spam ou atividades maliciosas.</li>
+                  <li>Reproduzir, duplicar ou revender qualquer parte do serviço sem permissão.</li>
+                </ul>
+
+                <h2>5. Propriedade Intelectual</h2>
+                <p>
+                  O serviço e seu conteúdo original (excluindo o conteúdo criado pelos usuários) são e
+                  permanecerão propriedade exclusiva da Task View. Nossos serviços são protegidos por leis
+                  de direitos autorais, marcas registradas e outras leis.
+                </p>
+
+                <h2>6. Conteúdo do Usuário</h2>
+                <p>
+                  Você retém a propriedade de todo o conteúdo que cria na plataforma (boards, tarefas, textos).
+                  Ao publicar conteúdo, você nos concede uma licença limitada, não exclusiva e livre de royalties
+                  para exibir e processar esse conteúdo exclusivamente para a operação do serviço.
+                </p>
+
+                <h2>7. Disponibilidade do Serviço</h2>
+                <p>
+                  Nos esforçamos para manter o serviço disponível 99,5% do tempo, mas não garantimos
+                  disponibilidade ininterrupta. Podemos suspender o serviço para manutenção ou atualizações,
+                  com aviso prévio sempre que possível.
+                </p>
+
+                <h2>8. Limitação de Responsabilidade</h2>
+                <p>
+                  O Task View não será responsável por danos indiretos, incidentais, especiais ou consequentes
+                  decorrentes do uso ou incapacidade de usar o serviço, incluindo perda de dados. Nossa
+                  responsabilidade total não excederá o valor pago pelo serviço nos últimos 12 meses.
+                </p>
+
+                <h2>9. Encerramento</h2>
+                <p>
+                  Podemos encerrar ou suspender seu acesso imediatamente, sem aviso prévio, se você violar
+                  estes Termos. Você pode encerrar sua conta a qualquer momento através das configurações da
+                  plataforma. Após o encerramento, seus dados serão tratados conforme a Política de Privacidade.
+                </p>
+
+                <h2>10. Alterações nos Termos</h2>
+                <p>
+                  Reservamo-nos o direito de modificar estes Termos a qualquer momento. A continuação do uso
+                  do serviço após as alterações constitui aceitação dos novos Termos. Notificaremos sobre
+                  mudanças materiais com pelo menos 30 dias de antecedência.
+                </p>
+
+                <h2>11. Lei Aplicável</h2>
+                <p>
+                  Estes Termos são regidos pelas leis do Brasil. Qualquer disputa será resolvida no foro
+                  da comarca de São Paulo, SP, com renúncia a qualquer outro, por mais privilegiado que seja.
+                </p>
+
+                <h2>12. Contato</h2>
+                <p>
+                  Para questões sobre estes Termos, entre em contato pelo e-mail
+                  <strong>legal@taskview.com.br</strong>.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Acceptance -->
+          <section class="acceptance-card" aria-labelledby="acceptance-title">
+            <h2 class="acceptance-card__title" id="acceptance-title">Confirme sua leitura e aceitação</h2>
+            <p class="acceptance-card__subtitle">Marque ambas as opções abaixo para prosseguir.</p>
+
+            <div class="checkbox-group" role="group" aria-label="Checkboxes de aceitação">
+              <label class="checkbox-item" id="label-privacy">
+                <input
+                  type="checkbox"
+                  class="checkbox-item__input"
+                  id="checkPrivacy"
+                  aria-describedby="label-privacy"
+                />
+                <span class="checkbox-item__label">
+                  <strong>Li e concordo com a Política de Privacidade.</strong><br/>
+                  Compreendo como meus dados são coletados, armazenados e utilizados.
+                </span>
+              </label>
+
+              <label class="checkbox-item" id="label-terms">
+                <input
+                  type="checkbox"
+                  class="checkbox-item__input"
+                  id="checkTerms"
+                  aria-describedby="label-terms"
+                />
+                <span class="checkbox-item__label">
+                  <strong>Li e concordo com os Termos de Serviço.</strong><br/>
+                  Aceito as condições de uso, direitos e responsabilidades descritos no documento.
+                </span>
+              </label>
+            </div>
+
+            <div class="divider" aria-hidden="true"></div>
+
+            <div class="actions">
+              <button
+                type="button"
+                class="btn btn--secondary"
+                id="btnDecline"
+                aria-label="Recusar os termos e sair"
+              >
+                <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Recusar
+              </button>
+              <button
+                type="button"
+                class="btn btn--primary"
+                id="btnAccept"
+                disabled
+                aria-disabled="true"
+                aria-label="Aceitar os termos e continuar para a plataforma"
+              >
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                Aceitar e Continuar
+              </button>
+            </div>
+          </section>
+
+        </div>
+      </main>
+    </div>
+
+    <!-- Decline Confirmation Modal -->
+    <div
+      class="modal-overlay"
+      id="declineModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      aria-describedby="modal-desc"
+    >
+      <div class="modal">
+        <div class="modal__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h2 class="modal__title" id="modal-title">Recusar os termos?</h2>
+        <p class="modal__body" id="modal-desc">
+          Ao recusar a Política de Privacidade e os Termos de Serviço, você não poderá
+          acessar a plataforma Task View. Você pode retornar e aceitar os termos a qualquer momento.
+        </p>
+        <div class="modal__actions">
+          <button type="button" class="btn btn--secondary" id="btnCancelDecline">
+            Voltar e ler
+          </button>
+          <button type="button" class="btn btn--primary" id="btnConfirmDecline"
+            style="background-color: var(--color-error);">
+            <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Confirmar recusa
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast toast--success" id="toast" role="status" aria-live="polite">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      <span id="toastMsg">Consentimento registrado com sucesso!</span>
+    </div>
+
+    <script>
+      'use strict';
+
+      // ── Constants ────────────────────────────────────────────────────
+      const STORAGE_KEY = 'taskview_consent';
+      const REDIRECT_URL = 'index.html';
+      const CONSENT_VERSION = '2026-03-01';
+
+      // ── DOM Refs ─────────────────────────────────────────────────────
+      const checkPrivacy     = document.getElementById('checkPrivacy');
+      const checkTerms       = document.getElementById('checkTerms');
+      const btnAccept        = document.getElementById('btnAccept');
+      const btnDecline       = document.getElementById('btnDecline');
+      const declineModal     = document.getElementById('declineModal');
+      const btnCancelDecline = document.getElementById('btnCancelDecline');
+      const btnConfirmDecline= document.getElementById('btnConfirmDecline');
+      const toast            = document.getElementById('toast');
+      const toastMsg         = document.getElementById('toastMsg');
+      const alreadyAccepted  = document.getElementById('alreadyAccepted');
+      const labelPrivacy     = document.getElementById('label-privacy');
+      const labelTerms       = document.getElementById('label-terms');
+
+      // ── State ────────────────────────────────────────────────────────
+
+      /**
+       * Reads consent record from localStorage.
+       * @returns {{ version: string, timestamp: string } | null}
+       */
+      function getStoredConsent() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch {
+          return null;
+        }
+      }
+
+      /**
+       * Saves consent record to localStorage.
+       */
+      function saveConsent() {
+        const record = {
+          version: CONSENT_VERSION,
+          timestamp: new Date().toISOString(),
+          privacyAccepted: true,
+          termsAccepted: true,
+        };
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
+        } catch (e) {
+          console.warn('Could not save consent to localStorage:', e);
+        }
+      }
+
+      /**
+       * Removes consent record from localStorage.
+       */
+      function revokeConsent() {
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+        } catch (e) {
+          console.warn('Could not remove consent from localStorage:', e);
+        }
+      }
+
+      // ── Checkbox Logic ───────────────────────────────────────────────
+
+      function updateAcceptButton() {
+        const bothChecked = checkPrivacy.checked && checkTerms.checked;
+        btnAccept.disabled = !bothChecked;
+        btnAccept.setAttribute('aria-disabled', String(!bothChecked));
+      }
+
+      function syncCheckboxStyle(checkbox, label) {
+        if (checkbox.checked) {
+          label.classList.add('is-checked');
+        } else {
+          label.classList.remove('is-checked');
+        }
+      }
+
+      checkPrivacy.addEventListener('change', () => {
+        syncCheckboxStyle(checkPrivacy, labelPrivacy);
+        updateAcceptButton();
+      });
+
+      checkTerms.addEventListener('change', () => {
+        syncCheckboxStyle(checkTerms, labelTerms);
+        updateAcceptButton();
+      });
+
+      // ── Accept Flow ──────────────────────────────────────────────────
+
+      btnAccept.addEventListener('click', () => {
+        if (!checkPrivacy.checked || !checkTerms.checked) return;
+
+        saveConsent();
+        showToast('✓ Consentimento registrado! Redirecionando…', 'success');
+
+        btnAccept.disabled = true;
+        btnDecline.disabled = true;
+
+        setTimeout(() => {
+          window.location.href = REDIRECT_URL;
+        }, 1800);
+      });
+
+      // ── Decline Flow ─────────────────────────────────────────────────
+
+      btnDecline.addEventListener('click', () => {
+        openDeclineModal();
+      });
+
+      btnCancelDecline.addEventListener('click', () => {
+        closeDeclineModal();
+      });
+
+      btnConfirmDecline.addEventListener('click', () => {
+        revokeConsent();
+        closeDeclineModal();
+        showToast('Acesso encerrado. Até mais!', 'neutral');
+
+        setTimeout(() => {
+          // Reload the page to reset state (simulates session end)
+          window.location.reload();
+        }, 1600);
+      });
+
+      // Close modal on overlay click
+      declineModal.addEventListener('click', (e) => {
+        if (e.target === declineModal) closeDeclineModal();
+      });
+
+      // Close modal on Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && declineModal.classList.contains('is-open')) {
+          closeDeclineModal();
+        }
+      });
+
+      function openDeclineModal() {
+        declineModal.classList.add('is-open');
+        btnCancelDecline.focus();
+      }
+
+      function closeDeclineModal() {
+        declineModal.classList.remove('is-open');
+        btnDecline.focus();
+      }
+
+      // ── Toast ────────────────────────────────────────────────────────
+
+      let toastTimer = null;
+
+      function showToast(message, type = 'success') {
+        toastMsg.textContent = message;
+        toast.classList.toggle('toast--success', type === 'success');
+        toast.classList.add('is-visible');
+
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('is-visible');
+        }, 3000);
+      }
+
+      // ── Init: restore prior consent ──────────────────────────────────
+
+      (function init() {
+        const prior = getStoredConsent();
+        if (prior) {
+          // Pre-fill checkboxes and show informational banner
+          checkPrivacy.checked = true;
+          checkTerms.checked = true;
+          syncCheckboxStyle(checkPrivacy, labelPrivacy);
+          syncCheckboxStyle(checkTerms, labelTerms);
+          updateAcceptButton();
+          alreadyAccepted.classList.add('is-visible');
+        }
+      })();
+    </script>
+  </body>
+</html>
