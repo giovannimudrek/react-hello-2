@@ -3,9 +3,795 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello World</title>
+    <title>Task View - Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Hello World</h1>
+    <div class="app">
+
+      <!-- ==============================
+           HEADER
+           ============================== -->
+      <header class="header">
+
+        <!-- Brand -->
+        <a href="#" class="header__brand">
+          <div class="header__logo">
+            <svg class="header__logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect width="32" height="32" rx="6" fill="url(#logo-grad)" />
+              <path
+                d="M7 10h7v12H7V10zM18 10h7v7h-7v-7z"
+                fill="white"
+                opacity="0.9"
+              />
+              <defs>
+                <linearGradient id="logo-grad" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#f4ebff" />
+                  <stop offset="100%" stop-color="#7f56d9" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <span class="header__brand-name">Task View</span>
+        </a>
+
+        <!-- Search -->
+        <div class="header__search" role="search">
+          <svg class="header__search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input
+            class="header__search-input"
+            type="search"
+            placeholder="Pesquise suas tarefas"
+            aria-label="Pesquise suas tarefas"
+          />
+        </div>
+
+        <!-- Actions -->
+        <div class="header__actions">
+          <button class="header__notification-btn" aria-label="Notificações">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <path d="M9 1.5a5.5 5.5 0 0 0-5.5 5.5c0 2.42-.56 4.09-1.18 5.16A1 1 0 0 0 3.17 14h11.66a1 1 0 0 0 .85-1.84C15.06 11.09 14.5 9.42 14.5 7A5.5 5.5 0 0 0 9 1.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7 14a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="header__avatar" role="img" aria-label="Usuário DS">DS</div>
+        </div>
+
+      </header>
+
+      <!-- ==============================
+           MAIN
+           ============================== -->
+      <div class="main">
+
+        <!-- Sidebar -->
+        <nav class="sidebar" aria-label="Navegação principal">
+          <ul class="nav" role="list">
+            <li>
+              <a href="#" class="nav__item" aria-label="Home">
+                <span class="nav__icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <rect x="1.5" y="1.5" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                    <rect x="10.5" y="1.5" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                    <rect x="1.5" y="10.5" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                    <rect x="10.5" y="10.5" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                </span>
+                <span>Home</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav__item" aria-label="Notificação">
+                <span class="nav__icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M9 1.5a5.5 5.5 0 0 0-5.5 5.5c0 2.42-.56 4.09-1.18 5.16A1 1 0 0 0 3.17 14h11.66a1 1 0 0 0 .85-1.84C15.06 11.09 14.5 9.42 14.5 7A5.5 5.5 0 0 0 9 1.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 14a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span>Notificação</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav__item nav__item--active" aria-label="Tarefas" aria-current="page">
+                <span class="nav__icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <rect x="1.5" y="1.5" width="15" height="15" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M1.5 7h15" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M7 7v9" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                </span>
+                <span>Tarefas</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav__item" aria-label="Analytics">
+                <span class="nav__icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M2 12l4-4 4 3 6-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <span>Analytics</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Board Area -->
+        <main class="board-area">
+
+          <!-- Toolbar -->
+          <div class="board-toolbar">
+
+            <!-- Filter Tabs -->
+            <div class="board-filters" role="group" aria-label="Filtros de tarefas">
+              <button class="filter-btn filter-btn--active" aria-pressed="true">
+                <svg class="filter-btn__icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2 4h10M4 7h6M6 10h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                Todos
+              </button>
+              <button class="filter-btn" aria-pressed="false">
+                <svg class="filter-btn__icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M7 4v3.5l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                Pendentes
+              </button>
+              <button class="filter-btn" aria-pressed="false">
+                <svg class="filter-btn__icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2.5 7.5l3 3 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Concluídas
+              </button>
+            </div>
+
+            <!-- Members + Add -->
+            <div class="board-toolbar__right">
+              <div class="member-avatars" role="list" aria-label="Membros do board">
+                <div class="member-avatars__item" role="listitem" aria-label="Membro 1">
+                  <div class="avatar-placeholder avatar-placeholder--1">A1</div>
+                </div>
+                <div class="member-avatars__item" role="listitem" aria-label="Membro 2">
+                  <div class="avatar-placeholder avatar-placeholder--2">A2</div>
+                </div>
+                <div class="member-avatars__item" role="listitem" aria-label="Membro 3">
+                  <div class="avatar-placeholder avatar-placeholder--3">A3</div>
+                </div>
+                <div class="member-avatars__item" role="listitem" aria-label="Membro 4">
+                  <div class="avatar-placeholder avatar-placeholder--4">A4</div>
+                </div>
+                <div class="member-avatars__item" role="listitem" aria-label="Membro 5">
+                  <div class="avatar-placeholder avatar-placeholder--5">A5</div>
+                </div>
+                <div class="member-avatars__item" role="listitem" aria-label="Membro 6">
+                  <div class="avatar-placeholder avatar-placeholder--6">A6</div>
+                </div>
+                <div class="member-avatars__item" role="listitem" aria-label="Membro 7">
+                  <div class="avatar-placeholder avatar-placeholder--7">A7</div>
+                </div>
+                <div class="member-avatars__item" role="listitem" aria-label="Membro 8">
+                  <div class="avatar-placeholder avatar-placeholder--8">A8</div>
+                </div>
+                <div class="member-avatars__more" role="listitem" aria-label="5 membros adicionais">+5</div>
+              </div>
+              <button class="add-member-btn" aria-label="Adicionar membro">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Kanban Columns -->
+          <div class="board-columns">
+
+            <!-- ================
+                 COLUMN: BACKLOG
+                 ================ -->
+            <section class="column" aria-label="Backlog">
+              <div class="column__header">
+                <div class="column__title-wrap">
+                  <h2 class="column__title">Backlog</h2>
+                  <span class="column__count">10 tarefas</span>
+                </div>
+                <button class="column__add-btn" aria-label="Adicionar tarefa ao Backlog">+</button>
+              </div>
+              <div class="column__cards" role="list">
+
+                <!-- Card 1 -->
+                <article class="card" role="listitem">
+                  <div class="card__header">
+                    <div class="card__tags">
+                      <span class="tag tag--urgente">Urgente</span>
+                      <span class="tag tag--interno-orange">Interno</span>
+                      <span class="tag tag--interno-green">Interno</span>
+                    </div>
+                    <button class="card__menu-btn" aria-label="Menu da tarefa">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="8" cy="3" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="13" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Customer Support Expert</h3>
+                    <p class="card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__date">
+                      <svg class="card__date-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <rect x="1" y="2.5" width="11" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M1 5.5h11" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M4 1v3M9 1v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4 Mar. 2026
+                    </div>
+                    <div class="card__tasks">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <path d="M1.5 3h10M1.5 6.5h10M1.5 10h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4/12
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__assignees" aria-label="Responsáveis">
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--1">M</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--2">N</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--3">O</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--4">P</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--5">Q</div></div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 3.5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H8L6.5 10 5 8.5H3a1 1 0 0 1-1-1v-4z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 9V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v5l-2-1H3a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="card" role="listitem">
+                  <div class="card__header">
+                    <div class="card__tags">
+                      <span class="tag tag--urgente">Urgente</span>
+                      <span class="tag tag--interno-orange">Interno</span>
+                      <span class="tag tag--interno-green">Interno</span>
+                    </div>
+                    <button class="card__menu-btn" aria-label="Menu da tarefa">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="8" cy="3" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="13" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Customer Support Expert</h3>
+                    <p class="card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__date">
+                      <svg class="card__date-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <rect x="1" y="2.5" width="11" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M1 5.5h11" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M4 1v3M9 1v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4 Mar. 2026
+                    </div>
+                    <div class="card__tasks">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <path d="M1.5 3h10M1.5 6.5h10M1.5 10h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4/12
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__assignees" aria-label="Responsáveis">
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--3">R</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--6">S</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--7">T</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--1">U</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--4">V</div></div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 3.5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H8L6.5 10 5 8.5H3a1 1 0 0 1-1-1v-4z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 9V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v5l-2-1H3a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="card" role="listitem">
+                  <div class="card__header">
+                    <div class="card__tags">
+                      <span class="tag tag--urgente">Urgente</span>
+                      <span class="tag tag--interno-orange">Interno</span>
+                      <span class="tag tag--interno-green">Interno</span>
+                    </div>
+                    <button class="card__menu-btn" aria-label="Menu da tarefa">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="8" cy="3" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="13" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Customer Support Expert</h3>
+                    <p class="card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__date">
+                      <svg class="card__date-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <rect x="1" y="2.5" width="11" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M1 5.5h11" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M4 1v3M9 1v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4 Mar. 2026
+                    </div>
+                    <div class="card__tasks">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <path d="M1.5 3h10M1.5 6.5h10M1.5 10h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4/12
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__assignees" aria-label="Responsáveis">
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--2">W</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--5">X</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--8">Y</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--1">Z</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--3">A</div></div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 3.5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H8L6.5 10 5 8.5H3a1 1 0 0 1-1-1v-4z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 9V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v5l-2-1H3a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 4 (partially visible) -->
+                <article class="card" role="listitem">
+                  <div class="card__header">
+                    <div class="card__tags">
+                      <span class="tag tag--urgente">Urgente</span>
+                      <span class="tag tag--interno-orange">Interno</span>
+                      <span class="tag tag--interno-green">Interno</span>
+                    </div>
+                    <button class="card__menu-btn" aria-label="Menu da tarefa">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="8" cy="3" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="13" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Customer Support Expert</h3>
+                    <p class="card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__date">
+                      <svg class="card__date-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <rect x="1" y="2.5" width="11" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M1 5.5h11" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M4 1v3M9 1v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4 Mar. 2026
+                    </div>
+                    <div class="card__tasks">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <path d="M1.5 3h10M1.5 6.5h10M1.5 10h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4/12
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__assignees" aria-label="Responsáveis">
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--4">B</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--7">C</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--2">D</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--6">E</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--8">F</div></div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 3.5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H8L6.5 10 5 8.5H3a1 1 0 0 1-1-1v-4z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 9V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v5l-2-1H3a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+              </div>
+            </section>
+
+            <!-- ==================
+                 COLUMN: PENDENTES
+                 ================== -->
+            <section class="column" aria-label="Pendentes">
+              <div class="column__header">
+                <div class="column__title-wrap">
+                  <h2 class="column__title">Pendentes</h2>
+                  <span class="column__count">2 tarefas</span>
+                </div>
+                <button class="column__add-btn" aria-label="Adicionar tarefa a Pendentes">+</button>
+              </div>
+              <div class="column__cards" role="list">
+
+                <!-- Card 1 -->
+                <article class="card" role="listitem">
+                  <div class="card__header">
+                    <div class="card__tags">
+                      <span class="tag tag--urgente">Urgente</span>
+                      <span class="tag tag--interno-orange">Interno</span>
+                      <span class="tag tag--interno-green">Interno</span>
+                    </div>
+                    <button class="card__menu-btn" aria-label="Menu da tarefa">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="8" cy="3" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="13" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Customer Support Expert</h3>
+                    <p class="card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__date">
+                      <svg class="card__date-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <rect x="1" y="2.5" width="11" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M1 5.5h11" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M4 1v3M9 1v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4 Mar. 2026
+                    </div>
+                    <div class="card__tasks">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <path d="M1.5 3h10M1.5 6.5h10M1.5 10h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4/12
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__assignees" aria-label="Responsáveis">
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--5">G</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--1">H</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--3">I</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--7">J</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--4">K</div></div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 3.5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H8L6.5 10 5 8.5H3a1 1 0 0 1-1-1v-4z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 9V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v5l-2-1H3a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="card" role="listitem">
+                  <div class="card__header">
+                    <div class="card__tags">
+                      <span class="tag tag--urgente">Urgente</span>
+                      <span class="tag tag--interno-orange">Interno</span>
+                      <span class="tag tag--interno-green">Interno</span>
+                    </div>
+                    <button class="card__menu-btn" aria-label="Menu da tarefa">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="8" cy="3" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="13" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Customer Support Expert</h3>
+                    <p class="card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__date">
+                      <svg class="card__date-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <rect x="1" y="2.5" width="11" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M1 5.5h11" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M4 1v3M9 1v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4 Mar. 2026
+                    </div>
+                    <div class="card__tasks">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <path d="M1.5 3h10M1.5 6.5h10M1.5 10h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4/12
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__assignees" aria-label="Responsáveis">
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--6">L</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--2">M</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--8">N</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--5">O</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--3">P</div></div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 3.5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H8L6.5 10 5 8.5H3a1 1 0 0 1-1-1v-4z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 9V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v5l-2-1H3a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+              </div>
+            </section>
+
+            <!-- ====================
+                 COLUMN: CONCLUIDAS
+                 ==================== -->
+            <section class="column" aria-label="Concluídas">
+              <div class="column__header">
+                <div class="column__title-wrap">
+                  <h2 class="column__title">Concluídas</h2>
+                  <span class="column__count">3 tarefas</span>
+                </div>
+                <button class="column__add-btn" aria-label="Adicionar tarefa a Concluídas">+</button>
+              </div>
+              <div class="column__cards" role="list">
+
+                <!-- Card 1 -->
+                <article class="card" role="listitem">
+                  <div class="card__header">
+                    <div class="card__tags">
+                      <span class="tag tag--urgente">Urgente</span>
+                      <span class="tag tag--interno-orange">Interno</span>
+                      <span class="tag tag--interno-green">Interno</span>
+                    </div>
+                    <button class="card__menu-btn" aria-label="Menu da tarefa">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="8" cy="3" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="13" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Customer Support Expert</h3>
+                    <p class="card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__date">
+                      <svg class="card__date-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <rect x="1" y="2.5" width="11" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M1 5.5h11" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M4 1v3M9 1v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4 Mar. 2026
+                    </div>
+                    <div class="card__tasks">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <path d="M1.5 3h10M1.5 6.5h10M1.5 10h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4/12
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__assignees" aria-label="Responsáveis">
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--7">Q</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--3">R</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--1">S</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--4">T</div></div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 3.5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H8L6.5 10 5 8.5H3a1 1 0 0 1-1-1v-4z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 9V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v5l-2-1H3a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="card" role="listitem">
+                  <div class="card__header">
+                    <div class="card__tags">
+                      <span class="tag tag--urgente">Urgente</span>
+                      <span class="tag tag--interno-orange">Interno</span>
+                      <span class="tag tag--interno-green">Interno</span>
+                    </div>
+                    <button class="card__menu-btn" aria-label="Menu da tarefa">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="8" cy="3" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="13" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Customer Support Expert</h3>
+                    <p class="card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__date">
+                      <svg class="card__date-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <rect x="1" y="2.5" width="11" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M1 5.5h11" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M4 1v3M9 1v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4 Mar. 2026
+                    </div>
+                    <div class="card__tasks">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <path d="M1.5 3h10M1.5 6.5h10M1.5 10h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4/12
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__assignees" aria-label="Responsáveis">
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--8">U</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--5">V</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--2">W</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--6">X</div></div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 3.5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H8L6.5 10 5 8.5H3a1 1 0 0 1-1-1v-4z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 9V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v5l-2-1H3a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="card" role="listitem">
+                  <div class="card__header">
+                    <div class="card__tags">
+                      <span class="tag tag--urgente">Urgente</span>
+                      <span class="tag tag--interno-orange">Interno</span>
+                      <span class="tag tag--interno-green">Interno</span>
+                    </div>
+                    <button class="card__menu-btn" aria-label="Menu da tarefa">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="8" cy="3" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="13" r="1" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Customer Support Expert</h3>
+                    <p class="card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__date">
+                      <svg class="card__date-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <rect x="1" y="2.5" width="11" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M1 5.5h11" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M4 1v3M9 1v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4 Mar. 2026
+                    </div>
+                    <div class="card__tasks">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <path d="M1.5 3h10M1.5 6.5h10M1.5 10h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      4/12
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__assignees" aria-label="Responsáveis">
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--1">Y</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--4">Z</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--7">A</div></div>
+                      <div class="card__assignee"><div class="avatar-placeholder avatar-placeholder--3">B</div></div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 3.5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H8L6.5 10 5 8.5H3a1 1 0 0 1-1-1v-4z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                          <path d="M2 9V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v5l-2-1H3a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.2"/>
+                        </svg>
+                        8
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+              </div>
+            </section>
+
+          </div>
+        </main>
+      </div>
+    </div>
   </body>
 </html>
