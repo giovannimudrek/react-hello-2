@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard de Graficos - Task View</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+      /* ============================================
+         Dashboard de Graficos - Task View
+         Figma: node-id=15-5820
+         ============================================ */
+
+      /* Custom Properties */
+      :root {
+        /* Brand */
+        --color-brand: #7f56d9;
+        --color-brand-light: #f4ebff;
+        --color-brand-gradient-start: #f4ebff;
+        --color-brand-gradient-end: #7f56d9;
+
+        /* Backgrounds */
+        --color-bg: #f5f5f5;
+        --color-white: #ffffff;
+        --color-header-bg: #ffffff;
+        --color-sidebar-bg: #ffffff;
+        --color-card-bg: #ffffff;
+
+        /* Text */
+        --color-text-primary: #0a0d12;
+        --color-text-secondary: #414651;
+        --color-text-muted: #535862;
+        --color-text-placeholder: #717680;
+
+        /* Borders */
+        --color-border: #e5e7eb;
+
+        /* Chart colors */
+        --color-green: #039855;
+        --color-orange: #dc6803;
+        --color-red: #d92d20;
+
+        /* Shadows */
+        --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+        --shadow-header: 0 1px 0 var(--color-border);
+
+        /* Typography */
+        --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        --font-size-xs: 11px;
+        --font-size-sm: 12px;
+        --font-size-base: 14px;
+        --font-size-md: 16px;
+        --font-size-lg: 18px;
+        --font-size-xl: 24px;
+        --font-size-2xl: 28px;
+
+        /* Spacing */
+        --spacing-xs: 4px;
+        --spacing-sm: 8px;
+        --spacing-md: 12px;
+        --spacing-lg: 16px;
+        --spacing-xl: 20px;
+        --spacing-2xl: 24px;
+        --spacing-3xl: 32px;
+
+        /* Radii */
+        --radius-sm: 6px;
+        --radius-md: 8px;
+        --radius-lg: 12px;
+        --radius-full: 9999px;
+      }
+
+      /* Reset & Base */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        font-family: var(--font-family);
+        font-size: var(--font-size-base);
+        color: var(--color-text-primary);
+        background-color: var(--color-bg);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* ==============================
+         APP SHELL
+         ============================== */
+      .app {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      /* ==============================
+         HEADER
+         ============================== */
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 76px;
+        padding: 0 var(--spacing-3xl);
+        background-color: var(--color-header-bg);
+        box-shadow: var(--shadow-header);
+        flex-shrink: 0;
+        gap: var(--spacing-2xl);
+      }
+
+      .header__brand {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        flex-shrink: 0;
+      }
+
+      .header__logo {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      .header__logo-svg {
+        width: 32px;
+        height: 32px;
+        display: block;
+      }
+
+      .header__brand-name {
+        font-size: var(--font-size-md);
+        font-weight: 600;
+        color: var(--color-text-primary);
+        line-height: 24px;
+        white-space: nowrap;
+      }
+
+      .header__search {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        width: 320px;
+        height: 44px;
+        background-color: var(--color-white);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 0 var(--spacing-md);
+        flex-shrink: 0;
+      }
+
+      .header__search-icon {
+        color: var(--color-text-placeholder);
+        flex-shrink: 0;
+      }
+
+      .header__search-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-family: var(--font-family);
+        font-size: var(--font-size-base);
+        color: var(--color-text-primary);
+        background: transparent;
+      }
+
+      .header__search-input::placeholder {
+        color: var(--color-text-placeholder);
+      }
+
+      .header__actions {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        flex-shrink: 0;
+      }
+
+      .header__icon-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        background: var(--color-white);
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+
+      .header__icon-btn:hover {
+        background: #f9fafb;
+      }
+
+      .header__avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-full);
+        background-color: var(--color-brand-light);
+        color: var(--color-brand);
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        letter-spacing: 0.02em;
+      }
+
+      /* ==============================
+         LAYOUT
+         ============================== */
+      .layout {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      /* ==============================
+         SIDEBAR
+         ============================== */
+      .sidebar {
+        width: 224px;
+        flex-shrink: 0;
+        background-color: var(--color-sidebar-bg);
+        border-right: 1px solid var(--color-border);
+        padding: var(--spacing-2xl) var(--spacing-lg);
+        overflow-y: auto;
+      }
+
+      .sidebar__nav {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs);
+      }
+
+      .sidebar__nav-item {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm) var(--spacing-md);
+        border-radius: var(--radius-md);
+        font-size: var(--font-size-base);
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        text-decoration: none;
+        transition: background 0.15s, color 0.15s;
+        white-space: nowrap;
+      }
+
+      .sidebar__nav-item:hover {
+        background: var(--color-brand-light);
+        color: var(--color-brand);
+      }
+
+      .sidebar__nav-item--active {
+        background: var(--color-brand-light);
+        color: var(--color-brand);
+        font-weight: 600;
+      }
+
+      .sidebar__nav-icon {
+        flex-shrink: 0;
+        width: 16px;
+        height: 16px;
+      }
+
+      /* ==============================
+         MAIN CONTENT
+         ============================== */
+      .main {
+        flex: 1;
+        overflow-y: auto;
+        padding: var(--spacing-3xl);
+        background-color: var(--color-bg);
+      }
+
+      /* ==============================
+         ANALYTICS CARD WRAPPER
+         ============================== */
+      .analytics-card {
+        background-color: var(--color-white);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-3xl);
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-2xl);
+      }
+
+      /* ==============================
+         PAGE HEADER
+         ============================== */
+      .analytics-header {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+      }
+
+      .analytics-back-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        background: var(--color-white);
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background 0.15s;
+      }
+
+      .analytics-back-btn:hover {
+        background: #f9fafb;
+      }
+
+      .analytics-title {
+        font-size: var(--font-size-xl);
+        font-weight: 600;
+        color: var(--color-text-primary);
+        line-height: 30px;
+      }
+
+      /* ==============================
+         KPI CARDS ROW
+         ============================== */
+      .kpi-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-lg);
+      }
+
+      .kpi-card {
+        background: var(--color-white);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-xl) var(--spacing-2xl);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs);
+        box-shadow: var(--shadow-card);
+      }
+
+      .kpi-card__label {
+        font-size: var(--font-size-base);
+        font-weight: 500;
+        color: var(--color-text-primary);
+        line-height: 20px;
+      }
+
+      .kpi-card__value {
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        line-height: 32px;
+        color: var(--color-brand);
+      }
+
+      .kpi-card__value-sub {
+        font-size: var(--font-size-xl);
+        font-weight: 600;
+        color: var(--color-brand);
+        opacity: 0.7;
+      }
+
+      /* ==============================
+         CHARTS SECTION
+         ============================== */
+      .charts-section {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+      }
+
+      .charts-section__title {
+        font-size: var(--font-size-md);
+        font-weight: 600;
+        color: var(--color-text-primary);
+        line-height: 24px;
+      }
+
+      /* Charts grid - top row: donut + horizontal bar */
+      .charts-row-top {
+        display: grid;
+        grid-template-columns: 433fr 662fr;
+        gap: var(--spacing-lg);
+      }
+
+      /* Charts grid - bottom row: bar + area (equal width) */
+      .charts-row-bottom {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-lg);
+      }
+
+      /* ==============================
+         CHART PANEL
+         ============================== */
+      .chart-panel {
+        background: var(--color-white);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-2xl);
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+        min-height: 286px;
+      }
+
+      .chart-panel__header {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+      }
+
+      .chart-panel__title {
+        font-size: var(--font-size-base);
+        font-weight: 600;
+        color: var(--color-text-primary);
+        line-height: 20px;
+      }
+
+      /* Legend row */
+      .chart-legend {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xl);
+        flex-wrap: wrap;
+      }
+
+      .chart-legend__item {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        font-size: var(--font-size-sm);
+        color: var(--color-text-secondary);
+        font-weight: 400;
+      }
+
+      .chart-legend__dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      .chart-legend__dot--green {
+        background-color: var(--color-green);
+      }
+
+      .chart-legend__dot--orange {
+        background-color: var(--color-orange);
+      }
+
+      .chart-legend__dot--red {
+        background-color: var(--color-red);
+      }
+
+      /* Chart canvas container */
+      .chart-panel__body {
+        flex: 1;
+        position: relative;
+        min-height: 180px;
+      }
+
+      /* Donut specific: center label */
+      .donut-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 220px;
+      }
+
+      .donut-wrapper canvas {
+        position: relative;
+        z-index: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+
+      <!-- ==============================
+           HEADER
+           ============================== -->
+      <header class="header">
+
+        <!-- Brand -->
+        <a href="#" class="header__brand">
+          <div class="header__logo">
+            <svg class="header__logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect width="32" height="32" rx="6" fill="url(#logo-grad)" />
+              <path d="M7 10h7v12H7V10zM18 10h7v7h-7v-7z" fill="white" opacity="0.9" />
+              <defs>
+                <linearGradient id="logo-grad" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#f4ebff" />
+                  <stop offset="100%" stop-color="#7f56d9" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <span class="header__brand-name">Task View</span>
+        </a>
+
+        <!-- Search -->
+        <div class="header__search" role="search">
+          <svg class="header__search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input
+            type="search"
+            class="header__search-input"
+            placeholder="Pesquise suas tarefas"
+            aria-label="Pesquisar tarefas"
+          />
+        </div>
+
+        <!-- Actions -->
+        <div class="header__actions">
+          <button class="header__icon-btn" aria-label="Notificacoes">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M10 2a6 6 0 00-6 6v3l-1.5 2.5h15L16 11V8a6 6 0 00-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M8.5 16.5a1.5 1.5 0 003 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button class="header__avatar" aria-label="Perfil do usuario">DS</button>
+        </div>
+
+      </header>
+
+      <!-- ==============================
+           LAYOUT
+           ============================== -->
+      <div class="layout">
+
+        <!-- SIDEBAR -->
+        <nav class="sidebar" aria-label="Navegacao principal">
+          <ul class="sidebar__nav" role="list">
+            <li>
+              <a href="#" class="sidebar__nav-item">
+                <svg class="sidebar__nav-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                  <rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                  <rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                  <rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <span>Home</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="sidebar__nav-item">
+                <svg class="sidebar__nav-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M8 2a5 5 0 00-5 5v2.5L1.5 12h13L13 9.5V7A5 5 0 008 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                  <path d="M6.5 13.5a1.5 1.5 0 003 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span>Notificacao</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="sidebar__nav-item">
+                <svg class="sidebar__nav-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M4 6h8M4 9h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span>Tarefas</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="sidebar__nav-item sidebar__nav-item--active" aria-current="page">
+                <svg class="sidebar__nav-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <polyline points="1,13 5,8 8,11 11,6 15,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Analytics</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <main class="main" id="main-content">
+
+          <!-- Analytics Card Wrapper -->
+          <div class="analytics-card">
+
+            <!-- Page heading -->
+            <div class="analytics-header">
+              <button class="analytics-back-btn" aria-label="Voltar">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <h1 class="analytics-title">Analytics</h1>
+            </div>
+
+            <!-- KPI Cards row -->
+            <div class="kpi-row" role="list">
+
+              <article class="kpi-card" role="listitem">
+                <span class="kpi-card__label">Total de tarefas</span>
+                <span class="kpi-card__value">850</span>
+              </article>
+
+              <article class="kpi-card" role="listitem">
+                <span class="kpi-card__label">Taxa de conclusao</span>
+                <span class="kpi-card__value">90%</span>
+              </article>
+
+              <article class="kpi-card" role="listitem">
+                <span class="kpi-card__label">Progresso de subtarefas</span>
+                <span class="kpi-card__value">
+                  810<span class="kpi-card__value-sub">/850</span>
+                </span>
+              </article>
+
+            </div>
+
+            <!-- Charts Section -->
+            <section class="charts-section" aria-labelledby="charts-heading">
+              <h2 class="charts-section__title" id="charts-heading">Status das tarefas</h2>
+
+              <!-- Top row: Donut + Horizontal Bar -->
+              <div class="charts-row-top">
+
+                <!-- Donut Chart: Visao geral dos status -->
+                <div class="chart-panel" aria-label="Grafico de rosca - Visao geral dos status">
+                  <div class="chart-panel__header">
+                    <span class="chart-panel__title">Visao geral dos status</span>
+                    <div class="chart-legend" role="list">
+                      <div class="chart-legend__item" role="listitem">
+                        <span class="chart-legend__dot chart-legend__dot--green" aria-hidden="true"></span>
+                        Concluidas
+                      </div>
+                      <div class="chart-legend__item" role="listitem">
+                        <span class="chart-legend__dot chart-legend__dot--orange" aria-hidden="true"></span>
+                        Em andamento
+                      </div>
+                      <div class="chart-legend__item" role="listitem">
+                        <span class="chart-legend__dot chart-legend__dot--red" aria-hidden="true"></span>
+                        Criticas
+                      </div>
+                    </div>
+                  </div>
+                  <div class="donut-wrapper">
+                    <canvas
+                      id="chart-donut"
+                      width="220"
+                      height="220"
+                      role="img"
+                      aria-label="Donut chart: 85% concluidas, 10% em andamento, 5% criticas"
+                    ></canvas>
+                  </div>
+                </div>
+
+                <!-- Horizontal Bar: Carga de trabalho por membro -->
+                <div class="chart-panel" aria-label="Grafico de barras horizontais - Carga de trabalho por membro">
+                  <div class="chart-panel__header">
+                    <span class="chart-panel__title">Carga de trabalho por membro</span>
+                    <div class="chart-legend" role="list">
+                      <div class="chart-legend__item" role="listitem">
+                        <span class="chart-legend__dot chart-legend__dot--green" aria-hidden="true"></span>
+                        Concluidas
+                      </div>
+                      <div class="chart-legend__item" role="listitem">
+                        <span class="chart-legend__dot chart-legend__dot--orange" aria-hidden="true"></span>
+                        Em andamento
+                      </div>
+                    </div>
+                  </div>
+                  <div class="chart-panel__body">
+                    <canvas
+                      id="chart-hbar"
+                      role="img"
+                      aria-label="Barras horizontais empilhadas por membro da equipe: Alice, Bruno, Carlos, Diana"
+                    ></canvas>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Bottom row: Vertical Bar + Area -->
+              <div class="charts-row-bottom">
+
+                <!-- Vertical Bar: Tarefas por prioridade -->
+                <div class="chart-panel" aria-label="Grafico de barras verticais - Tarefas por prioridade">
+                  <div class="chart-panel__header">
+                    <span class="chart-panel__title">Tarefas por prioridade</span>
+                    <div class="chart-legend" role="list">
+                      <div class="chart-legend__item" role="listitem">
+                        <span class="chart-legend__dot chart-legend__dot--red" aria-hidden="true"></span>
+                        Alta
+                      </div>
+                      <div class="chart-legend__item" role="listitem">
+                        <span class="chart-legend__dot chart-legend__dot--orange" aria-hidden="true"></span>
+                        Media
+                      </div>
+                      <div class="chart-legend__item" role="listitem">
+                        <span class="chart-legend__dot chart-legend__dot--green" aria-hidden="true"></span>
+                        Baixa
+                      </div>
+                    </div>
+                  </div>
+                  <div class="chart-panel__body">
+                    <canvas
+                      id="chart-vbar"
+                      role="img"
+                      aria-label="Barras verticais por prioridade: alta, media e baixa"
+                    ></canvas>
+                  </div>
+                </div>
+
+                <!-- Area Chart: Carga de trabalho por semana -->
+                <div class="chart-panel" aria-label="Grafico de area - Carga de trabalho por semana">
+                  <div class="chart-panel__header">
+                    <span class="chart-panel__title">Carga de trabalho por semana</span>
+                    <div class="chart-legend" role="list">
+                      <div class="chart-legend__item" role="listitem">
+                        <span class="chart-legend__dot chart-legend__dot--green" aria-hidden="true"></span>
+                        Concluidas
+                      </div>
+                    </div>
+                  </div>
+                  <div class="chart-panel__body">
+                    <canvas
+                      id="chart-area"
+                      role="img"
+                      aria-label="Grafico de area mostrando carga de trabalho nas semanas 1 a 4"
+                    ></canvas>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      /* ============================================
+         Chart.js Configuration
+         Figma node-id 15-5820
+         ============================================ */
+
+      const GREEN  = '#039855';
+      const ORANGE = '#dc6803';
+      const RED    = '#d92d20';
+      const TEXT_MUTED = '#535862';
+      const TEXT_SECONDARY = '#414651';
+      const GRID_COLOR = 'rgba(0,0,0,0.06)';
+
+      // Shared font defaults
+      Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+      Chart.defaults.font.size = 12;
+      Chart.defaults.color = TEXT_SECONDARY;
+
+      /* -------------------------------------------
+         1. DONUT CHART — Visao geral dos status
+         Data: 85% concluidas (green), 10% em andamento (orange), 5% criticas (red)
+         ------------------------------------------- */
+      (function () {
+        const ctx = document.getElementById('chart-donut').getContext('2d');
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Concluidas (85%)', 'Em andamento (10%)', 'Criticas (5%)'],
+            datasets: [{
+              data: [85, 10, 5],
+              backgroundColor: [GREEN, ORANGE, RED],
+              borderWidth: 0,
+              hoverOffset: 6,
+            }],
+          },
+          options: {
+            responsive: false,
+            cutout: '65%',
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => ` ${ctx.label}`,
+                },
+              },
+            },
+            animation: {
+              animateScale: true,
+              animateRotate: true,
+            },
+          },
+          plugins: [{
+            id: 'donut-center-text',
+            afterDraw(chart) {
+              const { ctx: c, chartArea: { top, bottom, left, right } } = chart;
+              const cx = (left + right) / 2;
+              const cy = (top + bottom) / 2;
+              c.save();
+              c.textAlign = 'center';
+              c.textBaseline = 'middle';
+              c.font = 'bold 28px Inter, sans-serif';
+              c.fillStyle = '#039855';
+              c.fillText('85%', cx, cy - 10);
+              c.font = '12px Inter, sans-serif';
+              c.fillStyle = TEXT_MUTED;
+              c.fillText('concluidas', cx, cy + 14);
+              c.restore();
+            },
+          }],
+        });
+      })();
+
+      /* -------------------------------------------
+         2. HORIZONTAL STACKED BAR — Carga de trabalho por membro
+         Members: Alice (195 done + 130 progress = 325 total via rect widths proportional)
+                  Bruno  (260 done + 130 progress)
+                  Carlos (260 done + 65 progress)
+                  Diana  (455 done + 325 progress)
+         Scale: max 850 tasks total (axis 0-850)
+         ------------------------------------------- */
+      (function () {
+        const ctx = document.getElementById('chart-hbar').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Alice', 'Bruno', 'Carlos', 'Diana'],
+            datasets: [
+              {
+                label: 'Concluidas',
+                data: [195, 260, 260, 455],
+                backgroundColor: GREEN,
+                borderRadius: { topRight: 0, bottomRight: 0, topLeft: 3, bottomLeft: 3 },
+                borderSkipped: false,
+              },
+              {
+                label: 'Em andamento',
+                data: [130, 130, 65, 325],
+                backgroundColor: ORANGE,
+                borderRadius: { topRight: 3, bottomRight: 3, topLeft: 0, bottomLeft: 0 },
+                borderSkipped: false,
+              },
+            ],
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                stacked: true,
+                min: 0,
+                max: 850,
+                ticks: {
+                  stepSize: 100,
+                  color: TEXT_SECONDARY,
+                  font: { size: 11 },
+                },
+                grid: {
+                  color: GRID_COLOR,
+                },
+                border: { display: false },
+              },
+              y: {
+                stacked: true,
+                ticks: {
+                  color: TEXT_SECONDARY,
+                  font: { size: 12, weight: '400' },
+                  padding: 8,
+                },
+                grid: { display: false },
+                border: { display: false },
+              },
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                mode: 'index',
+                callbacks: {
+                  title: (items) => items[0].label,
+                },
+              },
+            },
+            layout: {
+              padding: { top: 4, bottom: 4 },
+            },
+          },
+        });
+      })();
+
+      /* -------------------------------------------
+         3. VERTICAL BAR — Tarefas por prioridade
+         Data derived from Figma rect heights (proportional to y-axis 0-20):
+           Alta (red):   height 27px ~ 5 tasks
+           Media (orange): height 52px ~ 10 tasks
+           Baixa (green):  height 138px ~ 20 tasks (max)
+         ------------------------------------------- */
+      (function () {
+        const ctx = document.getElementById('chart-vbar').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Alta', 'Media', 'Baixa'],
+            datasets: [{
+              label: 'Numero de tarefas',
+              data: [5, 10, 20],
+              backgroundColor: [RED, ORANGE, GREEN],
+              borderRadius: 4,
+              borderSkipped: false,
+              barThickness: 48,
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                min: 0,
+                max: 20,
+                ticks: {
+                  stepSize: 5,
+                  color: TEXT_SECONDARY,
+                  font: { size: 11 },
+                },
+                grid: {
+                  color: GRID_COLOR,
+                },
+                border: { display: false },
+                title: {
+                  display: true,
+                  text: 'Numero de tarefas',
+                  color: TEXT_MUTED,
+                  font: { size: 11 },
+                  rotation: -90,
+                  padding: { bottom: 8 },
+                },
+              },
+              x: {
+                grid: { display: false },
+                border: { display: false },
+                ticks: {
+                  color: TEXT_SECONDARY,
+                  font: { size: 12, weight: '500' },
+                },
+              },
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => ` ${ctx.parsed.y} tarefas`,
+                },
+              },
+            },
+            layout: {
+              padding: { top: 8 },
+            },
+          },
+        });
+      })();
+
+      /* -------------------------------------------
+         4. AREA CHART — Carga de trabalho por semana
+         Data: week 1-4, showing task completion trend
+         ------------------------------------------- */
+      (function () {
+        const ctx = document.getElementById('chart-area').getContext('2d');
+
+        // Create gradient fill
+        const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+        gradient.addColorStop(0, 'rgba(3,152,85,0.25)');
+        gradient.addColorStop(1, 'rgba(3,152,85,0.02)');
+
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+            datasets: [
+              {
+                label: 'Concluidas',
+                data: [8, 14, 11, 18],
+                borderColor: GREEN,
+                backgroundColor: gradient,
+                fill: true,
+                tension: 0.35,
+                pointBackgroundColor: GREEN,
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                borderWidth: 2.5,
+              },
+              {
+                label: 'Em andamento',
+                data: [12, 9, 15, 7],
+                borderColor: ORANGE,
+                backgroundColor: 'transparent',
+                fill: false,
+                tension: 0.35,
+                pointBackgroundColor: ORANGE,
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                borderWidth: 2,
+                borderDash: [5, 4],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                min: 0,
+                max: 20,
+                ticks: {
+                  stepSize: 5,
+                  color: TEXT_SECONDARY,
+                  font: { size: 11 },
+                },
+                grid: {
+                  color: GRID_COLOR,
+                },
+                border: { display: false },
+                title: {
+                  display: true,
+                  text: 'Numero de tarefas',
+                  color: TEXT_MUTED,
+                  font: { size: 11 },
+                  padding: { bottom: 8 },
+                },
+              },
+              x: {
+                grid: { display: false },
+                border: { display: false },
+                ticks: {
+                  color: TEXT_SECONDARY,
+                  font: { size: 12 },
+                },
+              },
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                  label: (ctx) => ` ${ctx.dataset.label}: ${ctx.parsed.y}`,
+                },
+              },
+            },
+            interaction: {
+              mode: 'index',
+              intersect: false,
+            },
+            layout: {
+              padding: { top: 8 },
+            },
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>
