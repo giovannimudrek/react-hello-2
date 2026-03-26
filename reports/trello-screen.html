@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ferramenta Trello — Board</title>
+  <style>
+    /* ===========================
+       CSS Custom Properties
+    =========================== */
+    :root {
+      --color-bg-app: #0052CC;
+      --color-bg-board: #1565C0;
+      --color-header-bg: rgba(0, 0, 0, 0.24);
+      --color-header-text: #FFFFFF;
+      --color-column-bg: #EBECF0;
+      --color-column-header: #172B4D;
+      --color-card-bg: #FFFFFF;
+      --color-card-text: #172B4D;
+      --color-card-secondary: #5E6C84;
+      --color-card-hover: #F4F5F7;
+      --color-add-btn: rgba(255,255,255,0.3);
+      --color-add-btn-hover: rgba(255,255,255,0.4);
+      --color-add-card-text: #5E6C84;
+      --color-add-card-hover: #091E4214;
+      --color-label-green: #61BD4F;
+      --color-label-yellow: #F2D600;
+      --color-label-orange: #FF9F1A;
+      --color-label-red: #EB5A46;
+      --color-label-purple: #C377E0;
+      --color-label-blue: #0079BF;
+      --color-label-sky: #00C2E0;
+      --color-label-pink: #FF78CB;
+      --color-label-lime: #51E898;
+      --color-label-gray: #B3BAC5;
+      --color-icon: rgba(255,255,255,0.8);
+      --color-divider: #DFE1E6;
+      --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-size-xs: 11px;
+      --font-size-sm: 12px;
+      --font-size-base: 14px;
+      --font-size-md: 15px;
+      --font-size-lg: 16px;
+      --font-size-xl: 18px;
+      --radius-sm: 3px;
+      --radius-base: 6px;
+      --radius-lg: 8px;
+      --shadow-card: 0 1px 0 rgba(9,30,66,0.25);
+      --shadow-card-hover: 0 4px 8px rgba(9,30,66,0.15), 0 1px 1px rgba(9,30,66,0.25);
+      --transition-base: 0.15s ease;
+    }
+
+    /* ===========================
+       Reset & Base
+    =========================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font-family);
+      font-size: var(--font-size-base);
+      color: var(--color-card-text);
+      background-color: var(--color-bg-board);
+      overflow: hidden;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    input, textarea {
+      font-family: inherit;
+    }
+
+    svg {
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    /* ===========================
+       App Layout
+    =========================== */
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ===========================
+       Global Header
+    =========================== */
+    .global-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 48px;
+      padding: 0 8px;
+      background-color: var(--color-header-bg);
+      flex-shrink: 0;
+      gap: 8px;
+    }
+
+    .global-header__left,
+    .global-header__right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .global-header__center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .header-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      color: var(--color-header-text);
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      background: rgba(255,255,255,0.2);
+      transition: background var(--transition-base);
+      white-space: nowrap;
+    }
+
+    .header-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .header-btn--icon-only {
+      padding: 6px;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      color: var(--color-header-text);
+      text-decoration: none;
+      transition: background var(--transition-base);
+    }
+
+    .header-logo:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .header-logo__icon {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .header-logo__icon span {
+      display: block;
+      background: white;
+      border-radius: 2px;
+    }
+
+    .header-logo__icon .bar-left {
+      width: 8px;
+      height: 18px;
+    }
+
+    .header-logo__icon .bar-right {
+      width: 8px;
+      height: 12px;
+    }
+
+    .header-logo__text {
+      font-size: var(--font-size-xl);
+      font-weight: 700;
+      margin-left: 4px;
+      letter-spacing: -0.3px;
+    }
+
+    .header-search {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 220px;
+      height: 32px;
+      padding: 0 10px;
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.7);
+      font-size: var(--font-size-sm);
+      border: 1px solid rgba(255,255,255,0.3);
+      transition: background var(--transition-base), width var(--transition-base);
+    }
+
+    .header-search:hover {
+      background: rgba(255,255,255,0.35);
+    }
+
+    .header-search input {
+      background: none;
+      border: none;
+      outline: none;
+      color: white;
+      font-size: var(--font-size-sm);
+      width: 100%;
+    }
+
+    .header-search input::placeholder {
+      color: rgba(255,255,255,0.65);
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #DFE1E6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      color: var(--color-column-header);
+      cursor: pointer;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ===========================
+       Board Header
+    =========================== */
+    .board-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      flex-shrink: 0;
+      gap: 8px;
+    }
+
+    .board-header__left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .board-header__right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .board-title {
+      font-size: var(--font-size-xl);
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      line-height: 1.2;
+      transition: background var(--transition-base), border-color var(--transition-base);
+    }
+
+    .board-title:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.4);
+    }
+
+    .board-header-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      color: white;
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      background: rgba(255,255,255,0.24);
+      transition: background var(--transition-base);
+      white-space: nowrap;
+    }
+
+    .board-header-btn:hover {
+      background: rgba(255,255,255,0.36);
+    }
+
+    .board-header-btn--icon {
+      padding: 6px;
+    }
+
+    .board-header-separator {
+      width: 1px;
+      height: 16px;
+      background: rgba(255,255,255,0.4);
+      margin: 0 4px;
+    }
+
+    /* ===========================
+       Board Area
+    =========================== */
+    .board-area {
+      flex: 1;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 8px 12px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .board-area::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .board-area::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.1);
+      border-radius: 4px;
+    }
+
+    .board-area::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.35);
+      border-radius: 4px;
+    }
+
+    .board-area::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.5);
+    }
+
+    /* ===========================
+       Column (List)
+    =========================== */
+    .column {
+      display: flex;
+      flex-direction: column;
+      width: 272px;
+      min-width: 272px;
+      max-height: calc(100vh - 110px);
+      background: var(--color-column-bg);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .column__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px 8px;
+      cursor: pointer;
+    }
+
+    .column__title {
+      font-size: var(--font-size-base);
+      font-weight: 700;
+      color: var(--color-column-header);
+      line-height: 1.3;
+      flex: 1;
+    }
+
+    .column__menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      color: var(--color-card-secondary);
+      transition: background var(--transition-base);
+      flex-shrink: 0;
+    }
+
+    .column__menu-btn:hover {
+      background: rgba(9,30,66,0.08);
+      color: var(--color-column-header);
+    }
+
+    .column__cards {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .column__cards::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .column__cards::-webkit-scrollbar-thumb {
+      background: rgba(9,30,66,0.2);
+      border-radius: 2px;
+    }
+
+    .column__footer {
+      padding: 6px 8px 8px;
+    }
+
+    /* ===========================
+       Card
+    =========================== */
+    .card {
+      background: var(--color-card-bg);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-card);
+      padding: 8px 10px;
+      cursor: pointer;
+      position: relative;
+      transition: box-shadow var(--transition-base), background var(--transition-base);
+    }
+
+    .card:hover {
+      background: var(--color-card-hover);
+      box-shadow: var(--shadow-card-hover);
+    }
+
+    .card__cover {
+      width: calc(100% + 20px);
+      margin: -8px -10px 8px;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      overflow: hidden;
+    }
+
+    .card__cover img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card__cover--colored {
+      height: 32px;
+    }
+
+    .card__labels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .label {
+      height: 8px;
+      min-width: 40px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: filter var(--transition-base);
+    }
+
+    .label:hover {
+      filter: brightness(0.85);
+    }
+
+    .label--green  { background: var(--color-label-green); }
+    .label--yellow { background: var(--color-label-yellow); }
+    .label--orange { background: var(--color-label-orange); }
+    .label--red    { background: var(--color-label-red); }
+    .label--purple { background: var(--color-label-purple); }
+    .label--blue   { background: var(--color-label-blue); }
+    .label--sky    { background: var(--color-label-sky); }
+    .label--pink   { background: var(--color-label-pink); }
+    .label--lime   { background: var(--color-label-lime); }
+    .label--gray   { background: var(--color-label-gray); }
+
+    .card__title {
+      font-size: var(--font-size-base);
+      font-weight: 400;
+      color: var(--color-card-text);
+      line-height: 1.4;
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+
+    .card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+    }
+
+    .card__badges {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: var(--font-size-xs);
+      color: var(--color-card-secondary);
+      padding: 2px 4px;
+      border-radius: var(--radius-sm);
+      transition: background var(--transition-base), color var(--transition-base);
+    }
+
+    .badge:hover {
+      background: rgba(9,30,66,0.08);
+      color: var(--color-column-header);
+    }
+
+    .badge--due {
+      color: #5E6C84;
+    }
+
+    .badge--due-soon {
+      background: var(--color-label-orange);
+      color: white;
+    }
+
+    .badge--overdue {
+      background: var(--color-label-red);
+      color: white;
+    }
+
+    .badge--complete {
+      background: var(--color-label-green);
+      color: white;
+    }
+
+    .card__members {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .card__members .avatar {
+      width: 24px;
+      height: 24px;
+      font-size: 10px;
+    }
+
+    .card__edit-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      background: var(--color-column-bg);
+      color: var(--color-card-secondary);
+      transition: background var(--transition-base);
+    }
+
+    .card:hover .card__edit-btn {
+      display: flex;
+    }
+
+    .card__edit-btn:hover {
+      background: #DFE1E6;
+    }
+
+    /* ===========================
+       Add Card Button
+    =========================== */
+    .add-card-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      color: var(--color-add-card-text);
+      font-size: var(--font-size-sm);
+      text-align: left;
+      transition: background var(--transition-base), color var(--transition-base);
+    }
+
+    .add-card-btn:hover {
+      background: var(--color-add-card-hover);
+      color: var(--color-column-header);
+    }
+
+    /* ===========================
+       Add List Button
+    =========================== */
+    .add-list-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 272px;
+      min-width: 272px;
+      padding: 10px 12px;
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,0.24);
+      color: white;
+      font-size: var(--font-size-base);
+      font-weight: 500;
+      transition: background var(--transition-base);
+      align-self: flex-start;
+    }
+
+    .add-list-btn:hover {
+      background: rgba(255,255,255,0.36);
+    }
+
+    /* ===========================
+       Member Avatars (board header)
+    =========================== */
+    .member-avatars {
+      display: flex;
+      align-items: center;
+    }
+
+    .member-avatars .avatar {
+      width: 32px;
+      height: 32px;
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      margin-left: -6px;
+      border: 2px solid var(--color-bg-board);
+    }
+
+    .member-avatars .avatar:first-child {
+      margin-left: 0;
+    }
+
+    /* Avatar colors */
+    .avatar--blue   { background: #0052CC; color: white; }
+    .avatar--green  { background: #36B37E; color: white; }
+    .avatar--orange { background: #FF8B00; color: white; }
+    .avatar--red    { background: #DE350B; color: white; }
+    .avatar--purple { background: #6554C0; color: white; }
+    .avatar--teal   { background: #00B8D9; color: white; }
+    .avatar--yellow { background: #FFAB00; color: var(--color-column-header); }
+    .avatar--gray   { background: #97A0AF; color: white; }
+
+    /* ===========================
+       Notification dot
+    =========================== */
+    .notif-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-label-red);
+      position: absolute;
+      top: 2px;
+      right: 2px;
+    }
+
+    .header-btn-wrap {
+      position: relative;
+    }
+
+    /* ===========================
+       Scrollbar customization
+    =========================== */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(9,30,66,0.2);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <!-- ==================== Global Header ==================== -->
+    <header class="global-header" role="banner">
+      <div class="global-header__left">
+        <!-- Trello logo -->
+        <a href="#" class="header-logo" aria-label="Trello">
+          <span class="header-logo__icon">
+            <span class="bar-left"></span>
+            <span class="bar-right"></span>
+          </span>
+          <span class="header-logo__text">trello</span>
+        </a>
+
+        <!-- Workspaces -->
+        <button class="header-btn" aria-label="Workspaces">
+          <span>Workspaces</span>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
+            <path d="M0 0l5 6 5-6H0z"/>
+          </svg>
+        </button>
+
+        <!-- Recent -->
+        <button class="header-btn" aria-label="Recentes">
+          <span>Recentes</span>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
+            <path d="M0 0l5 6 5-6H0z"/>
+          </svg>
+        </button>
+
+        <!-- Starred -->
+        <button class="header-btn" aria-label="Com estrela">
+          <span>Com estrela</span>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
+            <path d="M0 0l5 6 5-6H0z"/>
+          </svg>
+        </button>
+
+        <!-- Templates -->
+        <button class="header-btn" aria-label="Modelos">
+          <span>Modelos</span>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
+            <path d="M0 0l5 6 5-6H0z"/>
+          </svg>
+        </button>
+
+        <!-- Create button -->
+        <button class="header-btn" style="background: #0065FF;" aria-label="Criar">
+          <span>Criar</span>
+        </button>
+      </div>
+
+      <!-- Center: Search -->
+      <div class="global-header__center">
+        <div class="header-search" role="search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="search" placeholder="Pesquisar" aria-label="Pesquisar no Trello" />
+        </div>
+      </div>
+
+      <div class="global-header__right">
+        <!-- Notifications -->
+        <div class="header-btn-wrap">
+          <button class="header-btn header-btn--icon-only" aria-label="Notificações">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </button>
+          <span class="notif-dot" aria-hidden="true"></span>
+        </div>
+
+        <!-- Info -->
+        <button class="header-btn header-btn--icon-only" aria-label="Informações">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </button>
+
+        <!-- User avatar -->
+        <div class="avatar avatar--orange" aria-label="Perfil do usuário" role="button" tabindex="0">
+          <span>JD</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==================== Board Header ==================== -->
+    <div class="board-header" role="navigation" aria-label="Board actions">
+      <div class="board-header__left">
+        <h1 class="board-title">Desenvolvimento de Produto</h1>
+
+        <!-- Starred -->
+        <button class="board-header-btn board-header-btn--icon" aria-label="Marcar com estrela">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </button>
+
+        <div class="board-header-separator" aria-hidden="true"></div>
+
+        <!-- Visibility -->
+        <button class="board-header-btn" aria-label="Privacidade do quadro">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <span>Privado</span>
+        </button>
+
+        <div class="board-header-separator" aria-hidden="true"></div>
+
+        <!-- Members -->
+        <div class="member-avatars" aria-label="Membros do board">
+          <div class="avatar avatar--purple" title="Ana Lima">AL</div>
+          <div class="avatar avatar--green" title="Bruno Costa">BC</div>
+          <div class="avatar avatar--orange" title="Carla Dias">CD</div>
+          <div class="avatar avatar--blue" title="Diego Martins">DM</div>
+        </div>
+
+        <!-- Invite -->
+        <button class="board-header-btn" aria-label="Convidar membros">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <line x1="19" y1="8" x2="19" y2="14"/>
+            <line x1="22" y1="11" x2="16" y2="11"/>
+          </svg>
+          <span>Convidar</span>
+        </button>
+      </div>
+
+      <div class="board-header__right">
+        <!-- Filter -->
+        <button class="board-header-btn" aria-label="Filtrar cartões">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          <span>Filtros</span>
+        </button>
+
+        <!-- Power-Ups -->
+        <button class="board-header-btn" aria-label="Power-Ups">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          <span>Power-Ups</span>
+        </button>
+
+        <!-- Automation -->
+        <button class="board-header-btn" aria-label="Automação">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+          <span>Automação</span>
+        </button>
+
+        <div class="board-header-separator" aria-hidden="true"></div>
+
+        <!-- Menu -->
+        <button class="board-header-btn" aria-label="Mostrar menu">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+          <span>Mostrar menu</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== Board Area ==================== -->
+    <main class="board-area" role="main" aria-label="Board de tarefas">
+
+      <!-- ===== Column 1: Backlog ===== -->
+      <section class="column" aria-label="Lista: Backlog">
+        <div class="column__header">
+          <h2 class="column__title">Backlog</h2>
+          <button class="column__menu-btn" aria-label="Ações da lista Backlog">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="column__cards">
+          <!-- Card 1 -->
+          <article class="card" tabindex="0" aria-label="Cartão: Redesign da página inicial">
+            <div class="card__labels">
+              <span class="label label--blue"></span>
+              <span class="label label--green"></span>
+            </div>
+            <p class="card__title">Redesign da página inicial</p>
+            <div class="card__footer">
+              <div class="card__badges">
+                <span class="badge badge--due">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  15 abr
+                </span>
+                <span class="badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  </svg>
+                  3
+                </span>
+              </div>
+              <div class="card__members">
+                <div class="avatar avatar--purple" title="Ana Lima">AL</div>
+              </div>
+            </div>
+            <button class="card__edit-btn" aria-label="Editar cartão">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="card" tabindex="0" aria-label="Cartão: Integração com API de pagamentos">
+            <div class="card__labels">
+              <span class="label label--orange"></span>
+            </div>
+            <p class="card__title">Integração com API de pagamentos</p>
+            <div class="card__footer">
+              <div class="card__badges">
+                <span class="badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                  </svg>
+                  2/5
+                </span>
+                <span class="badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  </svg>
+                  1
+                </span>
+              </div>
+              <div class="card__members">
+                <div class="avatar avatar--blue" title="Diego Martins">DM</div>
+                <div class="avatar avatar--orange" title="Carla Dias">CD</div>
+              </div>
+            </div>
+            <button class="card__edit-btn" aria-label="Editar cartão">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="card" tabindex="0" aria-label="Cartão: Documentação da API">
+            <p class="card__title">Documentação da API</p>
+            <div class="card__footer">
+              <div class="card__badges">
+                <span class="badge badge--due-soon">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  Hoje
+                </span>
+              </div>
+              <div class="card__members">
+                <div class="avatar avatar--green" title="Bruno Costa">BC</div>
+              </div>
+            </div>
+            <button class="card__edit-btn" aria-label="Editar cartão">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </article>
+
+          <!-- Card 4 (with cover image) -->
+          <article class="card" tabindex="0" aria-label="Cartão: Novo sistema de onboarding">
+            <div class="card__cover">
+              <img
+                src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&q=80"
+                alt="Onboarding system mockup"
+                width="272"
+                height="130"
+              />
+            </div>
+            <div class="card__labels">
+              <span class="label label--purple"></span>
+              <span class="label label--sky"></span>
+            </div>
+            <p class="card__title">Novo sistema de onboarding</p>
+            <div class="card__footer">
+              <div class="card__badges">
+                <span class="badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 0 2 2z"/>
+                  </svg>
+                  5
+                </span>
+              </div>
+              <div class="card__members">
+                <div class="avatar avatar--purple" title="Ana Lima">AL</div>
+                <div class="avatar avatar--green" title="Bruno Costa">BC</div>
+              </div>
+            </div>
+            <button class="card__edit-btn" aria-label="Editar cartão">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </article>
+        </div>
+
+        <div class="column__footer">
+          <button class="add-card-btn" aria-label="Adicionar cartão à lista Backlog">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Adicionar um cartao
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== Column 2: Em Andamento ===== -->
+      <section class="column" aria-label="Lista: Em Andamento">
+        <div class="column__header">
+          <h2 class="column__title">Em Andamento</h2>
+          <button class="column__menu-btn" aria-label="Ações da lista Em Andamento">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="column__cards">
+          <!-- Card 1 -->
+          <article class="card" tabindex="0" aria-label="Cartão: Implementar autenticação JWT">
+            <div class="card__labels">
+              <span class="label label--red"></span>
+              <span class="label label--blue"></span>
+            </div>
+            <p class="card__title">Implementar autenticacao JWT</p>
+            <div class="card__footer">
+              <div class="card__badges">
+                <span class="badge badge--overdue">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  2 dias atrás
+                </span>
+              </div>
+              <div class="card__members">
+                <div class="avatar avatar--blue" title="Diego Martins">DM</div>
+              </div>
+            </div>
+            <button class="card__edit-btn" aria-label="Editar cartão">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="card" tabindex="0" aria-label="Cartão: Dashboard de métricas">
+            <div class="card__labels">
+              <span class="label label--green"></span>
+            </div>
+            <p class="card__title">Dashboard de metricas</p>
+            <div class="card__footer">
+              <div class="card__badges">
+                <span class="badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                  </svg>
+                  3/7
+                </span>
+                <span class="badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 0 2 2z"/>
+                  </svg>
+                  2
+                </span>
+                <span class="badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
+                  </svg>
+                  1
+                </span>
+              </div>
+              <div class="card__members">
+                <div class="avatar avatar--orange" title="Carla Dias">CD</div>
+                <div class="avatar avatar--purple" title="Ana Lima">AL</div>
+              </div>
+            </div>
+            <button class="card__edit-btn" aria-label="Editar cartão">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="card" tabindex="0" aria-label="Cartão: Testes unitários do módulo de usuários">
+            <div class="card__labels">
+              <span class="label label--yellow"></span>
+              <span class="label label--purple"></span>
+            </div>
+            <p class="card__title">Testes unitarios do modulo de usuarios</p>
+            <div class="card__footer">
+              <div class="card__badges">
+                <span class="badge badge--due">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  28 abr
+                </span>
+              </div>
+              <div class="card__members">
+                <div class="avatar avatar--green" title="Bruno Costa">BC</div>
+              </div>
+            </div>
+            <button class="card__edit-btn" aria-label="Editar cartão">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </article>
+        </div>
+
+        <div class="column__footer">
+          <button class="add-card-btn" aria-label="Adicionar cartão à lista Em Andamento">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Adicionar um cartao
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== Column 3: Revisão ===== -->
+      <section class="column" aria-label="Lista: Revisão">
+        <div class="column__header">
+          <h2 class="column__title">Revisao</h2>
+          <button class="column__menu-btn" aria-label="Ações da lista Revisão">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="column__cards">
+          <!-- Card 1 -->
+          <article class="card" tabindex="0" aria-label="Cartão: Otimização de queries do banco">
+            <div class="card__labels">
+              <span class="label label--orange"></span>
+              <span class="label label--green"></span>
+            </div>
+            <p class="card__title">Otimizacao de queries do banco</p>
+            <div class="card__footer">
+              <div class="card__badges">
+                <span class="badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                  </svg>
+                  4/4
+                </span>
+              </div>
+              <div class="card__members">
+                <div class="avatar avatar--blue" title="Diego Martins">DM</div>
+                <div class="avatar avatar--green" title="Bruno Costa">BC</div>
+              </div>
+            </div>
+            <button class="card__edit-btn" aria-label="Editar cartão">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="card" tabindex="0" aria-label="Cartão: Revisão de código do módulo de relatórios">
+            <div class="card__labels">
+              <span class="label label--blue"></span>
+            </div>
+            <p class="card__title">Revisao de codigo do modulo de relatorios</p>
+            <div class="card__footer">
+              <div class="card__badges">
+                <span class="badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 0 2 2z"/>
+                  </svg>
+                  4
+                </span>
+              </div>
+              <div class="card__members">
+                <div class="avatar avatar--purple" title="Ana Lima">AL</div>
+              </div>
+            </div>
+            <button class="card__edit-btn" aria-label="Editar cartão">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </article>
+        </div>
+
+        <div class="column__footer">
+          <button class="add-card-btn" aria-label="Adicionar cartão à lista Revisão">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Adicionar um cartao
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== Column 4: Concluído ===== -->
+      <section class="column" aria-label="Lista: Concluído">
+        <div class="column__header">
+          <h2 class="column__title">Concluido</h2>
+          <button class="column__menu-btn" aria-label="Ações da lista Concluído">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="column__cards">
+          <!-- Card 1 -->
+          <article class="card" tabindex="0" aria-label="Cartão: Setup CI/CD pipeline" style="opacity: 0.85;">
+            <div class="card__labels">
+              <span class="label label--lime"></span>
+              <span class="label label--green"></span>
+            </div>
+            <p class="card__title">Setup CI/CD pipeline</p>
+            <div class="card__footer">
+              <div class="card__badges">
+                <span class="badge badge--complete">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  Concluido
+                </span>
+              </div>
+              <div class="card__members">
+                <div class="avatar avatar--orange" title="Carla Dias">CD</div>
+              </div>
+            </div>
+            <button class="card__edit-btn" aria-label="Editar cartão">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="card" tabindex="0" aria-label="Cartão: Configuração do ambiente de staging" style="opacity: 0.85;">
+            <div class="card__labels">
+              <span class="label label--blue"></span>
+            </div>
+            <p class="card__title">Configuracao do ambiente de staging</p>
+            <div class="card__footer">
+              <div class="card__badges">
+                <span class="badge badge--complete">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  Concluido
+                </span>
+              </div>
+              <div class="card__members">
+                <div class="avatar avatar--green" title="Bruno Costa">BC</div>
+                <div class="avatar avatar--blue" title="Diego Martins">DM</div>
+              </div>
+            </div>
+            <button class="card__edit-btn" aria-label="Editar cartão">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="card" tabindex="0" aria-label="Cartão: Migração do banco de dados" style="opacity: 0.85;">
+            <div class="card__labels">
+              <span class="label label--gray"></span>
+            </div>
+            <p class="card__title">Migracao do banco de dados</p>
+            <div class="card__footer">
+              <div class="card__badges">
+                <span class="badge badge--complete">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  Concluido
+                </span>
+                <span class="badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                  </svg>
+                  5/5
+                </span>
+              </div>
+              <div class="card__members">
+                <div class="avatar avatar--purple" title="Ana Lima">AL</div>
+              </div>
+            </div>
+            <button class="card__edit-btn" aria-label="Editar cartão">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+          </article>
+        </div>
+
+        <div class="column__footer">
+          <button class="add-card-btn" aria-label="Adicionar cartão à lista Concluído">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Adicionar um cartao
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== Add List Button ===== -->
+      <button class="add-list-btn" aria-label="Adicionar outra lista">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Adicionar outra lista
+      </button>
+
+    </main>
+  </div>
+</body>
+</html>
