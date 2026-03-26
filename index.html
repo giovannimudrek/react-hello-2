@@ -1,11 +1,826 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello World</title>
-  </head>
-  <body>
-    <h1>Hello World</h1>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task View – Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- ============================================================
+       HEADER
+       Figma: Frame 1 > Header — size=1440x76, padding=16 32
+       fill=#ffffff, border-bottom=#e9eaeb
+  ============================================================ -->
+  <header class="header" role="banner">
+
+    <!-- Brand: logo + "Task View" -->
+    <a href="#" class="brand" aria-label="Task View — Página inicial">
+      <span class="brand__logo" aria-hidden="true">
+        <!-- Gradient lightning-bolt logo (Figma: Vector, gradient #f4ebff → #7f56d9) -->
+        <svg width="25" height="22" viewBox="0 0 25 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="logo-grad" x1="12.5" y1="0" x2="12.5" y2="22" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#f4ebff"/>
+              <stop offset="100%" stop-color="#7f56d9"/>
+            </linearGradient>
+          </defs>
+          <path d="M14 0L0 13h9L11 22L25 9H16L14 0Z" fill="url(#logo-grad)"/>
+        </svg>
+      </span>
+      <span class="brand__name">Task View</span>
+    </a>
+
+    <!-- Search field: pill, 320x44, centered in header -->
+    <div class="search" role="search">
+      <!-- Magnifying glass icon -->
+      <svg class="search__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M17.5 17.5L13.875 13.875M15.833 9.167a6.667 6.667 0 1 1-13.333 0 6.667 6.667 0 0 1 13.333 0Z" stroke="#717680" stroke-width="1.667" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <input
+        class="search__input"
+        type="search"
+        placeholder="Pesquise suas tarefas"
+        aria-label="Pesquisar tarefas"
+      />
+    </div>
+
+    <!-- Right: notification bell + DS avatar -->
+    <div class="header__actions">
+      <!-- Bell notification button -->
+      <button class="btn-icon" aria-label="Notificações" type="button">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M7.5 14.167v.833a2.5 2.5 0 0 0 5 0v-.833M3.75 14.167h12.5m-1.25 0V8.333a5 5 0 0 0-10 0v5.834" stroke="#535862" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <!-- DS avatar: 40x40, #f4ebff bg, #7f56d9 text -->
+      <div class="avatar" role="img" aria-label="Perfil do usuário DS">DS</div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       MAIN LAYOUT: sidebar + content
+  ============================================================ -->
+  <div class="main-layout">
+
+    <!-- ============================================================
+         SIDEBAR
+         Figma: Menu — size=224x935, padding=20 92 855 32
+         fill=#ffffff, border-right=#e9eaeb
+    ============================================================ -->
+    <aside class="sidebar" aria-label="Menu de navegação">
+      <nav class="sidebar__nav" aria-label="Navegação principal">
+
+        <a href="#" class="nav-item" aria-label="Home">
+          <!-- Home icon -->
+          <svg class="nav-item__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 6.333L8 1.333l6 5V14a.667.667 0 0 1-.667.667H10a.667.667 0 0 1-.667-.667v-3.333H6.667V14A.667.667 0 0 1 6 14.667H2.667A.667.667 0 0 1 2 14V6.333Z" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Home</span>
+        </a>
+
+        <a href="#" class="nav-item" aria-label="Notificação">
+          <!-- Bell icon -->
+          <svg class="nav-item__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M6 11.333v.667a2 2 0 0 0 4 0v-.667M3 11.333h10m-1-5.333V5.333a4 4 0 0 0-8 0v.667L2.667 9.333A.667.667 0 0 0 3.333 10h9.334a.667.667 0 0 0 .666-.667L13 6Z" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Notificação</span>
+        </a>
+
+        <a href="#" class="nav-item" aria-label="Tarefas" aria-current="page">
+          <!-- Tasks icon (checklist) -->
+          <svg class="nav-item__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2.667 4.667h10.666M2.667 8h6M2.667 11.333h4" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Tarefas</span>
+        </a>
+
+        <a href="#" class="nav-item" aria-label="Analytics">
+          <!-- Chart icon -->
+          <svg class="nav-item__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M14 12H2V4m2 4 2-2.667 2 1.334L10.667 4 13 6.667" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Analytics</span>
+        </a>
+
+      </nav>
+    </aside>
+
+    <!-- ============================================================
+         CONTENT AREA (toolbar + board)
+    ============================================================ -->
+    <div class="content">
+
+      <!-- ============================================================
+           TOOLBAR: tab bar (left) + avatar group (right)
+           Figma: Frame 10 (342x52 pill, white bg, border) + Avatar Group (320x32)
+      ============================================================ -->
+      <div class="toolbar" role="toolbar" aria-label="Filtros e membros">
+
+        <!-- Tab bar: pill, white, r:999 -->
+        <nav class="tab-bar" aria-label="Filtrar tarefas" role="tablist">
+          <!-- Active tab: "Todos" – purple bg -->
+          <button class="tab tab--active" role="tab" aria-selected="true" aria-controls="board">
+            <!-- Grid/board icon -->
+            <svg class="tab__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="2" y="2" width="5" height="5" rx="1" fill="currentColor"/>
+              <rect x="9" y="2" width="5" height="5" rx="1" fill="currentColor"/>
+              <rect x="2" y="9" width="5" height="5" rx="1" fill="currentColor"/>
+              <rect x="9" y="9" width="5" height="5" rx="1" fill="currentColor"/>
+            </svg>
+            Todos
+          </button>
+
+          <!-- "Pendentes" tab -->
+          <button class="tab" role="tab" aria-selected="false" aria-controls="board">
+            <!-- Alert circle icon -->
+            <svg class="tab__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="8" cy="8" r="6" stroke="#414651" stroke-width="1.333"/>
+              <path d="M8 5.333v3M8 10.667h.007" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+            </svg>
+            Pendentes
+          </button>
+
+          <!-- "Concluídas" tab -->
+          <button class="tab" role="tab" aria-selected="false" aria-controls="board">
+            <!-- Check square icon -->
+            <svg class="tab__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="2" y="2" width="12" height="12" rx="2" stroke="#414651" stroke-width="1.333"/>
+              <path d="M5.333 8 7.333 10l3.334-4" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Concluídas
+          </button>
+        </nav>
+
+        <!-- Avatar group: 11 overlapping avatars + "+5" badge + add member button -->
+        <div class="avatar-group" aria-label="Membros do projeto">
+          <div class="avatar-stack" role="list" aria-label="Avatares dos membros">
+            <div class="avatar avatar--sm avatar--color-1" role="listitem" aria-label="Membro AB" style="z-index:11">AB</div>
+            <div class="avatar avatar--sm avatar--color-2" role="listitem" aria-label="Membro CD" style="z-index:10">CD</div>
+            <div class="avatar avatar--sm avatar--color-3" role="listitem" aria-label="Membro EF" style="z-index:9">EF</div>
+            <div class="avatar avatar--sm avatar--color-4" role="listitem" aria-label="Membro GH" style="z-index:8">GH</div>
+            <div class="avatar avatar--sm avatar--color-5" role="listitem" aria-label="Membro IJ" style="z-index:7">IJ</div>
+            <div class="avatar avatar--sm avatar--color-6" role="listitem" aria-label="Membro KL" style="z-index:6">KL</div>
+            <div class="avatar avatar--sm avatar--color-7" role="listitem" aria-label="Membro MN" style="z-index:5">MN</div>
+            <div class="avatar avatar--sm avatar--color-8" role="listitem" aria-label="Membro OP" style="z-index:4">OP</div>
+            <div class="avatar avatar--sm avatar--color-9" role="listitem" aria-label="Membro QR" style="z-index:3">QR</div>
+            <div class="avatar avatar--sm avatar--color-10" role="listitem" aria-label="Membro ST" style="z-index:2">ST</div>
+            <!-- +5 overflow badge: #f4ebff bg, #7f56d9 text -->
+            <div class="avatar avatar--sm avatar--more" role="listitem" aria-label="Mais 5 membros" style="z-index:1">+5</div>
+          </div>
+          <!-- Add member -->
+          <button class="btn-add-member" type="button" aria-label="Adicionar membro">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M8 3.333v9.334M3.333 8h9.334" stroke="#414651" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+      </div><!-- /.toolbar -->
+
+      <!-- ============================================================
+           BOARD: 3 columns
+           Figma: Frame 18 (Backlog), Frame 19 (Pendentes), Frame 20 (Concluídas)
+           All: size=378x846, padding=16 20, gap between cards=16
+      ============================================================ -->
+      <div class="board-wrapper">
+        <div class="board" id="board" role="main" aria-label="Board de tarefas">
+
+          <!-- ======================================================
+               COLUMN 1 – Backlog / "A Fazer" — 4 cards
+               Figma: Frame 18 pos=(194,277) size=378x846
+          ====================================================== -->
+          <section class="column" aria-label="Coluna: Backlog">
+            <div class="column__header">
+              <div class="column__title-row">
+                <!-- Backlog icon: inbox -->
+                <svg class="column__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M2 10h2.667l1.333 2h4l1.333-2H14M2 10V3.333a.667.667 0 0 1 .667-.666h10.666A.667.667 0 0 1 14 3.333V10" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="column__title">Backlog</span>
+                <span class="column__count">10 tarefas</span>
+              </div>
+              <!-- Add card button: 36x36, r:8, border brand -->
+              <button class="btn-add-card" type="button" aria-label="Adicionar tarefa ao Backlog">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M8 3.333v9.334M3.333 8h9.334" stroke="#7f56d9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="column__cards" role="list" aria-label="Tarefas do Backlog">
+
+              <!-- Card 1 -->
+              <article class="card" role="listitem" tabindex="0" aria-label="Tarefa: Customer Support Expert">
+                <div class="card__inner">
+                  <!-- Badges + more icon -->
+                  <div class="card__header">
+                    <div class="badge-group">
+                      <span class="badge badge--red">Urgente</span>
+                      <span class="badge badge--orange">Interno</span>
+                      <span class="badge badge--green">Externo</span>
+                    </div>
+                    <button class="card__more" aria-label="Mais opções" type="button">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="3" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="8" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="13" cy="8" r="1.333" fill="#414651"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <!-- Title + description -->
+                  <div class="card__body">
+                    <h3 class="card__title">Customer Support Expert</h3>
+                    <p class="card__desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  </div>
+                  <!-- Meta: date + checklist -->
+                  <div class="card__meta">
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="2" y="2.667" width="12" height="11.333" rx="1.333" stroke="#414651" stroke-width="1.333"/>
+                        <path d="M10.667 1.333V4M5.333 1.333V4M2 6.667h12" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                      </svg>
+                      <time datetime="2026-03-04">4 Mar. 2026</time>
+                    </div>
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M2.667 4h10.666M2.667 8h6.666M2.667 12H6" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                        <path d="M10.667 10l1.333 1.333 2-2.666" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>4/12</span>
+                    </div>
+                  </div>
+                  <!-- Footer: avatars + stats -->
+                  <div class="card__footer">
+                    <div class="card__avatars" aria-label="Responsáveis">
+                      <div class="avatar avatar--xs avatar--color-1" title="Membro 1">A</div>
+                      <div class="avatar avatar--xs avatar--color-2" title="Membro 2">B</div>
+                      <div class="avatar avatar--xs avatar--color-3" title="Membro 3">C</div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M5.333 8h5.334M5.333 11.333H8M2 2.667h12v8.666l-2.667 2.667H2V2.667Z" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>3</span>
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M2 2.667h12V12l-2.667 2H2V2.667ZM5.333 5.333h5.334M5.333 8h3.333" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>2</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Card 2 -->
+              <article class="card" role="listitem" tabindex="0" aria-label="Tarefa: UX Research Lead">
+                <div class="card__inner">
+                  <div class="card__header">
+                    <div class="badge-group">
+                      <span class="badge badge--blue">Design</span>
+                      <span class="badge badge--purple">Pesquisa</span>
+                    </div>
+                    <button class="card__more" aria-label="Mais opções" type="button">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="3" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="8" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="13" cy="8" r="1.333" fill="#414651"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">UX Research Lead</h3>
+                    <p class="card__desc">Conduzir pesquisas com usuários para melhorar a experiência do produto.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="2" y="2.667" width="12" height="11.333" rx="1.333" stroke="#414651" stroke-width="1.333"/>
+                        <path d="M10.667 1.333V4M5.333 1.333V4M2 6.667h12" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                      </svg>
+                      <time datetime="2026-03-10">10 Mar. 2026</time>
+                    </div>
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M2.667 4h10.666M2.667 8h6.666M2.667 12H6" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                        <path d="M10.667 10l1.333 1.333 2-2.666" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>2/8</span>
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__avatars" aria-label="Responsáveis">
+                      <div class="avatar avatar--xs avatar--color-4" title="Membro 4">D</div>
+                      <div class="avatar avatar--xs avatar--color-5" title="Membro 5">E</div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M5.333 8h5.334M5.333 11.333H8M2 2.667h12v8.666l-2.667 2.667H2V2.667Z" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>1</span>
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M2 2.667h12V12l-2.667 2H2V2.667ZM5.333 5.333h5.334M5.333 8h3.333" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>4</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Card 3 -->
+              <article class="card" role="listitem" tabindex="0" aria-label="Tarefa: Backend API Refactor">
+                <div class="card__inner">
+                  <div class="card__header">
+                    <div class="badge-group">
+                      <span class="badge badge--orange">Médio</span>
+                      <span class="badge badge--green">Backend</span>
+                    </div>
+                    <button class="card__more" aria-label="Mais opções" type="button">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="3" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="8" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="13" cy="8" r="1.333" fill="#414651"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Backend API Refactor</h3>
+                    <p class="card__desc">Refatorar endpoints da API para melhorar performance e manutenibilidade.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="2" y="2.667" width="12" height="11.333" rx="1.333" stroke="#414651" stroke-width="1.333"/>
+                        <path d="M10.667 1.333V4M5.333 1.333V4M2 6.667h12" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                      </svg>
+                      <time datetime="2026-03-15">15 Mar. 2026</time>
+                    </div>
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M2.667 4h10.666M2.667 8h6.666M2.667 12H6" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                        <path d="M10.667 10l1.333 1.333 2-2.666" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>1/6</span>
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__avatars" aria-label="Responsáveis">
+                      <div class="avatar avatar--xs avatar--color-6" title="Membro 6">F</div>
+                      <div class="avatar avatar--xs avatar--color-7" title="Membro 7">G</div>
+                      <div class="avatar avatar--xs avatar--color-8" title="Membro 8">H</div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M5.333 8h5.334M5.333 11.333H8M2 2.667h12v8.666l-2.667 2.667H2V2.667Z" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>5</span>
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M2 2.667h12V12l-2.667 2H2V2.667ZM5.333 5.333h5.334M5.333 8h3.333" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>3</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Card 4 -->
+              <article class="card" role="listitem" tabindex="0" aria-label="Tarefa: Mobile App Testing">
+                <div class="card__inner">
+                  <div class="card__header">
+                    <div class="badge-group">
+                      <span class="badge badge--red">Urgente</span>
+                      <span class="badge badge--blue">Mobile</span>
+                    </div>
+                    <button class="card__more" aria-label="Mais opções" type="button">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="3" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="8" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="13" cy="8" r="1.333" fill="#414651"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Mobile App Testing</h3>
+                    <p class="card__desc">Executar testes de regressão no aplicativo mobile para validar as novas funcionalidades.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="2" y="2.667" width="12" height="11.333" rx="1.333" stroke="#414651" stroke-width="1.333"/>
+                        <path d="M10.667 1.333V4M5.333 1.333V4M2 6.667h12" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                      </svg>
+                      <time datetime="2026-03-20">20 Mar. 2026</time>
+                    </div>
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M2.667 4h10.666M2.667 8h6.666M2.667 12H6" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                        <path d="M10.667 10l1.333 1.333 2-2.666" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>3/10</span>
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__avatars" aria-label="Responsáveis">
+                      <div class="avatar avatar--xs avatar--color-9" title="Membro 9">I</div>
+                      <div class="avatar avatar--xs avatar--color-10" title="Membro 10">J</div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M5.333 8h5.334M5.333 11.333H8M2 2.667h12v8.666l-2.667 2.667H2V2.667Z" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>2</span>
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M2 2.667h12V12l-2.667 2H2V2.667ZM5.333 5.333h5.334M5.333 8h3.333" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>6</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+            </div><!-- /.column__cards -->
+          </section><!-- /.column (Backlog) -->
+
+          <!-- ======================================================
+               COLUMN 2 – Pendentes — 2 cards
+               Figma: Frame 19 pos=(580,277) size=378x846
+          ====================================================== -->
+          <section class="column" aria-label="Coluna: Pendentes">
+            <div class="column__header">
+              <div class="column__title-row">
+                <!-- Alert circle icon -->
+                <svg class="column__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <circle cx="8" cy="8" r="6" stroke="#414651" stroke-width="1.333"/>
+                  <path d="M8 5.333v3M8 10.667h.007" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                </svg>
+                <span class="column__title">Pendentes</span>
+                <span class="column__count">2 tarefas</span>
+              </div>
+              <button class="btn-add-card" type="button" aria-label="Adicionar tarefa em Pendentes">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M8 3.333v9.334M3.333 8h9.334" stroke="#7f56d9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="column__cards" role="list" aria-label="Tarefas pendentes">
+
+              <!-- Card 1 -->
+              <article class="card" role="listitem" tabindex="0" aria-label="Tarefa: Customer Support Expert">
+                <div class="card__inner">
+                  <div class="card__header">
+                    <div class="badge-group">
+                      <span class="badge badge--red">Urgente</span>
+                      <span class="badge badge--orange">Interno</span>
+                      <span class="badge badge--green">Externo</span>
+                    </div>
+                    <button class="card__more" aria-label="Mais opções" type="button">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="3" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="8" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="13" cy="8" r="1.333" fill="#414651"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Customer Support Expert</h3>
+                    <p class="card__desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="2" y="2.667" width="12" height="11.333" rx="1.333" stroke="#414651" stroke-width="1.333"/>
+                        <path d="M10.667 1.333V4M5.333 1.333V4M2 6.667h12" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                      </svg>
+                      <time datetime="2026-03-04">4 Mar. 2026</time>
+                    </div>
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M2.667 4h10.666M2.667 8h6.666M2.667 12H6" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                        <path d="M10.667 10l1.333 1.333 2-2.666" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>4/12</span>
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__avatars" aria-label="Responsáveis">
+                      <div class="avatar avatar--xs avatar--color-1" title="Membro 1">A</div>
+                      <div class="avatar avatar--xs avatar--color-2" title="Membro 2">B</div>
+                      <div class="avatar avatar--xs avatar--color-3" title="Membro 3">C</div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M5.333 8h5.334M5.333 11.333H8M2 2.667h12v8.666l-2.667 2.667H2V2.667Z" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>3</span>
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M2 2.667h12V12l-2.667 2H2V2.667ZM5.333 5.333h5.334M5.333 8h3.333" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>2</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Card 2 -->
+              <article class="card" role="listitem" tabindex="0" aria-label="Tarefa: Frontend Performance">
+                <div class="card__inner">
+                  <div class="card__header">
+                    <div class="badge-group">
+                      <span class="badge badge--purple">Design System</span>
+                      <span class="badge badge--blue">Frontend</span>
+                    </div>
+                    <button class="card__more" aria-label="Mais opções" type="button">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="3" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="8" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="13" cy="8" r="1.333" fill="#414651"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Frontend Performance</h3>
+                    <p class="card__desc">Otimizar tempo de carregamento e métricas Core Web Vitals do dashboard.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="2" y="2.667" width="12" height="11.333" rx="1.333" stroke="#414651" stroke-width="1.333"/>
+                        <path d="M10.667 1.333V4M5.333 1.333V4M2 6.667h12" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                      </svg>
+                      <time datetime="2026-03-18">18 Mar. 2026</time>
+                    </div>
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M2.667 4h10.666M2.667 8h6.666M2.667 12H6" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                        <path d="M10.667 10l1.333 1.333 2-2.666" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>7/9</span>
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__avatars" aria-label="Responsáveis">
+                      <div class="avatar avatar--xs avatar--color-5" title="Membro 5">E</div>
+                      <div class="avatar avatar--xs avatar--color-6" title="Membro 6">F</div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M5.333 8h5.334M5.333 11.333H8M2 2.667h12v8.666l-2.667 2.667H2V2.667Z" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>4</span>
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M2 2.667h12V12l-2.667 2H2V2.667ZM5.333 5.333h5.334M5.333 8h3.333" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>1</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+            </div><!-- /.column__cards -->
+          </section><!-- /.column (Pendentes) -->
+
+          <!-- ======================================================
+               COLUMN 3 – Concluídas — 3 cards
+               Figma: Frame 20 pos=(966,277) size=378x846
+          ====================================================== -->
+          <section class="column" aria-label="Coluna: Concluídas">
+            <div class="column__header">
+              <div class="column__title-row">
+                <!-- Check square icon -->
+                <svg class="column__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="2" y="2" width="12" height="12" rx="2" stroke="#414651" stroke-width="1.333"/>
+                  <path d="M5.333 8 7.333 10l3.334-4" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="column__title">Concluídas</span>
+                <span class="column__count">3 tarefas</span>
+              </div>
+              <button class="btn-add-card" type="button" aria-label="Adicionar tarefa em Concluídas">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M8 3.333v9.334M3.333 8h9.334" stroke="#7f56d9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="column__cards" role="list" aria-label="Tarefas concluídas">
+
+              <!-- Card 1 -->
+              <article class="card" role="listitem" tabindex="0" aria-label="Tarefa: Customer Support Expert">
+                <div class="card__inner">
+                  <div class="card__header">
+                    <div class="badge-group">
+                      <span class="badge badge--red">Urgente</span>
+                      <span class="badge badge--orange">Interno</span>
+                      <span class="badge badge--green">Externo</span>
+                    </div>
+                    <button class="card__more" aria-label="Mais opções" type="button">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="3" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="8" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="13" cy="8" r="1.333" fill="#414651"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Customer Support Expert</h3>
+                    <p class="card__desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="2" y="2.667" width="12" height="11.333" rx="1.333" stroke="#414651" stroke-width="1.333"/>
+                        <path d="M10.667 1.333V4M5.333 1.333V4M2 6.667h12" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                      </svg>
+                      <time datetime="2026-03-04">4 Mar. 2026</time>
+                    </div>
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M2.667 4h10.666M2.667 8h6.666M2.667 12H6" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                        <path d="M10.667 10l1.333 1.333 2-2.666" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>4/12</span>
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__avatars" aria-label="Responsáveis">
+                      <div class="avatar avatar--xs avatar--color-1" title="Membro 1">A</div>
+                      <div class="avatar avatar--xs avatar--color-2" title="Membro 2">B</div>
+                      <div class="avatar avatar--xs avatar--color-3" title="Membro 3">C</div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M5.333 8h5.334M5.333 11.333H8M2 2.667h12v8.666l-2.667 2.667H2V2.667Z" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>3</span>
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M2 2.667h12V12l-2.667 2H2V2.667ZM5.333 5.333h5.334M5.333 8h3.333" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>2</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Card 2 -->
+              <article class="card" role="listitem" tabindex="0" aria-label="Tarefa: Design System Tokens">
+                <div class="card__inner">
+                  <div class="card__header">
+                    <div class="badge-group">
+                      <span class="badge badge--purple">Design System</span>
+                      <span class="badge badge--green">Concluído</span>
+                    </div>
+                    <button class="card__more" aria-label="Mais opções" type="button">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="3" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="8" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="13" cy="8" r="1.333" fill="#414651"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Design System Tokens</h3>
+                    <p class="card__desc">Mapear e documentar todos os design tokens do sistema de design corporativo.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="2" y="2.667" width="12" height="11.333" rx="1.333" stroke="#414651" stroke-width="1.333"/>
+                        <path d="M10.667 1.333V4M5.333 1.333V4M2 6.667h12" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                      </svg>
+                      <time datetime="2026-03-01">1 Mar. 2026</time>
+                    </div>
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M2.667 4h10.666M2.667 8h6.666M2.667 12H6" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                        <path d="M10.667 10l1.333 1.333 2-2.666" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>8/8</span>
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__avatars" aria-label="Responsáveis">
+                      <div class="avatar avatar--xs avatar--color-3" title="Membro 3">C</div>
+                      <div class="avatar avatar--xs avatar--color-4" title="Membro 4">D</div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M5.333 8h5.334M5.333 11.333H8M2 2.667h12v8.666l-2.667 2.667H2V2.667Z" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>0</span>
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M2 2.667h12V12l-2.667 2H2V2.667ZM5.333 5.333h5.334M5.333 8h3.333" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>5</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Card 3 -->
+              <article class="card" role="listitem" tabindex="0" aria-label="Tarefa: Onboarding Flow">
+                <div class="card__inner">
+                  <div class="card__header">
+                    <div class="badge-group">
+                      <span class="badge badge--blue">Produto</span>
+                      <span class="badge badge--green">Concluído</span>
+                    </div>
+                    <button class="card__more" aria-label="Mais opções" type="button">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="3" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="8" cy="8" r="1.333" fill="#414651"/>
+                        <circle cx="13" cy="8" r="1.333" fill="#414651"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="card__body">
+                    <h3 class="card__title">Onboarding Flow</h3>
+                    <p class="card__desc">Redesenhar o fluxo de onboarding para novos usuários com base em feedback de pesquisa.</p>
+                  </div>
+                  <div class="card__meta">
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="2" y="2.667" width="12" height="11.333" rx="1.333" stroke="#414651" stroke-width="1.333"/>
+                        <path d="M10.667 1.333V4M5.333 1.333V4M2 6.667h12" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                      </svg>
+                      <time datetime="2026-02-28">28 Fev. 2026</time>
+                    </div>
+                    <div class="card__meta-item">
+                      <svg class="card__meta-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M2.667 4h10.666M2.667 8h6.666M2.667 12H6" stroke="#414651" stroke-width="1.333" stroke-linecap="round"/>
+                        <path d="M10.667 10l1.333 1.333 2-2.666" stroke="#414651" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>5/5</span>
+                    </div>
+                  </div>
+                  <div class="card__footer">
+                    <div class="card__avatars" aria-label="Responsáveis">
+                      <div class="avatar avatar--xs avatar--color-7" title="Membro 7">G</div>
+                      <div class="avatar avatar--xs avatar--color-8" title="Membro 8">H</div>
+                      <div class="avatar avatar--xs avatar--color-9" title="Membro 9">I</div>
+                    </div>
+                    <div class="card__stats">
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M5.333 8h5.334M5.333 11.333H8M2 2.667h12v8.666l-2.667 2.667H2V2.667Z" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>7</span>
+                      </div>
+                      <div class="card__stat">
+                        <svg class="card__stat-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M2 2.667h12V12l-2.667 2H2V2.667ZM5.333 5.333h5.334M5.333 8h3.333" stroke="#717680" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>3</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+            </div><!-- /.column__cards -->
+          </section><!-- /.column (Concluídas) -->
+
+        </div><!-- /.board -->
+      </div><!-- /.board-wrapper -->
+
+    </div><!-- /.content -->
+  </div><!-- /.main-layout -->
+
+</div><!-- /.app -->
+</body>
 </html>
