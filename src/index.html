@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task View - Ferramenta Trello</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+
+      <!-- ====================================================================
+           HEADER
+           ==================================================================== -->
+      <header class="header">
+        <!-- Brand -->
+        <div class="header-brand">
+          <div class="header-brand-logo">
+            <svg viewBox="0 0 25 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path
+                d="M12.5 0L25 22H0L12.5 0Z"
+                fill="url(#brand-gradient)"
+              />
+              <defs>
+                <linearGradient id="brand-gradient" x1="12.5" y1="0" x2="12.5" y2="22" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#F4EBFF" />
+                  <stop offset="1" stop-color="#7F56D9" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <span class="header-brand-name">Task View</span>
+        </div>
+
+        <!-- Search -->
+        <div class="header-search">
+          <div class="search-field">
+            <svg class="search-field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <circle cx="7" cy="7" r="4.5" />
+              <path d="M10.5 10.5L14 14" stroke-linecap="round" />
+            </svg>
+            <input
+              class="search-field-input"
+              type="search"
+              placeholder="Email"
+              aria-label="Buscar"
+            />
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="header-actions">
+          <button class="icon-button" aria-label="Notificacoes" title="Notificacoes">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M10 2.5C6.686 2.5 4 5.186 4 8.5v4L2.5 14h15l-1.5-1.5v-4c0-3.314-2.686-6-6-6z" />
+              <path d="M8 14.5a2 2 0 004 0" stroke-linecap="round" />
+            </svg>
+          </button>
+          <div class="header-avatar" aria-label="Perfil do usuario">
+            <span aria-hidden="true">A</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ====================================================================
+           MAIN BODY
+           ==================================================================== -->
+      <div class="main-body">
+
+        <!-- ==================================================================
+             SIDEBAR / MENU
+             ================================================================== -->
+        <nav class="sidebar" aria-label="Menu principal">
+          <ul class="sidebar-nav">
+            <!-- Home -->
+            <li>
+              <a class="sidebar-nav-item" href="#" aria-label="Home">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <path d="M3 8L10 2l7 6v9a1 1 0 01-1 1H4a1 1 0 01-1-1V8z" stroke-linejoin="round" />
+                  <path d="M7 18V11h6v7" />
+                </svg>
+                <span class="sidebar-nav-item-label">Home</span>
+              </a>
+            </li>
+
+            <!-- Notificacao -->
+            <li>
+              <a class="sidebar-nav-item" href="#" aria-label="Notificacao">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <path d="M10 2.5C6.686 2.5 4 5.186 4 8.5v4L2.5 14h15l-1.5-1.5v-4c0-3.314-2.686-6-6-6z" />
+                  <path d="M8 14.5a2 2 0 004 0" stroke-linecap="round" />
+                </svg>
+                <span class="sidebar-nav-item-label">Notificacao</span>
+              </a>
+            </li>
+
+            <!-- Tarefas -->
+            <li>
+              <a class="sidebar-nav-item active" href="#" aria-current="page" aria-label="Tarefas">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <rect x="3" y="3" width="14" height="14" rx="2" />
+                  <path d="M7 10l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="sidebar-nav-item-label">Tarefas</span>
+              </a>
+            </li>
+
+            <!-- Analytics -->
+            <li>
+              <a class="sidebar-nav-item" href="#" aria-label="Analytics">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <path d="M3 15l4-5 4 3 4-6 2 2" stroke-linecap="round" stroke-linejoin="round" />
+                  <rect x="2" y="2" width="16" height="16" rx="2" />
+                </svg>
+                <span class="sidebar-nav-item-label">Analytics</span>
+              </a>
+            </li>
+
+            <!-- Pendentes -->
+            <li>
+              <a class="sidebar-nav-item" href="#" aria-label="Pendentes">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <circle cx="10" cy="10" r="7.5" />
+                  <path d="M10 6v5l3 2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="sidebar-nav-item-label">Pendentes</span>
+              </a>
+            </li>
+
+            <!-- Concluidas -->
+            <li>
+              <a class="sidebar-nav-item" href="#" aria-label="Concluidas">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <circle cx="10" cy="10" r="7.5" />
+                  <path d="M6.5 10l2.5 2.5 4.5-4.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="sidebar-nav-item-label">Concluidas</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- ==================================================================
+             BOARD CONTENT
+             ================================================================== -->
+        <main class="board-content" aria-label="Board de tarefas">
+
+          <!-- Toolbar -->
+          <div class="board-toolbar">
+            <div class="board-toolbar-left">
+              <span class="board-title-badge">Tarefas</span>
+            </div>
+            <div class="board-toolbar-right">
+              <!-- Avatar group -->
+              <div class="avatar-group" aria-label="Membros do board">
+                <div class="avatar-group-item card-avatar--purple" title="Ana Silva">
+                  <span aria-hidden="true">AS</span>
+                </div>
+                <div class="avatar-group-item card-avatar--blue" title="Bruno Costa">
+                  <span aria-hidden="true">BC</span>
+                </div>
+                <div class="avatar-group-item card-avatar--green" title="Carla Souza">
+                  <span aria-hidden="true">CS</span>
+                </div>
+                <div class="avatar-group-item card-avatar--orange" title="Diego Pereira">
+                  <span aria-hidden="true">DP</span>
+                </div>
+                <div class="avatar-group-item avatar-group-more" title="5 membros a mais">
+                  <span aria-hidden="true">+5</span>
+                </div>
+                <button class="add-member-btn" aria-label="Adicionar membro" title="Adicionar membro">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <path d="M7 2v10M2 7h10" stroke-linecap="round" />
+                  </svg>
+                </button>
+              </div>
+              <button class="btn-secondary" aria-label="Adicionar lista">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+                </svg>
+                Adicionar lista
+              </button>
+              <button class="btn-primary" aria-label="Novo card">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+                </svg>
+                Novo card
+              </button>
+            </div>
+          </div>
+
+          <!-- Kanban Board -->
+          <div class="board-kanban" role="region" aria-label="Colunas do kanban">
+
+            <!-- ============================================================
+                 COLUMN: A Fazer
+                 ============================================================ -->
+            <section class="board-column" id="col-a-fazer" aria-label="Coluna A Fazer">
+              <div class="column-header">
+                <div class="column-header-left">
+                  <svg class="column-header-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <circle cx="8" cy="8" r="5.5" />
+                  </svg>
+                  <span class="column-title">A Fazer</span>
+                  <span class="column-count" aria-label="4 cards">4</span>
+                </div>
+                <div class="column-header-actions">
+                  <button class="column-action-btn" aria-label="Adicionar card na coluna A Fazer" title="Adicionar card">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                      <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                  <button class="column-action-btn" aria-label="Mais opcoes" title="Mais opcoes">
+                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <circle cx="8" cy="3.5" r="1.25" />
+                      <circle cx="8" cy="8" r="1.25" />
+                      <circle cx="8" cy="12.5" r="1.25" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="column-cards" aria-label="Cards da coluna A Fazer">
+
+                <!-- Card 1 -->
+                <article class="card" draggable="true" aria-label="Card: Redesign da pagina inicial">
+                  <div class="card-image">
+                    <div class="card-image-placeholder" aria-hidden="true">
+                      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="5" y="5" width="30" height="30" rx="3" />
+                        <circle cx="14" cy="15" r="3" />
+                        <path d="M5 28l9-9 6 6 5-5 10 9" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="card-tags">
+                    <span class="card-tag card-tag--purple">Design</span>
+                    <span class="card-tag card-tag--blue">Frontend</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Redesign da pagina inicial</h3>
+                    <p class="card-description">Atualizar o layout da landing page com o novo sistema de design</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-footer-left">
+                      <span class="card-meta-item">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <rect x="1.5" y="2.5" width="11" height="10" rx="1.5" />
+                          <path d="M4.5 1v3M9.5 1v3M1.5 6.5h11" stroke-linecap="round" />
+                        </svg>
+                        <time>28 Mar</time>
+                      </span>
+                      <span class="card-meta-item card-priority--medium">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <path d="M7 2v7M7 11.5v1" stroke-linecap="round" />
+                          <circle cx="7" cy="11.5" r="0.5" fill="currentColor" />
+                        </svg>
+                        Media
+                      </span>
+                    </div>
+                    <div class="card-avatars">
+                      <div class="card-avatar card-avatar--purple" title="Ana Silva">AS</div>
+                      <div class="card-avatar card-avatar--blue" title="Bruno Costa">BC</div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="card" draggable="true" aria-label="Card: Integracao com API de pagamentos">
+                  <div class="card-tags">
+                    <span class="card-tag card-tag--green">Backend</span>
+                    <span class="card-tag card-tag--orange">Urgente</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Integracao com API de pagamentos</h3>
+                    <p class="card-description">Implementar gateway de pagamento Stripe na plataforma</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-footer-left">
+                      <span class="card-meta-item">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <rect x="1.5" y="2.5" width="11" height="10" rx="1.5" />
+                          <path d="M4.5 1v3M9.5 1v3M1.5 6.5h11" stroke-linecap="round" />
+                        </svg>
+                        <time>30 Mar</time>
+                      </span>
+                      <span class="card-meta-item card-priority--high">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <path d="M7 1l6 12H1L7 1z" stroke-linejoin="round" />
+                          <path d="M7 5.5v3" stroke-linecap="round" />
+                          <circle cx="7" cy="10" r="0.5" fill="currentColor" />
+                        </svg>
+                        Alta
+                      </span>
+                    </div>
+                    <div class="card-avatars">
+                      <div class="card-avatar card-avatar--green" title="Carla Souza">CS</div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="card" draggable="true" aria-label="Card: Testes automatizados">
+                  <div class="card-tags">
+                    <span class="card-tag card-tag--gray">QA</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Testes automatizados end-to-end</h3>
+                    <p class="card-description">Configurar suite de testes com Playwright para fluxo de checkout</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-footer-left">
+                      <span class="card-meta-item">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <rect x="1.5" y="2.5" width="11" height="10" rx="1.5" />
+                          <path d="M4.5 1v3M9.5 1v3M1.5 6.5h11" stroke-linecap="round" />
+                        </svg>
+                        <time>2 Abr</time>
+                      </span>
+                      <span class="card-meta-item card-priority--low">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <path d="M2 4l5 6 5-6" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        Baixa
+                      </span>
+                    </div>
+                    <div class="card-avatars">
+                      <div class="card-avatar card-avatar--orange" title="Diego Pereira">DP</div>
+                      <div class="card-avatar card-avatar--purple" title="Ana Silva">AS</div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 4 -->
+                <article class="card" draggable="true" aria-label="Card: Documentacao da API">
+                  <div class="card-tags">
+                    <span class="card-tag card-tag--blue">Docs</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Documentacao da API REST</h3>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-footer-left">
+                      <span class="card-meta-item">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <rect x="1.5" y="2.5" width="11" height="10" rx="1.5" />
+                          <path d="M4.5 1v3M9.5 1v3M1.5 6.5h11" stroke-linecap="round" />
+                        </svg>
+                        <time>5 Abr</time>
+                      </span>
+                    </div>
+                    <div class="card-avatars">
+                      <div class="card-avatar card-avatar--blue" title="Bruno Costa">BC</div>
+                    </div>
+                  </div>
+                </article>
+
+              </div>
+              <button class="column-add-btn" aria-label="Adicionar card na coluna A Fazer">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+                </svg>
+                Adicionar card
+              </button>
+            </section>
+
+            <!-- ============================================================
+                 COLUMN: Em Andamento
+                 ============================================================ -->
+            <section class="board-column" id="col-em-andamento" aria-label="Coluna Em Andamento">
+              <div class="column-header">
+                <div class="column-header-left">
+                  <svg class="column-header-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <circle cx="8" cy="8" r="5.5" />
+                    <path d="M8 4v4l2.5 2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="column-title">Em Andamento</span>
+                  <span class="column-count" aria-label="2 cards">2</span>
+                </div>
+                <div class="column-header-actions">
+                  <button class="column-action-btn" aria-label="Adicionar card na coluna Em Andamento" title="Adicionar card">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                      <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                  <button class="column-action-btn" aria-label="Mais opcoes" title="Mais opcoes">
+                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <circle cx="8" cy="3.5" r="1.25" />
+                      <circle cx="8" cy="8" r="1.25" />
+                      <circle cx="8" cy="12.5" r="1.25" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="column-cards" aria-label="Cards da coluna Em Andamento">
+
+                <!-- Card 1 -->
+                <article class="card" draggable="true" aria-label="Card: Sistema de autenticacao">
+                  <div class="card-image">
+                    <div class="card-image-placeholder" aria-hidden="true">
+                      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="10" y="5" width="20" height="15" rx="2" />
+                        <path d="M20 20v10M14 35h12" stroke-linecap="round" />
+                        <circle cx="20" cy="12" r="3" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="card-tags">
+                    <span class="card-tag card-tag--purple">Auth</span>
+                    <span class="card-tag card-tag--green">Backend</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Sistema de autenticacao OAuth 2.0</h3>
+                    <p class="card-description">Implementar login social com Google e GitHub</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-footer-left">
+                      <span class="card-meta-item">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <rect x="1.5" y="2.5" width="11" height="10" rx="1.5" />
+                          <path d="M4.5 1v3M9.5 1v3M1.5 6.5h11" stroke-linecap="round" />
+                        </svg>
+                        <time>27 Mar</time>
+                      </span>
+                      <span class="card-meta-item card-priority--high">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <path d="M7 1l6 12H1L7 1z" stroke-linejoin="round" />
+                          <path d="M7 5.5v3" stroke-linecap="round" />
+                          <circle cx="7" cy="10" r="0.5" fill="currentColor" />
+                        </svg>
+                        Alta
+                      </span>
+                    </div>
+                    <div class="card-avatars">
+                      <div class="card-avatar card-avatar--purple" title="Ana Silva">AS</div>
+                      <div class="card-avatar card-avatar--green" title="Carla Souza">CS</div>
+                      <div class="card-avatar card-avatar--orange" title="Diego Pereira">DP</div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="card" draggable="true" aria-label="Card: Dashboard de metricas">
+                  <div class="card-tags">
+                    <span class="card-tag card-tag--blue">Analytics</span>
+                    <span class="card-tag card-tag--purple">Design</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Dashboard de metricas em tempo real</h3>
+                    <p class="card-description">Criar painel com graficos interativos usando Chart.js</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-footer-left">
+                      <span class="card-meta-item">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <rect x="1.5" y="2.5" width="11" height="10" rx="1.5" />
+                          <path d="M4.5 1v3M9.5 1v3M1.5 6.5h11" stroke-linecap="round" />
+                        </svg>
+                        <time>1 Abr</time>
+                      </span>
+                      <span class="card-meta-item card-priority--medium">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <path d="M7 2v7M7 11.5v1" stroke-linecap="round" />
+                          <circle cx="7" cy="11.5" r="0.5" fill="currentColor" />
+                        </svg>
+                        Media
+                      </span>
+                    </div>
+                    <div class="card-avatars">
+                      <div class="card-avatar card-avatar--blue" title="Bruno Costa">BC</div>
+                    </div>
+                  </div>
+                </article>
+
+              </div>
+              <button class="column-add-btn" aria-label="Adicionar card na coluna Em Andamento">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+                </svg>
+                Adicionar card
+              </button>
+            </section>
+
+            <!-- ============================================================
+                 COLUMN: Pendentes
+                 ============================================================ -->
+            <section class="board-column" id="col-pendentes" aria-label="Coluna Pendentes">
+              <div class="column-header">
+                <div class="column-header-left">
+                  <svg class="column-header-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <circle cx="8" cy="8" r="5.5" />
+                    <path d="M8 5v3.5l2 2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="column-title">Pendentes</span>
+                  <span class="column-count" aria-label="3 cards">3</span>
+                </div>
+                <div class="column-header-actions">
+                  <button class="column-action-btn" aria-label="Adicionar card na coluna Pendentes" title="Adicionar card">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                      <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                  <button class="column-action-btn" aria-label="Mais opcoes" title="Mais opcoes">
+                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <circle cx="8" cy="3.5" r="1.25" />
+                      <circle cx="8" cy="8" r="1.25" />
+                      <circle cx="8" cy="12.5" r="1.25" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="column-cards" aria-label="Cards da coluna Pendentes">
+
+                <!-- Card 1 -->
+                <article class="card" draggable="true" aria-label="Card: Revisao de codigo">
+                  <div class="card-tags">
+                    <span class="card-tag card-tag--orange">Review</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Revisao de codigo do modulo de relatorios</h3>
+                    <p class="card-description">Code review pendente de aprovacao do tech lead</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-footer-left">
+                      <span class="card-meta-item">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <rect x="1.5" y="2.5" width="11" height="10" rx="1.5" />
+                          <path d="M4.5 1v3M9.5 1v3M1.5 6.5h11" stroke-linecap="round" />
+                        </svg>
+                        <time>26 Mar</time>
+                      </span>
+                      <span class="card-meta-item card-priority--medium">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <path d="M7 2v7M7 11.5v1" stroke-linecap="round" />
+                          <circle cx="7" cy="11.5" r="0.5" fill="currentColor" />
+                        </svg>
+                        Media
+                      </span>
+                    </div>
+                    <div class="card-avatars">
+                      <div class="card-avatar card-avatar--purple" title="Ana Silva">AS</div>
+                      <div class="card-avatar card-avatar--orange" title="Diego Pereira">DP</div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="card" draggable="true" aria-label="Card: Migracao de banco de dados">
+                  <div class="card-image">
+                    <div class="card-image-placeholder" aria-hidden="true">
+                      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <ellipse cx="20" cy="12" rx="12" ry="5" />
+                        <path d="M8 12v8c0 2.76 5.37 5 12 5s12-2.24 12-5v-8" />
+                        <path d="M8 20v6c0 2.76 5.37 5 12 5s12-2.24 12-5v-6" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="card-tags">
+                    <span class="card-tag card-tag--green">Database</span>
+                    <span class="card-tag card-tag--gray">DevOps</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Migracao banco PostgreSQL para v15</h3>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-footer-left">
+                      <span class="card-meta-item">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <rect x="1.5" y="2.5" width="11" height="10" rx="1.5" />
+                          <path d="M4.5 1v3M9.5 1v3M1.5 6.5h11" stroke-linecap="round" />
+                        </svg>
+                        <time>3 Abr</time>
+                      </span>
+                      <span class="card-meta-item card-priority--high">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <path d="M7 1l6 12H1L7 1z" stroke-linejoin="round" />
+                          <path d="M7 5.5v3" stroke-linecap="round" />
+                          <circle cx="7" cy="10" r="0.5" fill="currentColor" />
+                        </svg>
+                        Alta
+                      </span>
+                    </div>
+                    <div class="card-avatars">
+                      <div class="card-avatar card-avatar--green" title="Carla Souza">CS</div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="card" draggable="true" aria-label="Card: Onboarding de usuarios">
+                  <div class="card-tags">
+                    <span class="card-tag card-tag--blue">UX</span>
+                    <span class="card-tag card-tag--purple">Design</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Fluxo de onboarding de novos usuarios</h3>
+                    <p class="card-description">Projetar experiencia de boas-vindas com tour guiado</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-footer-left">
+                      <span class="card-meta-item">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <rect x="1.5" y="2.5" width="11" height="10" rx="1.5" />
+                          <path d="M4.5 1v3M9.5 1v3M1.5 6.5h11" stroke-linecap="round" />
+                        </svg>
+                        <time>7 Abr</time>
+                      </span>
+                    </div>
+                    <div class="card-avatars">
+                      <div class="card-avatar card-avatar--blue" title="Bruno Costa">BC</div>
+                      <div class="card-avatar card-avatar--purple" title="Ana Silva">AS</div>
+                    </div>
+                  </div>
+                </article>
+
+              </div>
+              <button class="column-add-btn" aria-label="Adicionar card na coluna Pendentes">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+                </svg>
+                Adicionar card
+              </button>
+            </section>
+
+            <!-- ============================================================
+                 COLUMN: Concluidas
+                 ============================================================ -->
+            <section class="board-column" id="col-concluidas" aria-label="Coluna Concluidas">
+              <div class="column-header">
+                <div class="column-header-left">
+                  <svg class="column-header-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <circle cx="8" cy="8" r="5.5" />
+                    <path d="M5.5 8l2 2 3.5-3.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="column-title">Concluidas</span>
+                  <span class="column-count" aria-label="2 cards">2</span>
+                </div>
+                <div class="column-header-actions">
+                  <button class="column-action-btn" aria-label="Adicionar card na coluna Concluidas" title="Adicionar card">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                      <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                  <button class="column-action-btn" aria-label="Mais opcoes" title="Mais opcoes">
+                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <circle cx="8" cy="3.5" r="1.25" />
+                      <circle cx="8" cy="8" r="1.25" />
+                      <circle cx="8" cy="12.5" r="1.25" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="column-cards" aria-label="Cards da coluna Concluidas">
+
+                <!-- Card 1 -->
+                <article class="card" draggable="true" aria-label="Card: Configuracao CI/CD">
+                  <div class="card-tags">
+                    <span class="card-tag card-tag--gray">DevOps</span>
+                    <span class="card-tag card-tag--green">Concluido</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Configuracao pipeline CI/CD</h3>
+                    <p class="card-description">Automatizacao completa de build, test e deploy com GitHub Actions</p>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-footer-left">
+                      <span class="card-meta-item">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <rect x="1.5" y="2.5" width="11" height="10" rx="1.5" />
+                          <path d="M4.5 1v3M9.5 1v3M1.5 6.5h11" stroke-linecap="round" />
+                        </svg>
+                        <time>20 Mar</time>
+                      </span>
+                    </div>
+                    <div class="card-avatars">
+                      <div class="card-avatar card-avatar--orange" title="Diego Pereira">DP</div>
+                      <div class="card-avatar card-avatar--green" title="Carla Souza">CS</div>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="card" draggable="true" aria-label="Card: Wireframes do app mobile">
+                  <div class="card-image">
+                    <div class="card-image-placeholder" aria-hidden="true">
+                      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="12" y="3" width="16" height="34" rx="3" />
+                        <path d="M17 6h6M20 33.5v.5" stroke-linecap="round" />
+                        <rect x="14" y="9" width="12" height="20" rx="1" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="card-tags">
+                    <span class="card-tag card-tag--purple">Design</span>
+                    <span class="card-tag card-tag--green">Concluido</span>
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">Wireframes do aplicativo mobile</h3>
+                  </div>
+                  <div class="card-footer">
+                    <div class="card-footer-left">
+                      <span class="card-meta-item">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                          <rect x="1.5" y="2.5" width="11" height="10" rx="1.5" />
+                          <path d="M4.5 1v3M9.5 1v3M1.5 6.5h11" stroke-linecap="round" />
+                        </svg>
+                        <time>18 Mar</time>
+                      </span>
+                    </div>
+                    <div class="card-avatars">
+                      <div class="card-avatar card-avatar--purple" title="Ana Silva">AS</div>
+                    </div>
+                  </div>
+                </article>
+
+              </div>
+              <button class="column-add-btn" aria-label="Adicionar card na coluna Concluidas">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+                </svg>
+                Adicionar card
+              </button>
+            </section>
+
+            <!-- Add Column Button -->
+            <button class="add-column-btn" aria-label="Adicionar nova coluna">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+              </svg>
+              Adicionar coluna
+            </button>
+
+          </div>
+          <!-- /board-kanban -->
+
+        </main>
+        <!-- /board-content -->
+
+      </div>
+      <!-- /main-body -->
+
+    </div>
+    <!-- /app-layout -->
+
+    <!-- ======================================================================
+         ADD CARD MODAL
+         ====================================================================== -->
+    <div id="add-card-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="modal-title">
+            Adicionar card em <span id="modal-column-name"></span>
+          </h2>
+          <button class="modal-close icon-button" aria-label="Fechar modal">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M3 3l10 10M13 3L3 13" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+        <form id="add-card-form" class="modal-body">
+          <div class="form-field">
+            <label for="card-title-input" class="form-label">Titulo do card</label>
+            <input
+              id="card-title-input"
+              class="form-input"
+              type="text"
+              placeholder="Digite o titulo..."
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-secondary modal-cancel-btn">Cancelar</button>
+            <button type="submit" class="btn-primary">Adicionar card</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="board.js"></script>
+  </body>
+</html>
