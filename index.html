@@ -1,11 +1,1585 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello World</title>
-  </head>
-  <body>
-    <h1>Hello World</h1>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task View – Kanban Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset ─────────────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ─── Design Tokens ──────────────────────────────────────────── */
+    :root {
+      /* Colors extracted from Figma */
+      --color-bg:               #f5f5f5;
+      --color-surface:          #ffffff;
+      --color-border:           #e9eaeb;
+
+      /* Text colors */
+      --color-text-primary:     #0a0d12;
+      --color-text-secondary:   #717680;
+      --color-text-placeholder: #9da3ae;
+
+      /* Brand / accent - from Figma gradient end stop r:0.498 g:0.337 b:0.851 */
+      --color-brand:            #7f56d9;
+      --color-brand-light:      #f4f3ff;
+
+      /* Badge colors */
+      --color-badge-urgent-bg:  #fff1ee;
+      --color-badge-urgent-text:#e04f16;
+      --color-badge-urgent-border: #fecdca;
+      --color-badge-interno-bg: #fffaeb;
+      --color-badge-interno-text:#b54708;
+      --color-badge-interno-border: #fedf89;
+      --color-badge-green-bg:   #ecfdf3;
+      --color-badge-green-text: #067647;
+      --color-badge-green-border: #abefc6;
+
+      /* Spacing - extracted from Figma */
+      --space-4:   4px;
+      --space-6:   6px;
+      --space-8:   8px;
+      --space-10:  10px;
+      --space-12:  12px;
+      --space-16:  16px;
+      --space-20:  20px;
+      --space-24:  24px;
+      --space-32:  32px;
+
+      /* Typography */
+      --font:      'Inter', system-ui, -apple-system, sans-serif;
+
+      /* Radius */
+      --radius-sm:   6px;
+      --radius-md:   8px;
+      --radius-lg:   12px;
+      --radius-xl:   16px;
+      --radius-full: 9999px;
+    }
+
+    /* ─── Base ───────────────────────────────────────────────────── */
+    html, body {
+      height: 100%;
+      font-family: var(--font);
+      background-color: var(--color-bg);
+      color: var(--color-text-primary);
+      font-size: 14px;
+      line-height: 20px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ─── App shell ──────────────────────────────────────────────── */
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       HEADER
+       Figma: width 1440 / height 76 / bg #ffffff / border-bottom #e9eaeb
+       padding: 16px 32px / layout HORIZONTAL / gap 10 / align CENTER / space-between
+    ════════════════════════════════════════════════════════════ */
+    .header {
+      width: 100%;
+      height: 76px;
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      gap: 10px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    /* Brand: Figma width 117 / height 32 / layout HORIZONTAL / gap 6 / align CENTER */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 117px;
+      height: 32px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .brand-icon-wrap {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      line-height: 24px;
+      white-space: nowrap;
+    }
+
+    /* Search: Figma width 320 / height 44 / cornerRadius 999 */
+    .search-wrap {
+      position: relative;
+      width: 320px;
+      height: 44px;
+      flex-shrink: 0;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: var(--color-text-placeholder);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      background: var(--color-surface);
+      padding: 0 16px 0 40px;
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--color-text-primary);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .search-input::placeholder {
+      color: var(--color-text-placeholder);
+    }
+
+    .search-input:focus {
+      border-color: var(--color-brand);
+      box-shadow: 0 0 0 3px rgba(127, 86, 217, 0.12);
+    }
+
+    /* Header right frame: Figma Frame 5 width 86 / height 40 / gap 10 / align CENTER */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 86px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+
+    .notif-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      transition: background 0.15s;
+      padding: 0;
+    }
+
+    .notif-btn:hover {
+      background: var(--color-bg);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #9e77ed, #7f56d9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffffff;
+      cursor: pointer;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       BODY LAYOUT
+    ════════════════════════════════════════════════════════════ */
+    .body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       SIDEBAR / MENU
+       Figma: width 224 / height 935 / bg #fff / border-right #e9eaeb
+       padding: 20px 92px 855px 32px — in practice top/left padding used
+       layout VERTICAL / gap 10
+    ════════════════════════════════════════════════════════════ */
+    .sidebar {
+      width: 224px;
+      flex-shrink: 0;
+      background: var(--color-surface);
+      border-right: 1px solid var(--color-border);
+      padding: 20px 0 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+    }
+
+    /* Frame 6 inner: Figma width 100 / height 140 / gap 20 / VERTICAL */
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 0 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.12s ease, color 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .nav-item:hover {
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+    }
+
+    .nav-item.active {
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+      font-weight: 500;
+    }
+
+    .nav-item svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       MAIN CONTENT
+    ════════════════════════════════════════════════════════════ */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       FILTER BAR (Frame 10)
+       Figma: x194 y213 / width 342 / height 52
+       bg #ffffff / border #e9eaeb / cornerRadius 999
+       padding 8px 16px / gap 16 / layout VERTICAL / align CENTER CENTER
+    ════════════════════════════════════════════════════════════ */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 16px 16px 0 16px;
+      padding: 8px 16px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      height: 52px;
+      flex-shrink: 0;
+      gap: 16px;
+    }
+
+    /* Frame 9 inner: horizontal gap 16 / align CENTER */
+    .filter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .filter-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 36px;
+      padding: 0 16px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: transparent;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: background 0.12s ease, color 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .filter-tab:hover {
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+    }
+
+    .filter-tab.active {
+      background: var(--color-brand);
+      color: #ffffff;
+    }
+
+    .filter-tab svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Avatar group (right side of filter bar) */
+    /* Figma Avatar Group: x1024 y223 / width 320 / height 32 / gap 16 / HORIZONTAL */
+    .avatar-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    /* Line_avatar: x1024 y223 / width 272 / height 32 / gap -8 (overlap) */
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+    }
+
+    .av {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--color-surface);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-left: -8px;
+      position: relative;
+    }
+
+    .av:first-child {
+      margin-left: 0;
+    }
+
+    .av-more {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--color-surface);
+      background: #f4f3ff;
+      color: var(--color-brand);
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-left: -8px;
+    }
+
+    /* _Buttom_Avatar: Figma x1312 y223 / w32 h32 */
+    .av-add-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1.5px dashed var(--color-border);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      transition: border-color 0.12s, color 0.12s;
+      flex-shrink: 0;
+    }
+
+    .av-add-btn:hover {
+      border-color: var(--color-brand);
+      color: var(--color-brand);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       BOARD AREA
+    ════════════════════════════════════════════════════════════ */
+    .board {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      flex: 1;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       LIST COLUMN (Frame 18 / 19 / 20)
+       Figma: width 378 / height 846 / bg #fff / border #e9eaeb
+       padding 16px 20px (top/left) / gap 10 / layout VERTICAL
+    ════════════════════════════════════════════════════════════ */
+    .list-col {
+      width: 378px;
+      min-width: 378px;
+      max-height: calc(100vh - 76px - 52px - 48px);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    /* List header row */
+    .list-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      height: 52px;
+      flex-shrink: 0;
+    }
+
+    .list-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .list-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      line-height: 24px;
+    }
+
+    .list-count {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      line-height: 20px;
+    }
+
+    /* Plus button: Figma cornerRadius 8 / border brand / 36x36 */
+    .list-add {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-brand);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--color-brand);
+      flex-shrink: 0;
+      transition: background 0.12s;
+    }
+
+    .list-add:hover {
+      background: var(--color-brand-light);
+    }
+
+    .list-add svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Cards scroll area */
+    .cards-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 0 20px 20px 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       CARD
+       Figma _Frame 4: bg #fff / border #e9eaeb / cornerRadius 16
+       padding 16px / gap 16 / layout VERTICAL / FILL width
+    ════════════════════════════════════════════════════════════ */
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      cursor: pointer;
+      transition: box-shadow 0.15s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 8px -2px rgba(16, 24, 40, 0.08), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
+    }
+
+    /* Card top row: badges + three-dot menu */
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    /* Badge row: Figma Frame 11 / gap 6 / HORIZONTAL */
+    .card-badges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* Badge: Figma cornerRadius 999 / padding 2 8 */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 18px;
+      white-space: nowrap;
+    }
+
+    .badge-urgent {
+      background: var(--color-badge-urgent-bg);
+      color: var(--color-badge-urgent-text);
+      border: 1px solid var(--color-badge-urgent-border);
+    }
+
+    .badge-interno {
+      background: var(--color-badge-interno-bg);
+      color: var(--color-badge-interno-text);
+      border: 1px solid var(--color-badge-interno-border);
+    }
+
+    .badge-green {
+      background: var(--color-badge-green-bg);
+      color: var(--color-badge-green-text);
+      border: 1px solid var(--color-badge-green-border);
+    }
+
+    /* Three-dot menu button */
+    .card-menu {
+      width: 20px;
+      height: 20px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      flex-shrink: 0;
+      padding: 0;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .card-menu:hover {
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+    }
+
+    /* Card body: title + description
+       Figma: Text "Customer Support Expert" Inter SemiBold 14px / lh 20
+       Text "Lorem ipsum…" Inter Regular 14px / lh 20 / color secondary
+    */
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      line-height: 20px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      line-height: 20px;
+    }
+
+    /* Card meta: date + checklist count */
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-date,
+    .card-check {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      line-height: 16px;
+    }
+
+    .card-date svg,
+    .card-check svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Card footer: inline avatars + attachment/comment counts */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    /* Inline avatar stack - overlapping by -6px (Figma gap -8 but for 24px avs) */
+    .card-avatars {
+      display: flex;
+      align-items: center;
+    }
+
+    .card-av {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--color-surface);
+      flex-shrink: 0;
+      margin-left: -6px;
+    }
+
+    .card-av:first-child {
+      margin-left: 0;
+    }
+
+    /* Stats: attachment + comment */
+    .card-stats {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-stat {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      line-height: 16px;
+    }
+
+    .card-stat svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* ─── Scrollbar styling ──────────────────────────────────────── */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-border);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #d1d5db;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ══════════════════════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="header">
+
+    <!-- Brand: logo icon + "Task View" text -->
+    <a class="brand" href="#" aria-label="Task View – página inicial">
+      <!-- Gradient icon: Figma Vector with gradient #f4eaff → #7f56d9 in 32x32 frame -->
+      <div class="brand-icon-wrap" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g1" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#f4eaff"/>
+              <stop offset="100%" stop-color="#7f56d9"/>
+            </linearGradient>
+          </defs>
+          <!-- Four rounded squares arranged 2x2 matching Figma grid icon -->
+          <rect x="2" y="2" width="12" height="12" rx="2.5" fill="url(#g1)"/>
+          <rect x="18" y="2" width="12" height="12" rx="2.5" fill="url(#g1)" opacity="0.8"/>
+          <rect x="2" y="18" width="12" height="12" rx="2.5" fill="url(#g1)" opacity="0.8"/>
+          <rect x="18" y="18" width="12" height="12" rx="2.5" fill="url(#g1)" opacity="0.55"/>
+        </svg>
+      </div>
+      <span class="brand-name">Task View</span>
+    </a>
+
+    <!-- Search input - Figma: width 320 / height 44 / cornerRadius 999 -->
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <circle cx="7" cy="7" r="4.5"/>
+        <path d="M11 11l3 3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <input
+        type="search"
+        class="search-input"
+        placeholder="Pesquise suas tarefas"
+        aria-label="Pesquisar tarefas"
+      />
+    </div>
+
+    <!-- Right controls: notification + user avatar -->
+    <div class="header-right">
+      <button class="notif-btn" aria-label="Notificações">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M10 2a5.5 5.5 0 0 0-5.5 5.5v3l-1.5 2.5h14l-1.5-2.5V7.5A5.5 5.5 0 0 0 10 2z" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8.25 17.5a1.75 1.75 0 0 0 3.5 0" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="user-avatar" role="button" tabindex="0" aria-label="Perfil do usuário – DS">DS</div>
+    </div>
+
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       BODY (sidebar + main)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="body">
+
+    <!-- ──────────────────────────────────────────────────────
+         SIDEBAR / MENU
+         Figma Menu: width 224 / bg #fff / border-right #e9eaeb
+         Frame 6 children: Home, Notificação, Tarefas, Analytics (gap 20)
+    ────────────────────────────────────────────────────── -->
+    <nav class="sidebar" aria-label="Navegação principal">
+      <div class="nav-list">
+        <a class="nav-item" href="#" tabindex="0">
+          <!-- Home / grid icon -->
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1.25"/>
+            <rect x="9" y="1.5" width="5.5" height="5.5" rx="1.25"/>
+            <rect x="1.5" y="9" width="5.5" height="5.5" rx="1.25"/>
+            <rect x="9" y="9" width="5.5" height="5.5" rx="1.25"/>
+          </svg>
+          Home
+        </a>
+
+        <a class="nav-item" href="#" tabindex="0">
+          <!-- Bell icon -->
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path d="M8 1.5a4.5 4.5 0 0 0-4.5 4.5V9L2 11h12l-1.5-2V6A4.5 4.5 0 0 0 8 1.5z" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6.5 13.5a1.5 1.5 0 0 0 3 0" stroke-linecap="round"/>
+          </svg>
+          Notificação
+        </a>
+
+        <a class="nav-item active" href="#" aria-current="page" tabindex="0">
+          <!-- List / tasks icon -->
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path d="M2 4.5h12M2 8h12M2 11.5h8" stroke-linecap="round"/>
+          </svg>
+          Tarefas
+        </a>
+
+        <a class="nav-item" href="#" tabindex="0">
+          <!-- Trend line / analytics icon -->
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <polyline points="1.5,13 5,8.5 7.5,10.5 10.5,5.5 14.5,9" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Analytics
+        </a>
+      </div>
+    </nav>
+
+    <!-- ──────────────────────────────────────────────────────
+         MAIN CONTENT
+    ────────────────────────────────────────────────────── -->
+    <main class="main">
+
+      <!-- ════════════════════════════════════════════════════
+           FILTER BAR (Frame 10 / Frame 9)
+           Figma: bg #fff / border #e9eaeb / cornerRadius 999 / height 52
+           Left: Todos (active), Pendentes, Concluidas tabs
+           Right: Avatar group + add button
+      ════════════════════════════════════════════════════ -->
+      <div class="filter-bar" role="toolbar" aria-label="Filtros de visualização">
+
+        <!-- Filter tabs (Frame 9: HORIZONTAL gap 16 align CENTER) -->
+        <div class="filter-tabs" role="group" aria-label="Filtrar tarefas">
+
+          <button class="filter-tab active" aria-pressed="true">
+            <!-- Grid / board icon -->
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+              <rect x="1" y="1" width="5" height="5" rx="1"/>
+              <rect x="8" y="1" width="5" height="5" rx="1"/>
+              <rect x="1" y="8" width="5" height="5" rx="1"/>
+              <rect x="8" y="8" width="5" height="5" rx="1"/>
+            </svg>
+            Todos
+          </button>
+
+          <button class="filter-tab" aria-pressed="false">
+            <!-- Clock icon -->
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+              <circle cx="7" cy="7" r="5.5"/>
+              <path d="M7 4v3.5l2.5 1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Pendentes
+          </button>
+
+          <button class="filter-tab" aria-pressed="false">
+            <!-- Checkmark icon -->
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M2 7.5l3.5 3.5L12 3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Concluídas
+          </button>
+
+        </div>
+
+        <!-- Avatar group (Figma Avatar Group + _Buttom_Avatar) -->
+        <div class="avatar-group" aria-label="Membros do projeto">
+
+          <!-- Avatar stack: Line_avatar w272 / gap -8 -->
+          <div class="avatar-stack">
+            <div class="av" style="background:linear-gradient(135deg,#fdb97d,#e06b3a);" aria-label="Membro 1"></div>
+            <div class="av" style="background:linear-gradient(135deg,#c9b8f7,#7f56d9);" aria-label="Membro 2"></div>
+            <div class="av" style="background:linear-gradient(135deg,#6fd8a8,#12b76a);" aria-label="Membro 3"></div>
+            <div class="av" style="background:linear-gradient(135deg,#fda29b,#f04438);" aria-label="Membro 4"></div>
+            <div class="av" style="background:linear-gradient(135deg,#7cd4fd,#0ea5e9);" aria-label="Membro 5"></div>
+            <div class="av" style="background:linear-gradient(135deg,#fde272,#dc6803);" aria-label="Membro 6"></div>
+            <div class="av" style="background:linear-gradient(135deg,#6ce9a6,#12b76a);" aria-label="Membro 7"></div>
+            <div class="av" style="background:linear-gradient(135deg,#e9d7fe,#9e77ed);" aria-label="Membro 8"></div>
+            <div class="av" style="background:linear-gradient(135deg,#fecdd6,#e11d48);" aria-label="Membro 9"></div>
+            <div class="av-more" aria-label="5 membros adicionais">+5</div>
+          </div>
+
+          <!-- Add member button (_Buttom_Avatar: 32x32) -->
+          <button class="av-add-btn" aria-label="Adicionar membro ao projeto">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M7 2v10M2 7h10" stroke-linecap="round"/>
+            </svg>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════
+           KANBAN BOARD
+      ════════════════════════════════════════════════════ -->
+      <div class="board" role="region" aria-label="Board Kanban">
+
+        <!-- ─────────────────────────────────────────────────
+             COLUMN 1: Backlog (10 tarefas)
+             Figma Frame 18: x194 y277 / w378 h846
+        ───────────────────────────────────────────────── -->
+        <section class="list-col" aria-labelledby="col-backlog-title">
+          <div class="list-head">
+            <div class="list-title-wrap">
+              <h2 class="list-title" id="col-backlog-title">Backlog</h2>
+              <span class="list-count">10 tarefas</span>
+            </div>
+            <button class="list-add" aria-label="Adicionar tarefa ao Backlog">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                <path d="M8 3v10M3 8h10" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="cards-wrap">
+
+            <!-- ── Card 1 ── -->
+            <article class="card" aria-label="Tarefa: Customer Support Expert">
+              <div class="card-top">
+                <div class="card-badges">
+                  <span class="badge badge-urgent">Urgente</span>
+                  <span class="badge badge-interno">Interno</span>
+                  <span class="badge badge-green">Interno</span>
+                </div>
+                <button class="card-menu" aria-label="Mais opções">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <circle cx="8" cy="3.5" r="1.25"/>
+                    <circle cx="8" cy="8" r="1.25"/>
+                    <circle cx="8" cy="12.5" r="1.25"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="card-body">
+                <p class="card-title">Customer Support Expert</p>
+                <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+              <div class="card-meta">
+                <div class="card-date">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="2" width="11" height="10.5" rx="1.5"/>
+                    <path d="M1.5 5.5h11" stroke-linecap="round"/>
+                    <path d="M4.5 1v2M9.5 1v2" stroke-linecap="round"/>
+                  </svg>
+                  <time datetime="2026-03-04">4 Mar. 2026</time>
+                </div>
+                <div class="card-check">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="1.5" width="11" height="11" rx="1.5"/>
+                    <path d="M4 6.5h6M4 9.5h4" stroke-linecap="round"/>
+                  </svg>
+                  <span>4/12</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-avatars" aria-label="Responsáveis">
+                  <div class="card-av" style="background:linear-gradient(135deg,#fdb97d,#e06b3a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#c9b8f7,#7f56d9);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#6fd8a8,#12b76a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#fda29b,#f04438);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#7cd4fd,#0ea5e9);"></div>
+                </div>
+                <div class="card-stats">
+                  <div class="card-stat" aria-label="8 anexos">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12 7.5a5 5 0 0 1-5 5H5a5 5 0 0 1 0-10h.5" stroke-linecap="round"/>
+                      <path d="M9 4.5l1.5-1.5a2.5 2.5 0 0 1 3.5 3.5L9 11a3.5 3.5 0 0 1-4.95-4.95L6.5 4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                  <div class="card-stat" aria-label="8 comentários">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12.5 7C12.5 9.76 10.04 12 7 12c-.88 0-1.71-.2-2.43-.56L1.5 12.5l.5-2.56A4.92 4.92 0 0 1 1.5 7C1.5 4.24 3.96 2 7 2s5.5 2.24 5.5 5z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- ── Card 2 ── -->
+            <article class="card">
+              <div class="card-top">
+                <div class="card-badges">
+                  <span class="badge badge-urgent">Urgente</span>
+                  <span class="badge badge-interno">Interno</span>
+                  <span class="badge badge-green">Interno</span>
+                </div>
+                <button class="card-menu" aria-label="Mais opções">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <circle cx="8" cy="3.5" r="1.25"/>
+                    <circle cx="8" cy="8" r="1.25"/>
+                    <circle cx="8" cy="12.5" r="1.25"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="card-body">
+                <p class="card-title">Customer Support Expert</p>
+                <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+              <div class="card-meta">
+                <div class="card-date">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="2" width="11" height="10.5" rx="1.5"/>
+                    <path d="M1.5 5.5h11" stroke-linecap="round"/>
+                    <path d="M4.5 1v2M9.5 1v2" stroke-linecap="round"/>
+                  </svg>
+                  <time datetime="2026-03-04">4 Mar. 2026</time>
+                </div>
+                <div class="card-check">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="1.5" width="11" height="11" rx="1.5"/>
+                    <path d="M4 6.5h6M4 9.5h4" stroke-linecap="round"/>
+                  </svg>
+                  <span>4/12</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-avatars">
+                  <div class="card-av" style="background:linear-gradient(135deg,#fdb97d,#e06b3a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#c9b8f7,#7f56d9);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#6fd8a8,#12b76a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#fda29b,#f04438);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#7cd4fd,#0ea5e9);"></div>
+                </div>
+                <div class="card-stats">
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12 7.5a5 5 0 0 1-5 5H5a5 5 0 0 1 0-10h.5" stroke-linecap="round"/>
+                      <path d="M9 4.5l1.5-1.5a2.5 2.5 0 0 1 3.5 3.5L9 11a3.5 3.5 0 0 1-4.95-4.95L6.5 4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12.5 7C12.5 9.76 10.04 12 7 12c-.88 0-1.71-.2-2.43-.56L1.5 12.5l.5-2.56A4.92 4.92 0 0 1 1.5 7C1.5 4.24 3.96 2 7 2s5.5 2.24 5.5 5z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- ── Card 3 ── -->
+            <article class="card">
+              <div class="card-top">
+                <div class="card-badges">
+                  <span class="badge badge-urgent">Urgente</span>
+                  <span class="badge badge-interno">Interno</span>
+                  <span class="badge badge-green">Interno</span>
+                </div>
+                <button class="card-menu" aria-label="Mais opções">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <circle cx="8" cy="3.5" r="1.25"/>
+                    <circle cx="8" cy="8" r="1.25"/>
+                    <circle cx="8" cy="12.5" r="1.25"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="card-body">
+                <p class="card-title">Customer Support Expert</p>
+                <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+              <div class="card-meta">
+                <div class="card-date">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="2" width="11" height="10.5" rx="1.5"/>
+                    <path d="M1.5 5.5h11" stroke-linecap="round"/>
+                    <path d="M4.5 1v2M9.5 1v2" stroke-linecap="round"/>
+                  </svg>
+                  <time datetime="2026-03-04">4 Mar. 2026</time>
+                </div>
+                <div class="card-check">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="1.5" width="11" height="11" rx="1.5"/>
+                    <path d="M4 6.5h6M4 9.5h4" stroke-linecap="round"/>
+                  </svg>
+                  <span>4/12</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-avatars">
+                  <div class="card-av" style="background:linear-gradient(135deg,#fdb97d,#e06b3a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#c9b8f7,#7f56d9);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#6fd8a8,#12b76a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#fda29b,#f04438);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#7cd4fd,#0ea5e9);"></div>
+                </div>
+                <div class="card-stats">
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12 7.5a5 5 0 0 1-5 5H5a5 5 0 0 1 0-10h.5" stroke-linecap="round"/>
+                      <path d="M9 4.5l1.5-1.5a2.5 2.5 0 0 1 3.5 3.5L9 11a3.5 3.5 0 0 1-4.95-4.95L6.5 4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12.5 7C12.5 9.76 10.04 12 7 12c-.88 0-1.71-.2-2.43-.56L1.5 12.5l.5-2.56A4.92 4.92 0 0 1 1.5 7C1.5 4.24 3.96 2 7 2s5.5 2.24 5.5 5z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- ── Card 4 ── -->
+            <article class="card">
+              <div class="card-top">
+                <div class="card-badges">
+                  <span class="badge badge-urgent">Urgente</span>
+                  <span class="badge badge-interno">Interno</span>
+                  <span class="badge badge-green">Interno</span>
+                </div>
+                <button class="card-menu" aria-label="Mais opções">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <circle cx="8" cy="3.5" r="1.25"/>
+                    <circle cx="8" cy="8" r="1.25"/>
+                    <circle cx="8" cy="12.5" r="1.25"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="card-body">
+                <p class="card-title">Customer Support Expert</p>
+                <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+              <div class="card-meta">
+                <div class="card-date">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="2" width="11" height="10.5" rx="1.5"/>
+                    <path d="M1.5 5.5h11" stroke-linecap="round"/>
+                    <path d="M4.5 1v2M9.5 1v2" stroke-linecap="round"/>
+                  </svg>
+                  <time datetime="2026-03-04">4 Mar. 2026</time>
+                </div>
+                <div class="card-check">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="1.5" width="11" height="11" rx="1.5"/>
+                    <path d="M4 6.5h6M4 9.5h4" stroke-linecap="round"/>
+                  </svg>
+                  <span>4/12</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-avatars">
+                  <div class="card-av" style="background:linear-gradient(135deg,#fdb97d,#e06b3a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#c9b8f7,#7f56d9);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#6fd8a8,#12b76a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#fda29b,#f04438);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#7cd4fd,#0ea5e9);"></div>
+                </div>
+                <div class="card-stats">
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12 7.5a5 5 0 0 1-5 5H5a5 5 0 0 1 0-10h.5" stroke-linecap="round"/>
+                      <path d="M9 4.5l1.5-1.5a2.5 2.5 0 0 1 3.5 3.5L9 11a3.5 3.5 0 0 1-4.95-4.95L6.5 4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12.5 7C12.5 9.76 10.04 12 7 12c-.88 0-1.71-.2-2.43-.56L1.5 12.5l.5-2.56A4.92 4.92 0 0 1 1.5 7C1.5 4.24 3.96 2 7 2s5.5 2.24 5.5 5z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ─────────────────────────────────────────────────
+             COLUMN 2: Pendentes (2 tarefas)
+             Figma Frame 19: x580 y277 / w378 h846
+        ───────────────────────────────────────────────── -->
+        <section class="list-col" aria-labelledby="col-pendentes-title">
+          <div class="list-head">
+            <div class="list-title-wrap">
+              <h2 class="list-title" id="col-pendentes-title">Pendentes</h2>
+              <span class="list-count">2 tarefas</span>
+            </div>
+            <button class="list-add" aria-label="Adicionar tarefa a Pendentes">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                <path d="M8 3v10M3 8h10" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="cards-wrap">
+
+            <!-- ── Card 1 ── -->
+            <article class="card">
+              <div class="card-top">
+                <div class="card-badges">
+                  <span class="badge badge-urgent">Urgente</span>
+                  <span class="badge badge-interno">Interno</span>
+                  <span class="badge badge-green">Interno</span>
+                </div>
+                <button class="card-menu" aria-label="Mais opções">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <circle cx="8" cy="3.5" r="1.25"/>
+                    <circle cx="8" cy="8" r="1.25"/>
+                    <circle cx="8" cy="12.5" r="1.25"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="card-body">
+                <p class="card-title">Customer Support Expert</p>
+                <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+              <div class="card-meta">
+                <div class="card-date">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="2" width="11" height="10.5" rx="1.5"/>
+                    <path d="M1.5 5.5h11" stroke-linecap="round"/>
+                    <path d="M4.5 1v2M9.5 1v2" stroke-linecap="round"/>
+                  </svg>
+                  <time datetime="2026-03-04">4 Mar. 2026</time>
+                </div>
+                <div class="card-check">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="1.5" width="11" height="11" rx="1.5"/>
+                    <path d="M4 6.5h6M4 9.5h4" stroke-linecap="round"/>
+                  </svg>
+                  <span>4/12</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-avatars">
+                  <div class="card-av" style="background:linear-gradient(135deg,#fdb97d,#e06b3a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#c9b8f7,#7f56d9);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#6fd8a8,#12b76a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#fda29b,#f04438);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#7cd4fd,#0ea5e9);"></div>
+                </div>
+                <div class="card-stats">
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12 7.5a5 5 0 0 1-5 5H5a5 5 0 0 1 0-10h.5" stroke-linecap="round"/>
+                      <path d="M9 4.5l1.5-1.5a2.5 2.5 0 0 1 3.5 3.5L9 11a3.5 3.5 0 0 1-4.95-4.95L6.5 4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12.5 7C12.5 9.76 10.04 12 7 12c-.88 0-1.71-.2-2.43-.56L1.5 12.5l.5-2.56A4.92 4.92 0 0 1 1.5 7C1.5 4.24 3.96 2 7 2s5.5 2.24 5.5 5z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- ── Card 2 ── -->
+            <article class="card">
+              <div class="card-top">
+                <div class="card-badges">
+                  <span class="badge badge-urgent">Urgente</span>
+                  <span class="badge badge-interno">Interno</span>
+                  <span class="badge badge-green">Interno</span>
+                </div>
+                <button class="card-menu" aria-label="Mais opções">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <circle cx="8" cy="3.5" r="1.25"/>
+                    <circle cx="8" cy="8" r="1.25"/>
+                    <circle cx="8" cy="12.5" r="1.25"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="card-body">
+                <p class="card-title">Customer Support Expert</p>
+                <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+              <div class="card-meta">
+                <div class="card-date">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="2" width="11" height="10.5" rx="1.5"/>
+                    <path d="M1.5 5.5h11" stroke-linecap="round"/>
+                    <path d="M4.5 1v2M9.5 1v2" stroke-linecap="round"/>
+                  </svg>
+                  <time datetime="2026-03-04">4 Mar. 2026</time>
+                </div>
+                <div class="card-check">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="1.5" width="11" height="11" rx="1.5"/>
+                    <path d="M4 6.5h6M4 9.5h4" stroke-linecap="round"/>
+                  </svg>
+                  <span>4/12</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-avatars">
+                  <div class="card-av" style="background:linear-gradient(135deg,#fdb97d,#e06b3a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#c9b8f7,#7f56d9);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#6fd8a8,#12b76a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#fda29b,#f04438);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#7cd4fd,#0ea5e9);"></div>
+                </div>
+                <div class="card-stats">
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12 7.5a5 5 0 0 1-5 5H5a5 5 0 0 1 0-10h.5" stroke-linecap="round"/>
+                      <path d="M9 4.5l1.5-1.5a2.5 2.5 0 0 1 3.5 3.5L9 11a3.5 3.5 0 0 1-4.95-4.95L6.5 4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12.5 7C12.5 9.76 10.04 12 7 12c-.88 0-1.71-.2-2.43-.56L1.5 12.5l.5-2.56A4.92 4.92 0 0 1 1.5 7C1.5 4.24 3.96 2 7 2s5.5 2.24 5.5 5z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ─────────────────────────────────────────────────
+             COLUMN 3: Concluidas (3 tarefas)
+             Figma Frame 20: x966 y277 / w378 h846
+        ───────────────────────────────────────────────── -->
+        <section class="list-col" aria-labelledby="col-concluidas-title">
+          <div class="list-head">
+            <div class="list-title-wrap">
+              <h2 class="list-title" id="col-concluidas-title">Concluídas</h2>
+              <span class="list-count">3 tarefas</span>
+            </div>
+            <button class="list-add" aria-label="Adicionar tarefa a Concluídas">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                <path d="M8 3v10M3 8h10" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="cards-wrap">
+
+            <!-- ── Card 1 ── -->
+            <article class="card">
+              <div class="card-top">
+                <div class="card-badges">
+                  <span class="badge badge-urgent">Urgente</span>
+                  <span class="badge badge-interno">Interno</span>
+                  <span class="badge badge-green">Interno</span>
+                </div>
+                <button class="card-menu" aria-label="Mais opções">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <circle cx="8" cy="3.5" r="1.25"/>
+                    <circle cx="8" cy="8" r="1.25"/>
+                    <circle cx="8" cy="12.5" r="1.25"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="card-body">
+                <p class="card-title">Customer Support Expert</p>
+                <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+              <div class="card-meta">
+                <div class="card-date">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="2" width="11" height="10.5" rx="1.5"/>
+                    <path d="M1.5 5.5h11" stroke-linecap="round"/>
+                    <path d="M4.5 1v2M9.5 1v2" stroke-linecap="round"/>
+                  </svg>
+                  <time datetime="2026-03-04">4 Mar. 2026</time>
+                </div>
+                <div class="card-check">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="1.5" width="11" height="11" rx="1.5"/>
+                    <path d="M4 6.5h6M4 9.5h4" stroke-linecap="round"/>
+                  </svg>
+                  <span>4/12</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-avatars">
+                  <div class="card-av" style="background:linear-gradient(135deg,#fdb97d,#e06b3a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#c9b8f7,#7f56d9);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#6fd8a8,#12b76a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#fda29b,#f04438);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#7cd4fd,#0ea5e9);"></div>
+                </div>
+                <div class="card-stats">
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12 7.5a5 5 0 0 1-5 5H5a5 5 0 0 1 0-10h.5" stroke-linecap="round"/>
+                      <path d="M9 4.5l1.5-1.5a2.5 2.5 0 0 1 3.5 3.5L9 11a3.5 3.5 0 0 1-4.95-4.95L6.5 4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12.5 7C12.5 9.76 10.04 12 7 12c-.88 0-1.71-.2-2.43-.56L1.5 12.5l.5-2.56A4.92 4.92 0 0 1 1.5 7C1.5 4.24 3.96 2 7 2s5.5 2.24 5.5 5z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- ── Card 2 ── -->
+            <article class="card">
+              <div class="card-top">
+                <div class="card-badges">
+                  <span class="badge badge-urgent">Urgente</span>
+                  <span class="badge badge-interno">Interno</span>
+                  <span class="badge badge-green">Interno</span>
+                </div>
+                <button class="card-menu" aria-label="Mais opções">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <circle cx="8" cy="3.5" r="1.25"/>
+                    <circle cx="8" cy="8" r="1.25"/>
+                    <circle cx="8" cy="12.5" r="1.25"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="card-body">
+                <p class="card-title">Customer Support Expert</p>
+                <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+              <div class="card-meta">
+                <div class="card-date">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="2" width="11" height="10.5" rx="1.5"/>
+                    <path d="M1.5 5.5h11" stroke-linecap="round"/>
+                    <path d="M4.5 1v2M9.5 1v2" stroke-linecap="round"/>
+                  </svg>
+                  <time datetime="2026-03-04">4 Mar. 2026</time>
+                </div>
+                <div class="card-check">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="1.5" width="11" height="11" rx="1.5"/>
+                    <path d="M4 6.5h6M4 9.5h4" stroke-linecap="round"/>
+                  </svg>
+                  <span>4/12</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-avatars">
+                  <div class="card-av" style="background:linear-gradient(135deg,#fdb97d,#e06b3a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#c9b8f7,#7f56d9);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#6fd8a8,#12b76a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#fda29b,#f04438);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#7cd4fd,#0ea5e9);"></div>
+                </div>
+                <div class="card-stats">
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12 7.5a5 5 0 0 1-5 5H5a5 5 0 0 1 0-10h.5" stroke-linecap="round"/>
+                      <path d="M9 4.5l1.5-1.5a2.5 2.5 0 0 1 3.5 3.5L9 11a3.5 3.5 0 0 1-4.95-4.95L6.5 4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12.5 7C12.5 9.76 10.04 12 7 12c-.88 0-1.71-.2-2.43-.56L1.5 12.5l.5-2.56A4.92 4.92 0 0 1 1.5 7C1.5 4.24 3.96 2 7 2s5.5 2.24 5.5 5z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- ── Card 3 ── -->
+            <article class="card">
+              <div class="card-top">
+                <div class="card-badges">
+                  <span class="badge badge-urgent">Urgente</span>
+                  <span class="badge badge-interno">Interno</span>
+                  <span class="badge badge-green">Interno</span>
+                </div>
+                <button class="card-menu" aria-label="Mais opções">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <circle cx="8" cy="3.5" r="1.25"/>
+                    <circle cx="8" cy="8" r="1.25"/>
+                    <circle cx="8" cy="12.5" r="1.25"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="card-body">
+                <p class="card-title">Customer Support Expert</p>
+                <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+              <div class="card-meta">
+                <div class="card-date">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="2" width="11" height="10.5" rx="1.5"/>
+                    <path d="M1.5 5.5h11" stroke-linecap="round"/>
+                    <path d="M4.5 1v2M9.5 1v2" stroke-linecap="round"/>
+                  </svg>
+                  <time datetime="2026-03-04">4 Mar. 2026</time>
+                </div>
+                <div class="card-check">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                    <rect x="1.5" y="1.5" width="11" height="11" rx="1.5"/>
+                    <path d="M4 6.5h6M4 9.5h4" stroke-linecap="round"/>
+                  </svg>
+                  <span>4/12</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-avatars">
+                  <div class="card-av" style="background:linear-gradient(135deg,#fdb97d,#e06b3a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#c9b8f7,#7f56d9);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#6fd8a8,#12b76a);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#fda29b,#f04438);"></div>
+                  <div class="card-av" style="background:linear-gradient(135deg,#7cd4fd,#0ea5e9);"></div>
+                </div>
+                <div class="card-stats">
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12 7.5a5 5 0 0 1-5 5H5a5 5 0 0 1 0-10h.5" stroke-linecap="round"/>
+                      <path d="M9 4.5l1.5-1.5a2.5 2.5 0 0 1 3.5 3.5L9 11a3.5 3.5 0 0 1-4.95-4.95L6.5 4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                  <div class="card-stat">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                      <path d="M12.5 7C12.5 9.76 10.04 12 7 12c-.88 0-1.71-.2-2.43-.56L1.5 12.5l.5-2.56A4.92 4.92 0 0 1 1.5 7C1.5 4.24 3.96 2 7 2s5.5 2.24 5.5 5z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    8
+                  </div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+      </div><!-- /.board -->
+    </main>
+  </div><!-- /.body -->
+</div><!-- /.app -->
+
+<script>
+  // Filter tab interaction
+  document.querySelectorAll('.filter-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-tab').forEach(function(b) {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      this.classList.add('active');
+      this.setAttribute('aria-pressed', 'true');
+    });
+  });
+
+  // Nav item interaction
+  document.querySelectorAll('.nav-item').forEach(function(item) {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('.nav-item').forEach(function(n) {
+        n.classList.remove('active');
+        n.removeAttribute('aria-current');
+      });
+      this.classList.add('active');
+      this.setAttribute('aria-current', 'page');
+    });
+  });
+</script>
+</body>
 </html>
