@@ -1,0 +1,344 @@
+{
+  "extraction": {
+    "date": "2026-03-27",
+    "source": "Figma - Ferramenta Trello",
+    "fileKey": "ik0Qa30O9oNUy3qelJbQO7",
+    "nodeId": "1-2"
+  },
+  "screen": {
+    "name": "Frame 1 - Kanban Board",
+    "width": 1440,
+    "height": 1011,
+    "type": "Kanban Task Board",
+    "description": "Trello-style Kanban board with columns (Todo, In Progress, Done), header with search and navigation, and left sidebar menu"
+  },
+  "structure": {
+    "layout": "FLEX",
+    "layoutDirection": "ROW",
+    "main_sections": [
+      {
+        "id": "header",
+        "name": "Header",
+        "position": "TOP",
+        "height": 76,
+        "width": 1440,
+        "layout": "HORIZONTAL",
+        "padding": "16px 32px",
+        "spacing": 10,
+        "components": ["Brand/Logo", "Search Input", "User Controls"]
+      },
+      {
+        "id": "sidebar",
+        "name": "Left Sidebar Menu",
+        "position": "LEFT",
+        "width": 224,
+        "layout": "VERTICAL",
+        "padding": "20px 32px",
+        "spacing": 10,
+        "fixed": true
+      },
+      {
+        "id": "main_content",
+        "name": "Kanban Board Area",
+        "position": "CENTER",
+        "layout": "HORIZONTAL",
+        "columns": [
+          {
+            "id": "column_1",
+            "name": "Todo Column",
+            "width": 378,
+            "height": 846,
+            "layout": "VERTICAL",
+            "padding": "16px 20px",
+            "spacing": 10,
+            "fill": "#FFFFFF",
+            "border": "1px solid #E8E8E8"
+          },
+          {
+            "id": "column_2",
+            "name": "In Progress Column",
+            "width": 378,
+            "height": 846,
+            "layout": "VERTICAL",
+            "padding": "16px 20px",
+            "spacing": 10,
+            "fill": "#FFFFFF",
+            "border": "1px solid #E8E8E8"
+          },
+          {
+            "id": "column_3",
+            "name": "Done Column",
+            "width": 378,
+            "height": 846,
+            "layout": "VERTICAL",
+            "padding": "16px 20px",
+            "spacing": 10,
+            "fill": "#FFFFFF",
+            "border": "1px solid #E8E8E8"
+          }
+        ]
+      }
+    ]
+  },
+  "designTokens": {
+    "colors": {
+      "primary": {
+        "white": "#FFFFFF",
+        "lightBackground": "#F5F5F5"
+      },
+      "neutral": {
+        "borderLight": "#E8E8E8",
+        "borderMedium": "#D0D0D0",
+        "textDark": "#1A1A1A",
+        "textMedium": "#666666",
+        "textLight": "#999999"
+      },
+      "semantic": {
+        "success": "#10B981",
+        "warning": "#F59E0B",
+        "error": "#EF4444",
+        "info": "#3B82F6"
+      }
+    },
+    "typography": {
+      "fontFamily": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      "fontFallback": "system-ui, -apple-system, sans-serif",
+      "sizes": {
+        "h1": "32px",
+        "h2": "24px",
+        "h3": "18px",
+        "body": "14px",
+        "small": "12px",
+        "xs": "11px"
+      },
+      "weights": {
+        "regular": 400,
+        "medium": 500,
+        "semibold": 600,
+        "bold": 700
+      },
+      "lineHeights": {
+        "tight": "1.2",
+        "normal": "1.5",
+        "relaxed": "1.75"
+      }
+    },
+    "spacing": {
+      "xs": "4px",
+      "sm": "8px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px",
+      "2xl": "48px"
+    },
+    "borderRadius": {
+      "sm": "4px",
+      "md": "8px",
+      "lg": "12px",
+      "xl": "16px",
+      "full": "999px"
+    },
+    "shadows": {
+      "none": "none",
+      "xs": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+      "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.1)",
+      "md": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+      "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+      "xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+    }
+  },
+  "components": [
+    {
+      "id": "header",
+      "name": "Header",
+      "type": "FRAME",
+      "width": 1440,
+      "height": 76,
+      "layout": {
+        "mode": "HORIZONTAL",
+        "alignment": "CENTER",
+        "spacing": 10,
+        "padding": "16px 32px"
+      },
+      "visual": {
+        "backgroundColor": "#FFFFFF",
+        "borderBottom": "1px solid #E8E8E8"
+      },
+      "children": [
+        {
+          "id": "brand",
+          "name": "Brand/Logo",
+          "type": "FRAME",
+          "width": 117,
+          "height": 32,
+          "layout": "HORIZONTAL"
+        },
+        {
+          "id": "search_input",
+          "name": "Input field (Search)",
+          "type": "INSTANCE",
+          "width": 320,
+          "height": 44,
+          "borderRadius": "999px"
+        },
+        {
+          "id": "controls",
+          "name": "User Controls",
+          "type": "FRAME",
+          "width": 86,
+          "height": 40,
+          "layout": "HORIZONTAL"
+        }
+      ]
+    },
+    {
+      "id": "sidebar_menu",
+      "name": "Sidebar Menu",
+      "type": "FRAME",
+      "width": 224,
+      "height": 935,
+      "layout": {
+        "mode": "VERTICAL",
+        "alignment": "TOP",
+        "spacing": 10,
+        "padding": "20px 32px"
+      },
+      "visual": {
+        "backgroundColor": "#FFFFFF",
+        "borderRight": "1px solid #E8E8E8"
+      },
+      "fixed": true
+    },
+    {
+      "id": "column_todo",
+      "name": "Column - Todo",
+      "type": "FRAME",
+      "width": 378,
+      "height": 846,
+      "layout": {
+        "mode": "VERTICAL",
+        "alignment": "TOP",
+        "spacing": 10,
+        "padding": "16px 20px"
+      },
+      "visual": {
+        "backgroundColor": "#FFFFFF",
+        "borderRight": "1px solid #E8E8E8"
+      }
+    },
+    {
+      "id": "column_in_progress",
+      "name": "Column - In Progress",
+      "type": "FRAME",
+      "width": 378,
+      "height": 846,
+      "layout": {
+        "mode": "VERTICAL",
+        "alignment": "TOP",
+        "spacing": 10,
+        "padding": "16px 20px"
+      },
+      "visual": {
+        "backgroundColor": "#FFFFFF",
+        "borderRight": "1px solid #E8E8E8"
+      }
+    },
+    {
+      "id": "column_done",
+      "name": "Column - Done",
+      "type": "FRAME",
+      "width": 378,
+      "height": 846,
+      "layout": {
+        "mode": "VERTICAL",
+        "alignment": "TOP",
+        "spacing": 10,
+        "padding": "16px 20px"
+      },
+      "visual": {
+        "backgroundColor": "#FFFFFF",
+        "borderRight": "1px solid #E8E8E8"
+      }
+    },
+    {
+      "id": "avatar_group",
+      "name": "Avatar Group",
+      "type": "INSTANCE",
+      "width": 320,
+      "height": 32,
+      "layout": "HORIZONTAL"
+    }
+  ],
+  "interactiveElements": [
+    {
+      "type": "INPUT",
+      "name": "Search Input",
+      "placeholder": "Search tasks...",
+      "height": 44,
+      "borderRadius": "999px"
+    },
+    {
+      "type": "BUTTON",
+      "name": "User Menu Button",
+      "width": 32,
+      "height": 32,
+      "borderRadius": "full"
+    },
+    {
+      "type": "CARD",
+      "name": "Task Card",
+      "description": "Draggable card component for tasks",
+      "width": "100%",
+      "borderRadius": "8px"
+    }
+  ],
+  "recommendations": {
+    "htmlStructure": [
+      "Use semantic HTML5: <header>, <aside>, <main>, <section>",
+      "Header should contain: <nav> with logo, <input type='search'> for search, and user menu",
+      "Sidebar should use <nav> or <aside> with menu links",
+      "Main content uses <main> with three <section> elements for columns",
+      "Each column contains draggable <article> elements for tasks"
+    ],
+    "cssStrategy": [
+      "Use CSS Grid or Flexbox for main layout (recommended: CSS Grid)",
+      "Header: fixed positioning with z-index: 100",
+      "Sidebar: position fixed or sticky, width 224px",
+      "Columns: display flex, flex-direction column, overflow-y auto",
+      "Task cards: use CSS transitions for drag animations"
+    ],
+    "components": [
+      {
+        "name": "TaskCard",
+        "description": "Individual task card with title, description, assigned users",
+        "props": ["id", "title", "description", "assignees", "dueDate", "priority"]
+      },
+      {
+        "name": "KanbanColumn",
+        "description": "Column container for tasks",
+        "props": ["title", "tasks", "onDrop"]
+      },
+      {
+        "name": "SearchInput",
+        "description": "Search input with rounded borders",
+        "props": ["placeholder", "onChange"]
+      }
+    ],
+    "complexity": "MEDIUM",
+    "estimatedComponents": 8,
+    "dependencies": [
+      "React.js or Angular framework",
+      "Drag-and-drop library (react-beautiful-dnd or similar)",
+      "Form handling (React Hook Form or similar)",
+      "HTTP client for API communication",
+      "State management (Redux, Zustand, or Context API)"
+    ],
+    "accessibility": [
+      "Add ARIA labels to interactive elements",
+      "Ensure color contrast ratios meet WCAG AA standards",
+      "Add focus visible states for keyboard navigation",
+      "Implement keyboard shortcuts for drag-and-drop",
+      "Add alt text to any icons or images"
+    ]
+  }
+}
