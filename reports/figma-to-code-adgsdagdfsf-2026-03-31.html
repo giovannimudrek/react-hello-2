@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Figma to Code — adgsdagdfsf | 2026-03-31</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg:           #0A1628;
+      --color-card:         #0F2035;
+      --color-snippet:      #142A45;
+      --color-border:       #1A3A5C;
+      --color-text:         #E8EDF3;
+      --color-text-muted:   #8BA3C0;
+      --color-accent:       #00BFFF;
+      --color-accent-2:     #0077CC;
+      --color-warn:         #F59E0B;
+      --color-error:        #EC4899;
+      --color-ok:           #10B981;
+      --gradient-header: linear-gradient(135deg, #0B1D33 0%, #0A1628 50%, #071225 100%);
+      --font-ui: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-ui);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────── */
+    .site-header {
+      background: var(--gradient-header);
+      border-bottom: 2px solid var(--color-accent);
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-header .brand { display: flex; align-items: center; gap: 16px; }
+    .fusion-logo text { }
+    .header-meta { text-align: right; }
+    .header-meta h1 { font-size: 18px; font-weight: 700; color: var(--color-text); }
+    .header-meta p  { font-size: 13px; color: var(--color-text-muted); }
+    .badge-task {
+      display: inline-block;
+      background: rgba(0,191,255,0.15);
+      border: 1px solid var(--color-accent);
+      color: var(--color-accent);
+      border-radius: 20px;
+      padding: 2px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    /* ── LAYOUT ──────────────────────────────────────────── */
+    .page-body {
+      display: flex;
+      gap: 0;
+    }
+    .sidebar {
+      width: 200px;
+      min-width: 200px;
+      position: sticky;
+      top: 72px;
+      height: calc(100vh - 72px);
+      overflow-y: auto;
+      border-right: 1px solid var(--color-border);
+      padding: 24px 0;
+      background: var(--color-bg);
+    }
+    .sidebar ul { list-style: none; }
+    .sidebar ul li a {
+      display: block;
+      padding: 9px 20px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      border-left: 3px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .sidebar ul li a:hover {
+      color: var(--color-accent);
+      border-left-color: var(--color-accent);
+      background: rgba(0,191,255,0.06);
+    }
+    .sidebar .nav-section {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-text-muted);
+      padding: 16px 20px 6px;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 32px;
+      overflow-x: hidden;
+    }
+
+    /* ── SECTIONS ────────────────────────────────────────── */
+    .section { margin-bottom: 48px; }
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-text);
+      border-bottom: 2px solid var(--color-border);
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      display: inline-block; flex-shrink: 0;
+    }
+
+    /* ── STATUS CARD ─────────────────────────────────────── */
+    .status-banner {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-left: 4px solid var(--color-warn);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+    .status-banner h2 { font-size: 16px; color: var(--color-warn); margin-bottom: 8px; }
+    .status-banner p  { font-size: 14px; color: var(--color-text-muted); margin-bottom: 6px; }
+    .status-banner code {
+      background: var(--color-snippet);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 13px;
+      color: var(--color-accent);
+    }
+
+    /* ── DASHBOARD ───────────────────────────────────────── */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .dash-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+      padding: 20px 16px;
+      text-align: center;
+    }
+    .dash-card .num { font-size: 32px; font-weight: 800; }
+    .dash-card .lbl { font-size: 12px; color: var(--color-text-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .dash-card.c1 .num { color: var(--color-accent); }
+    .dash-card.c2 .num { color: #8B5CF6; }
+    .dash-card.c3 .num { color: var(--color-ok); }
+    .dash-card.c4 .num { color: var(--color-warn); }
+    .dash-card.c5 .num { font-size: 18px; color: var(--color-error); }
+
+    /* ── INFO TABLE ──────────────────────────────────────── */
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .info-table th {
+      background: var(--color-snippet);
+      color: var(--color-text-muted);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .info-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-text);
+      vertical-align: top;
+    }
+    .info-table tr:last-child td { border-bottom: none; }
+    .info-table tr:hover td { background: rgba(0,191,255,0.04); }
+    .info-table .key { color: var(--color-text-muted); width: 200px; }
+
+    /* ── CODE BLOCK ──────────────────────────────────────── */
+    .code-block {
+      background: var(--color-snippet);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 20px;
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--color-text);
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+    .code-block .c-comment { color: var(--color-text-muted); }
+    .code-block .c-prop    { color: var(--color-accent); }
+    .code-block .c-val     { color: var(--color-ok); }
+    .code-block .c-tag     { color: var(--color-error); }
+    .code-block .c-str     { color: var(--color-warn); }
+
+    /* ── RECOMMENDATION CARD ─────────────────────────────── */
+    .rec-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-left: 4px solid;
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+    .rec-card h3 { font-size: 15px; margin-bottom: 8px; }
+    .rec-card p, .rec-card li { font-size: 13px; color: var(--color-text-muted); }
+    .rec-card ul { padding-left: 18px; }
+    .rec-card ul li { margin-bottom: 4px; }
+    .rec-card.color-struct   { border-left-color: var(--color-accent); }
+    .rec-card.color-struct h3 { color: var(--color-accent); }
+    .rec-card.color-comp     { border-left-color: #8B5CF6; }
+    .rec-card.color-comp h3  { color: #8B5CF6; }
+    .rec-card.color-token    { border-left-color: var(--color-ok); }
+    .rec-card.color-token h3 { color: var(--color-ok); }
+    .rec-card.color-img      { border-left-color: var(--color-warn); }
+    .rec-card.color-img h3   { color: var(--color-warn); }
+    .rec-card.color-rec      { border-left-color: var(--color-error); }
+    .rec-card.color-rec h3   { color: var(--color-error); }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--color-border);
+      padding: 20px 32px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="brand">
+    <svg class="fusion-logo" viewBox="0 0 160 48" width="160" height="48">
+      <text x="2" y="36" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="32" fill="#FFFFFF">Fusion</text>
+      <text x="120" y="36" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="32" fill="#00BFFF">AI</text>
+    </svg>
+  </div>
+  <div class="header-meta">
+    <h1>Figma to Code</h1>
+    <p>Tarefa: adgsdagdfsf &mdash; 2026-03-31</p>
+    <span class="badge-task">Step 2 — Code Generation</span>
+  </div>
+</header>
+
+<!-- PAGE BODY -->
+<div class="page-body">
+
+  <!-- SIDEBAR NAV -->
+  <nav class="sidebar" aria-label="Navegacao de secoes">
+    <ul>
+      <li><span class="nav-section">Relatorio</span></li>
+      <li><a href="#status">Status</a></li>
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#context">Contexto</a></li>
+      <li><a href="#output">Output gerado</a></li>
+      <li><a href="#next-steps">Proximos passos</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- STATUS BANNER -->
+    <div class="status-banner" id="status">
+      <h2>Sem dados de extracao Figma disponíveis</h2>
+      <p>
+        O Step 1 (Figma Extract) esta marcado como <strong>DONE</strong> no pipeline, porem nenhum
+        arquivo de extracao foi encontrado no diretorio <code>reports/</code>. A tarefa recebida
+        <code>adgsdagdfsf</code> nao corresponde a uma URL Figma valida nem a um nome de tela conhecido.
+      </p>
+      <p>
+        Este relatorio documenta o estado atual do pipeline, os arquivos inspecionados e as acoes
+        realizadas pelo agente Figma to Code.
+      </p>
+    </div>
+
+    <!-- DASHBOARD -->
+    <section class="section" id="dashboard">
+      <h2 class="section-title">
+        <span class="dot" style="background:var(--color-accent)"></span>
+        Dashboard
+      </h2>
+      <div class="dashboard-grid">
+        <div class="dash-card c1"><div class="num">0</div><div class="lbl">Componentes</div></div>
+        <div class="dash-card c2"><div class="num">0</div><div class="lbl">Tokens</div></div>
+        <div class="dash-card c3"><div class="num">0</div><div class="lbl">Imagens</div></div>
+        <div class="dash-card c4"><div class="num">0</div><div class="lbl">Fontes</div></div>
+        <div class="dash-card c5"><div class="num">N/A</div><div class="lbl">Complexidade</div></div>
+      </div>
+    </section>
+
+    <!-- CONTEXT -->
+    <section class="section" id="context">
+      <h2 class="section-title">
+        <span class="dot" style="background:#8B5CF6"></span>
+        Contexto inspecionado
+      </h2>
+      <table class="info-table">
+        <thead>
+          <tr><th>Item</th><th>Valor / Observacao</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="key">Tarefa recebida</td>
+            <td><code>adgsdagdfsf</code> — identificador sem URL Figma associada</td>
+          </tr>
+          <tr>
+            <td class="key">Diretorio de trabalho</td>
+            <td><code>/home/ec2-user/tmp/_squad_remote/run-206/repo</code></td>
+          </tr>
+          <tr>
+            <td class="key">reports/ encontrado?</td>
+            <td style="color:var(--color-warn)">Nao — diretorio nao existia; criado agora</td>
+          </tr>
+          <tr>
+            <td class="key">Dados de extracao Figma</td>
+            <td style="color:var(--color-warn)">Nao encontrados (nenhum arquivo figma-extract-*.html ou *.json)</td>
+          </tr>
+          <tr>
+            <td class="key">docs/ encontrado?</td>
+            <td style="color:var(--color-text-muted)">Sim, mas vazio (sem ARCHITECTURE.md, CONVENTIONS.md etc.)</td>
+          </tr>
+          <tr>
+            <td class="key">index.html existente</td>
+            <td>Sim — Hello World placeholder (sem design implementado)</td>
+          </tr>
+          <tr>
+            <td class="key">Status pipeline Step 1</td>
+            <td style="color:var(--color-ok)">DONE (conforme mcp__squad-pipeline__get_status)</td>
+          </tr>
+          <tr>
+            <td class="key">Status pipeline Step 2</td>
+            <td style="color:var(--color-accent)">RUNNING — este agente</td>
+          </tr>
+          <tr>
+            <td class="key">Status pipeline Step 3</td>
+            <td style="color:var(--color-text-muted)">PENDING (Figma Audit)</td>
+          </tr>
+          <tr>
+            <td class="key">Branch git</td>
+            <td><code>us-adgsdagdfsf</code></td>
+          </tr>
+          <tr>
+            <td class="key">Commits recentes relevantes</td>
+            <td>
+              <code>81392bf fix</code><br>
+              <code>fd6c201 feat: boarding screen - React+TS+Tailwind Kanban Task View</code><br>
+              <code>db09888 feat: figma-to-code - Board (Trello-style kanban)</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- OUTPUT GERADO -->
+    <section class="section" id="output">
+      <h2 class="section-title">
+        <span class="dot" style="background:var(--color-ok)"></span>
+        Output gerado
+      </h2>
+
+      <div class="rec-card color-struct">
+        <h3>Arquivo de relatorio criado</h3>
+        <p>
+          Este arquivo HTML foi gerado como saida do Step 2. Ele documenta o estado do pipeline
+          e serve como handoff para o Step 3 (Figma Audit).
+        </p>
+        <div class="code-block">
+          <span class="c-prop">reports/figma-to-code-adgsdagdfsf-2026-03-31.html</span>
+        </div>
+      </div>
+
+      <div class="rec-card color-comp">
+        <h3>Estrutura de pastas garantida</h3>
+        <p>O diretorio <code>reports/</code> foi criado para uso dos proximos agentes do pipeline.</p>
+        <div class="code-block">
+          <span class="c-comment"># Estrutura apos execucao deste agente</span><br>
+          repo/<br>
+          &nbsp;&nbsp;reports/<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-prop">figma-to-code-adgsdagdfsf-2026-03-31.html</span>  <span class="c-comment"># este arquivo</span><br>
+          &nbsp;&nbsp;index.html  <span class="c-comment"># placeholder original (nao modificado)</span><br>
+          &nbsp;&nbsp;CLAUDE.md<br>
+          &nbsp;&nbsp;docs/        <span class="c-comment"># vazio</span>
+        </div>
+      </div>
+
+      <div class="rec-card color-token">
+        <h3>Nenhum codigo de tela foi gerado</h3>
+        <p>
+          Sem dados de extracao Figma (nenhum <code>figma-extract-*.html</code> ou JSON com tokens,
+          componentes e layout), nao e possivel gerar uma implementacao pixel-perfect. Gerar codigo
+          sem a fonte de verdade do Figma resultaria em uma tela inventada sem fidelidade ao design.
+        </p>
+      </div>
+    </section>
+
+    <!-- PROXIMOS PASSOS -->
+    <section class="section" id="next-steps">
+      <h2 class="section-title">
+        <span class="dot" style="background:var(--color-error)"></span>
+        Proximos passos recomendados
+      </h2>
+
+      <div class="rec-card color-rec">
+        <h3>Para executar com sucesso o Figma to Code</h3>
+        <ul>
+          <li>
+            Fornecer uma URL Figma valida no formato
+            <code>https://www.figma.com/design/&lt;fileKey&gt;/...?node-id=&lt;nodeId&gt;</code>
+          </li>
+          <li>
+            Re-executar o Step 1 (Figma Extract) com a URL correta para gerar
+            <code>reports/figma-extract-&lt;nome-da-tela&gt;-YYYY-MM-DD.html</code>
+          </li>
+          <li>
+            Garantir que o MCP do Figma esteja autenticado e acessível antes da execucao
+          </li>
+          <li>
+            Re-executar este agente (Step 2) apos a extracao bem-sucedida
+          </li>
+        </ul>
+      </div>
+
+      <div class="rec-card color-struct">
+        <h3>Dados minimos necessarios para geracao de codigo</h3>
+        <ul>
+          <li>Arvore de nos do Figma (hierarquia de frames e componentes)</li>
+          <li>Design tokens: cores (hex), tipografia (family, size, weight, line-height), espacamentos (px)</li>
+          <li>Dimensoes e layout de cada frame (width, height, padding, gap, flex-direction)</li>
+          <li>URL de preview PNG da tela (referencia visual)</li>
+          <li>Textos (characters) de cada no de texto</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  Gerado por Claude Code | Powered by Fusion AI Design Extract
+</footer>
+
+</body>
+</html>
