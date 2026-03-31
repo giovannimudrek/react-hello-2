@@ -1,0 +1,185 @@
+================================================================================
+                     FIGMA AUDIT — SUMMARY REPORT
+================================================================================
+
+Task ID:              adgsdagdfsf
+Date:                 2026-03-31 16:45:00Z
+Pipeline Step:        3 of 3 (Figma Audit)
+Status:               COMPLETED WITH FINDINGS
+
+================================================================================
+                              EXECUTIVE SUMMARY
+================================================================================
+
+The Figma Audit pipeline step has been completed. However, the overall pipeline
+cannot progress because the initial input (adgsdagdfsf) is not a valid Figma URL
+or recognized screen name.
+
+Pipeline Status:
+  Step 1 — Figma Extract:    COMPLETED (but no design data extracted)
+  Step 2 — Figma to Code:    COMPLETED (but no code generated)
+  Step 3 — Figma Audit:      COMPLETED (this audit)
+
+Result: 0 components implemented / ? components expected
+Rate:   IMPOSSIBLE TO DETERMINE (no design data)
+
+================================================================================
+                            KEY FINDINGS
+================================================================================
+
+1. CODE IMPLEMENTATION STATUS
+   ──────────────────────────
+   - index.html:           PLACEHOLDER ("Hello World")
+   - React Components:     NONE
+   - TypeScript Files:     NONE
+   - CSS/Tailwind:         NONE
+   - Design Tokens:        NONE
+   - Documentation:        EMPTY (docs/ folder has no files)
+
+   Conclusion: Zero code implemented
+
+2. DESIGN DATA AVAILABLE
+   ─────────────────────
+   - Figma Extract Report:    Generated (Step 1)
+   - Design Tokens Found:     NONE
+   - Components Catalogued:   NONE
+   - Screen Preview:          NONE
+   - Layout Data:             NONE
+
+   Conclusion: No design data to compare against
+
+3. REPOSITORY STRUCTURE
+   ────────────────────
+   repo/
+   ├── index.html              (Hello World placeholder only)
+   ├── CLAUDE.md               (Pipeline documentation)
+   ├── .fusion-plugin/         (Agent specifications)
+   ├── docs/                   (Empty)
+   └── reports/
+       ├── figma-to-code-*.html        (Step 2 output)
+       ├── figma-audit-*.md            (This audit)
+       └── AUDIT_SUMMARY.txt           (This file)
+
+   Conclusion: Minimal implementation, pipeline infrastructure only
+
+================================================================================
+                          CRITICAL BLOCKERS
+================================================================================
+
+BLOCKER #1: Invalid Input
+──────────────────────────
+The task received (adgsdagdfsf) is not a valid Figma URL or screen name.
+
+Expected formats:
+  ✓ https://www.figma.com/design/fileKey/...?node-id=nodeId
+  ✓ "login-screen"
+  ✓ "kanban-board"
+  ✓ "US-1234"
+
+BLOCKER #2: No Design Data
+──────────────────────────
+Without Figma extract data, the code generation step cannot produce output.
+The Step 1 (Figma Extract) needs to be re-executed with valid input.
+
+BLOCKER #3: No Generated Code
+────────────────────────────
+Since no design data was available, Step 2 (Figma to Code) produced no output.
+The index.html remains a placeholder.
+
+================================================================================
+                         RECOMMENDATIONS
+================================================================================
+
+IMMEDIATE ACTIONS (Required):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Provide a valid Figma URL in format:
+   https://www.figma.com/design/<fileKey>/...?node-id=<nodeId>
+
+2. OR provide a valid screen name that maps to existing Figma design
+
+3. OR provide a US (User Story) identifier linked to a design
+
+RE-EXECUTION SEQUENCE:
+━━━━━━━━━━━━━━━━━━━━━━
+After providing valid input:
+
+  [ ] Step 1: Re-run Figma Extract with valid URL
+      → Verify reports/figma-extract-*.html contains design data
+
+  [ ] Step 2: Re-run Figma to Code
+      → Verify code files generated in repo
+
+  [ ] Step 3: Re-run Figma Audit
+      → Verify implementation status against design
+
+DATA VALIDATION CHECKLIST:
+──────────────────────────
+[ ] Figma file is accessible (not private)
+[ ] MCP Figma authentication is valid (check mcp__figma__check_api_key)
+[ ] Node ID exists in the Figma file
+[ ] Design contains actual components (not just frames)
+[ ] All required design tokens are present
+
+================================================================================
+                         AUDIT ARTIFACTS
+================================================================================
+
+Files Generated:
+  • reports/figma-audit-adgsdagdfsf-2026-03-31.md (219 lines)
+  • reports/AUDIT_SUMMARY.txt (this file)
+
+Previous Step Artifacts:
+  • reports/figma-to-code-adgsdagdfsf-2026-03-31.html
+
+Files NOT Modified:
+  • index.html (placeholder remains unchanged)
+  • Any source code (rule: audit only, no changes)
+  • CLAUDE.md or configuration files
+
+Git Status:
+  • Branch: us-adgsdagdfsf
+  • Working tree: clean (no uncommitted changes)
+  • No commits created by this audit
+
+================================================================================
+                         NEXT PIPELINE STEP
+================================================================================
+
+This is the final step of the pipeline. To proceed:
+
+  1. Gather valid Figma input (URL, screen name, or US ID)
+  2. Verify input format matches expected patterns
+  3. Restart pipeline at Step 1 (Figma Extract)
+  4. Allow all three steps to execute sequentially
+  5. Final audit will show actual implementation status
+
+================================================================================
+                              CONCLUSION
+================================================================================
+
+Status Code:      AUDIT_COMPLETE_BUT_BLOCKED
+Overall Health:   RED (critical input missing)
+Actionable Next:  OBTAIN VALID FIGMA INPUT
+
+The Figma Audit process executed successfully and documented the current state.
+However, the pipeline cannot progress further without a valid Figma design input.
+
+Detailed findings are available in:
+  → reports/figma-audit-adgsdagdfsf-2026-03-31.md
+
+================================================================================
+                          AUDIT METADATA
+================================================================================
+
+Agent:            Figma Audit (Claude Haiku 4.5)
+Model:            claude-haiku-4-5-20251001
+Execution Date:   2026-03-31 16:45:00Z
+Repository:       /home/ec2-user/tmp/_squad_remote/run-206/repo
+Branch:           us-adgsdagdfsf
+Lines of Analysis: 219 lines (markdown report)
+Git Status:       clean (no changes)
+Documentation:    Generated ✓
+
+================================================================================
+                              END OF REPORT
+================================================================================
