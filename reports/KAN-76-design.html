@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Report — KAN-76: Tela de board de gerenciamento de cards</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f1117;
+    color: #e2e8f0;
+    line-height: 1.6;
+    font-size: 14px;
+  }
+  a { color: #a78bfa; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #1e1b4b 0%, #2d1b69 50%, #1a0f3e 100%);
+    border-bottom: 3px solid #7f56d9;
+    padding: 40px 48px 32px;
+  }
+  .header-badge {
+    display: inline-block;
+    background: #7f56d9;
+    color: #fcfaff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .header-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #c4b5fd;
+  }
+  .header-meta-item .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #7f56d9;
+    flex-shrink: 0;
+  }
+
+  /* Layout */
+  .container { max-width: 1200px; margin: 0 auto; padding: 40px 48px; }
+
+  /* Section titles */
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #7f56d9;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #2d2d3e;
+  }
+
+  /* Story section */
+  .story-card {
+    background: #1a1a2e;
+    border: 1px solid #2d2d3e;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+  }
+  .story-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 8px;
+  }
+  .story-context {
+    color: #94a3b8;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    background: #0f1117;
+    border-radius: 8px;
+    border-left: 3px solid #7f56d9;
+    font-style: italic;
+  }
+  .story-narrative {
+    color: #c4b5fd;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    background: rgba(127,86,217,0.1);
+    border-radius: 8px;
+    font-weight: 500;
+  }
+  .ac-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .ac-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 14px;
+    background: #0f1117;
+    border-radius: 8px;
+    border: 1px solid #2d2d3e;
+  }
+  .ac-num {
+    background: #7f56d9;
+    color: #fcfaff;
+    font-size: 11px;
+    font-weight: 700;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .ac-text { color: #e2e8f0; line-height: 1.5; }
+
+  /* Scenarios */
+  .scenarios { margin-top: 24px; }
+  .scenario-group { margin-bottom: 16px; }
+  .scenario-group h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+  }
+  .scenario-item {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 4px;
+    color: #cbd5e1;
+  }
+  .scenario-item.happy { border-left: 3px solid #22a863; background: rgba(34,168,99,0.06); }
+  .scenario-item.edge { border-left: 3px solid #d49010; background: rgba(212,144,16,0.06); }
+  .scenario-item.error { border-left: 3px solid #c02c2c; background: rgba(192,44,44,0.06); }
+
+  /* Frame cards grid */
+  .frames-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+    gap: 28px;
+    margin-bottom: 40px;
+  }
+  .frame-card {
+    background: #1a1a2e;
+    border: 1px solid #2d2d3e;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .frame-card:hover { border-color: #7f56d9; }
+  .frame-screenshot {
+    background: #0d0d1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    overflow: hidden;
+    border-bottom: 1px solid #2d2d3e;
+    position: relative;
+  }
+  .frame-screenshot iframe {
+    width: 100%;
+    height: 340px;
+    border: none;
+    pointer-events: none;
+  }
+  .frame-screenshot-placeholder {
+    width: 100%;
+    height: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: #0d0d1a;
+  }
+  /* Inline SVG previews for each frame */
+  .frame-preview {
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    position: relative;
+    background: #f5f5f7;
+  }
+  .frame-preview svg {
+    width: 100%;
+    height: 100%;
+  }
+  .frame-info { padding: 20px 22px; }
+  .frame-info .frame-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 6px;
+  }
+  .frame-info .frame-desc {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .frame-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .tag-brand { background: rgba(127,86,217,0.2); color: #c4b5fd; border: 1px solid rgba(127,86,217,0.3); }
+  .tag-blue  { background: rgba(56,130,224,0.15); color: #93c5fd; border: 1px solid rgba(56,130,224,0.3); }
+  .tag-green { background: rgba(34,168,99,0.15);  color: #86efac; border: 1px solid rgba(34,168,99,0.3); }
+  .tag-yellow{ background: rgba(212,144,16,0.15); color: #fcd34d; border: 1px solid rgba(212,144,16,0.3); }
+  .tag-red   { background: rgba(192,44,44,0.15);  color: #fca5a5; border: 1px solid rgba(192,44,44,0.3); }
+  .ac-coverage {
+    background: #0f1117;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #94a3b8;
+    border: 1px solid #2d2d3e;
+    margin-bottom: 12px;
+  }
+  .ac-coverage strong { color: #c4b5fd; }
+  .frame-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #a78bfa;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border: 1px solid rgba(167,139,250,0.3);
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+  .frame-link:hover { background: rgba(167,139,250,0.1); text-decoration: none; }
+
+  /* DS table */
+  .ds-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .ds-card {
+    background: #1a1a2e;
+    border: 1px solid #2d2d3e;
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .ds-card h4 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #7f56d9;
+    margin-bottom: 12px;
+  }
+  .color-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .color-swatch {
+    width: 24px; height: 24px; border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+  .color-name { font-size: 12px; color: #94a3b8; flex: 1; }
+  .color-hex { font-size: 11px; font-family: 'SF Mono', 'Fira Mono', monospace; color: #c4b5fd; }
+  .typo-row { margin-bottom: 8px; font-size: 12px; color: #94a3b8; }
+  .typo-label { color: #e2e8f0; font-weight: 500; }
+  .comp-tag {
+    display: inline-block;
+    background: rgba(127,86,217,0.15);
+    color: #c4b5fd;
+    border: 1px solid rgba(127,86,217,0.25);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 500;
+    margin: 3px 3px 0 0;
+  }
+
+  /* Links section */
+  .links-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+  .link-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    background: #1a1a2e;
+    border: 1px solid #2d2d3e;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+  .link-item:hover { border-color: #7f56d9; text-decoration: none; }
+  .link-icon {
+    width: 32px; height: 32px; border-radius: 6px;
+    background: rgba(127,86,217,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .link-label { font-size: 13px; font-weight: 500; color: #e2e8f0; }
+  .link-url { font-size: 11px; color: #64748b; margin-top: 1px; }
+
+  /* Footer */
+  .footer {
+    background: #0d0d1a;
+    border-top: 1px solid #2d2d3e;
+    padding: 24px 48px;
+    text-align: center;
+    color: #475569;
+    font-size: 12px;
+  }
+
+  /* Figma embed container */
+  .figma-embed {
+    width: 100%;
+    height: 280px;
+    border: none;
+    overflow: hidden;
+    border-bottom: 1px solid #2d2d3e;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="header-badge">Design Report</div>
+  <h1>KAN-76 — Tela de board de gerenciamento de cards</h1>
+  <div class="header-meta">
+    <div class="header-meta-item"><span class="dot"></span>Data: 06/04/2026</div>
+    <div class="header-meta-item"><span class="dot"></span>Ferramenta: Figma</div>
+    <div class="header-meta-item"><span class="dot"></span>Agente: Jira Designer</div>
+    <div class="header-meta-item"><span class="dot"></span>
+      <a href="https://code-agents-brq.atlassian.net/browse/KAN-76" style="color:#c4b5fd;">KAN-76 no Jira</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== SECTION 1: STORY ===== -->
+  <p class="section-title">01 — Story do PO</p>
+  <div class="story-card">
+    <h3>US-KAN-76 — Tela de board de gerenciamento de cards</h3>
+
+    <div class="story-context">
+      O projeto necessita de uma tela de board no estilo Kanban para que os usuarios possam visualizar e gerenciar
+      cards distribuidos em colunas que representam etapas de um fluxo de trabalho.
+    </div>
+
+    <div class="story-narrative">
+      Como usuario do sistema, quero visualizar um board com colunas e cards organizados por status,
+      para acompanhar e gerenciar o progresso das tarefas de forma visual.
+    </div>
+
+    <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#64748b;margin-bottom:12px;">
+      Criterios de Aceitacao
+    </p>
+    <ul class="ac-list">
+      <li class="ac-item"><span class="ac-num">1</span><span class="ac-text">A tela exibe um board com multiplas colunas, cada coluna representando um status (ex: Para Fazer, Em andamento, Concluido).</span></li>
+      <li class="ac-item"><span class="ac-num">2</span><span class="ac-text">Cada coluna exibe seus cards com titulo visivel.</span></li>
+      <li class="ac-item"><span class="ac-num">3</span><span class="ac-text">O usuario pode mover um card entre colunas por meio de drag-and-drop ou botao de acao.</span></li>
+      <li class="ac-item"><span class="ac-num">4</span><span class="ac-text">O usuario pode criar um novo card em uma coluna especifica.</span></li>
+      <li class="ac-item"><span class="ac-num">5</span><span class="ac-text">O usuario pode excluir um card existente.</span></li>
+      <li class="ac-item"><span class="ac-num">6</span><span class="ac-text">A tela reflete em tempo real a posicao atual de cada card nas colunas.</span></li>
+    </ul>
+
+    <div class="scenarios">
+      <div class="scenario-group">
+        <h4>Happy Path</h4>
+        <div class="scenario-item happy">Usuario acessa a tela do board e visualiza as colunas com seus respectivos cards listados corretamente.</div>
+        <div class="scenario-item happy">Usuario move um card de "Para Fazer" para "Em andamento" e o card aparece na nova coluna.</div>
+        <div class="scenario-item happy">Usuario cria um novo card em uma coluna e ele aparece imediatamente na lista.</div>
+      </div>
+      <div class="scenario-group">
+        <h4>Edge Cases</h4>
+        <div class="scenario-item edge">Coluna sem nenhum card exibe estado vazio com mensagem ou area de criacao visivel.</div>
+        <div class="scenario-item edge">Board com grande numero de cards em uma coluna exibe scroll interno na coluna sem quebrar o layout.</div>
+      </div>
+      <div class="scenario-group">
+        <h4>Erros</h4>
+        <div class="scenario-item error">Tentativa de criar card com titulo vazio exibe mensagem de validacao sem submeter.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: FRAMES ===== -->
+  <p class="section-title">02 — Telas Criadas</p>
+  <div class="frames-grid">
+
+    <!-- Frame 1: Idle -->
+    <div class="frame-card">
+      <iframe class="figma-embed"
+        src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FxXnK8j2N9C66BZTg3TKAyD%2FMCP-Figma%3Fnode-id%3D98-2"
+        allowfullscreen>
+      </iframe>
+      <div class="frame-info">
+        <div class="frame-name">KAN-76 | Idle — board com cards</div>
+        <div class="frame-desc">
+          Estado padrao do board. Exibe 3 colunas (Para Fazer, Em andamento, Concluido) com cards distribuidos,
+          cada coluna com badge de contagem, acento de cor no topo e botao "+ Novo card" no rodape.
+        </div>
+        <div class="frame-tags">
+          <span class="tag tag-brand">1440x900</span>
+          <span class="tag tag-blue">Estado Padrao</span>
+          <span class="tag tag-green">3 Colunas</span>
+          <span class="tag tag-brand">7 Cards</span>
+        </div>
+        <div class="ac-coverage">
+          <strong>Criterios atendidos:</strong> 1 (colunas por status), 2 (titulos visiveis), 4 (botao criar card), 6 (posicao dos cards)
+        </div>
+        <div class="ac-coverage">
+          <strong>Componentes DS:</strong> Column, Card, Badge, Button Add (dashed)
+        </div>
+        <a class="frame-link" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=98-2" target="_blank">
+          Ver no Figma
+        </a>
+      </div>
+    </div>
+
+    <!-- Frame 2: Empty -->
+    <div class="frame-card">
+      <iframe class="figma-embed"
+        src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FxXnK8j2N9C66BZTg3TKAyD%2FMCP-Figma%3Fnode-id%3D98-62"
+        allowfullscreen>
+      </iframe>
+      <div class="frame-info">
+        <div class="frame-name">KAN-76 | Empty — coluna sem cards</div>
+        <div class="frame-desc">
+          Estado de coluna vazia. A coluna "Em andamento" exibe badge com contador "0", area cinza clara com
+          mensagem orientativa e botao "+ Novo card" visivel para incentivar a criacao do primeiro card.
+        </div>
+        <div class="frame-tags">
+          <span class="tag tag-brand">1440x900</span>
+          <span class="tag tag-yellow">Edge Case</span>
+          <span class="tag tag-yellow">Coluna Vazia</span>
+        </div>
+        <div class="ac-coverage">
+          <strong>Criterios atendidos:</strong> 1 (estrutura de colunas), 4 (botao criar card), edge case coluna vazia
+        </div>
+        <div class="ac-coverage">
+          <strong>Componentes DS:</strong> Column, Empty State, Button Add (dashed)
+        </div>
+        <a class="frame-link" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=98-62" target="_blank">
+          Ver no Figma
+        </a>
+      </div>
+    </div>
+
+    <!-- Frame 3: Modal -->
+    <div class="frame-card">
+      <iframe class="figma-embed"
+        src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FxXnK8j2N9C66BZTg3TKAyD%2FMCP-Figma%3Fnode-id%3D98-117"
+        allowfullscreen>
+      </iframe>
+      <div class="frame-info">
+        <div class="frame-name">KAN-76 | Modal — criar card (erro de validacao)</div>
+        <div class="frame-desc">
+          Modal de criacao de card sobreposto ao board (overlay 40% preto). Campo de titulo com borda
+          vermelha 2px e mensagem de erro "O titulo nao pode ser vazio." Botoes Cancelar (outline) e
+          Criar card (primario). Indicador de coluna de destino na base.
+        </div>
+        <div class="frame-tags">
+          <span class="tag tag-brand">1440x900</span>
+          <span class="tag tag-red">Erro Validacao</span>
+          <span class="tag tag-brand">Modal 440x310</span>
+        </div>
+        <div class="ac-coverage">
+          <strong>Criterios atendidos:</strong> 4 (criar card em coluna especifica), erro de titulo vazio
+        </div>
+        <div class="ac-coverage">
+          <strong>Componentes DS:</strong> Modal, Input (error state), Button Primary, Button Outline
+        </div>
+        <a class="frame-link" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=98-117" target="_blank">
+          Ver no Figma
+        </a>
+      </div>
+    </div>
+
+    <!-- Frame 4: Drag -->
+    <div class="frame-card">
+      <iframe class="figma-embed"
+        src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FxXnK8j2N9C66BZTg3TKAyD%2FMCP-Figma%3Fnode-id%3D98-193"
+        allowfullscreen>
+      </iframe>
+      <div class="frame-info">
+        <div class="frame-name">KAN-76 | Drag — mover card entre colunas</div>
+        <div class="frame-desc">
+          Estado de drag-and-drop ativo. Card "Implementar autenticacao OAuth" sendo arrastado
+          (levemente rotacionado, sombra acentuada, borda brand). Coluna origem exibe ghost
+          placeholder tracejado. Coluna destino "Em andamento" exibe drop zone destacada com
+          fundo roxo claro e borda brand 2px.
+        </div>
+        <div class="frame-tags">
+          <span class="tag tag-brand">1440x900</span>
+          <span class="tag tag-blue">Drag and Drop</span>
+          <span class="tag tag-brand">Ghost + Drop Zone</span>
+        </div>
+        <div class="ac-coverage">
+          <strong>Criterios atendidos:</strong> 3 (mover card entre colunas), 6 (posicao em tempo real)
+        </div>
+        <div class="ac-coverage">
+          <strong>Componentes DS:</strong> Card (dragging state), Column (drop target), Ghost Placeholder
+        </div>
+        <a class="frame-link" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=98-193" target="_blank">
+          Ver no Figma
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== SECTION 3: DESIGN SYSTEM ===== -->
+  <p class="section-title">03 — Design System Utilizado</p>
+  <div class="ds-grid">
+
+    <div class="ds-card">
+      <h4>Cores — Tokens</h4>
+      <div class="color-row"><div class="color-swatch" style="background:#7F56D9;"></div><span class="color-name">Brand Primary</span><span class="color-hex">#7F56D9</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#F4EBFF;border-color:#D6BBFB;"></div><span class="color-name">Brand Light</span><span class="color-hex">#F4EBFF</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#0A0D12;"></div><span class="color-name">Text Primary</span><span class="color-hex">#0A0D12</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#414651;"></div><span class="color-name">Text Secondary</span><span class="color-hex">#414651</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#535862;"></div><span class="color-name">Text Tertiary</span><span class="color-hex">#535862</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#717680;"></div><span class="color-name">Text Placeholder</span><span class="color-hex">#717680</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#E9EAEB;"></div><span class="color-name">Border Neutral</span><span class="color-hex">#E9EAEB</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#F5F5F7;"></div><span class="color-name">Background Page</span><span class="color-hex">#F5F5F7</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#FFFFFF;border-color:#E9EAEB;"></div><span class="color-name">Background White</span><span class="color-hex">#FFFFFF</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#C02C2C;"></div><span class="color-name">Error</span><span class="color-hex">#C02C2C</span></div>
+    </div>
+
+    <div class="ds-card">
+      <h4>Cores — Tags de Cards</h4>
+      <div class="color-row"><div class="color-swatch" style="background:#DCE9FB;"></div><span class="color-name">Tag BG Azul</span><span class="color-hex">#DCE9FB</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#3882E0;"></div><span class="color-name">Tag Text Azul</span><span class="color-hex">#3882E0</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#FFF3D5;"></div><span class="color-name">Tag BG Amarelo</span><span class="color-hex">#FFF3D5</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#D49010;"></div><span class="color-name">Tag Text Amarelo</span><span class="color-hex">#D49010</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#D9F5E4;"></div><span class="color-name">Tag BG Verde</span><span class="color-hex">#D9F5E4</span></div>
+      <div class="color-row"><div class="color-swatch" style="background:#22A863;"></div><span class="color-name">Tag Text Verde</span><span class="color-hex">#22A863</span></div>
+    </div>
+
+    <div class="ds-card">
+      <h4>Tipografia</h4>
+      <div class="typo-row"><span class="typo-label">Font Family:</span> Inter</div>
+      <div class="typo-row"><span class="typo-label">App Title:</span> 20px Bold</div>
+      <div class="typo-row"><span class="typo-label">Modal Title:</span> 18px Semi Bold</div>
+      <div class="typo-row"><span class="typo-label">Page Title:</span> 16px Semi Bold</div>
+      <div class="typo-row"><span class="typo-label">Column Title:</span> 15px Semi Bold</div>
+      <div class="typo-row"><span class="typo-label">Modal Sub:</span> 14px Regular</div>
+      <div class="typo-row"><span class="typo-label">Card Title:</span> 13px Medium</div>
+      <div class="typo-row"><span class="typo-label">Add Button:</span> 13px Semi Bold</div>
+      <div class="typo-row"><span class="typo-label">Badge:</span> 12px Semi Bold</div>
+      <div class="typo-row"><span class="typo-label">Tag Label:</span> 11px Semi Bold</div>
+    </div>
+
+    <div class="ds-card">
+      <h4>Espacamentos e Medidas</h4>
+      <div class="typo-row"><span class="typo-label">Frame:</span> 1440 x 900 px</div>
+      <div class="typo-row"><span class="typo-label">Topbar:</span> altura 64px</div>
+      <div class="typo-row"><span class="typo-label">Subbar:</span> altura 56px</div>
+      <div class="typo-row"><span class="typo-label">Board padding:</span> 40px laterais</div>
+      <div class="typo-row"><span class="typo-label">Coluna largura:</span> 300px</div>
+      <div class="typo-row"><span class="typo-label">Gap colunas:</span> 24px</div>
+      <div class="typo-row"><span class="typo-label">Card:</span> 260 x 82 px</div>
+      <div class="typo-row"><span class="typo-label">Gap cards:</span> 8px</div>
+      <div class="typo-row"><span class="typo-label">Modal:</span> 440 x 310 px</div>
+      <div class="typo-row"><span class="typo-label">Border Radius Card:</span> 8px</div>
+      <div class="typo-row"><span class="typo-label">Border Radius Coluna:</span> 12px</div>
+      <div class="typo-row"><span class="typo-label">Border Radius Badge:</span> 11px</div>
+    </div>
+
+    <div class="ds-card">
+      <h4>Componentes DS Instanciados</h4>
+      <span class="comp-tag">Card</span>
+      <span class="comp-tag">Column</span>
+      <span class="comp-tag">Badge (circular)</span>
+      <span class="comp-tag">Button Primary</span>
+      <span class="comp-tag">Button Outline</span>
+      <span class="comp-tag">Button Add (dashed)</span>
+      <span class="comp-tag">Input (default)</span>
+      <span class="comp-tag">Input (error)</span>
+      <span class="comp-tag">Modal</span>
+      <span class="comp-tag">Overlay</span>
+      <span class="comp-tag">Empty State</span>
+      <span class="comp-tag">Ghost Placeholder</span>
+      <span class="comp-tag">Drop Zone</span>
+      <span class="comp-tag">Tag Label</span>
+      <span class="comp-tag">Column Accent Bar</span>
+      <span class="comp-tag">Topbar</span>
+    </div>
+
+    <div class="ds-card">
+      <h4>Notas para o Frontend</h4>
+      <div class="typo-row"><span class="typo-label">Framework:</span> React + TypeScript + Tailwind CSS</div>
+      <div class="typo-row"><span class="typo-label">Drag lib sugerida:</span> @dnd-kit/core ou react-beautiful-dnd</div>
+      <div class="typo-row"><span class="typo-label">Overlay drag:</span> rotacao CSS -4deg + sombra 28px</div>
+      <div class="typo-row"><span class="typo-label">Ghost placeholder:</span> borda tracejada brand + bg roxo 50% opacidade</div>
+      <div class="typo-row"><span class="typo-label">Drop target:</span> bg brand light + borda brand 2px solida</div>
+      <div class="typo-row"><span class="typo-label">Modal overlay:</span> rgba(0,0,0,0.4), z-index alto</div>
+      <div class="typo-row"><span class="typo-label">Validacao:</span> submit bloqueado + borda 2px #C02C2C + msg abaixo</div>
+      <div class="typo-row"><span class="typo-label">Scroll coluna:</span> overflow-y: auto dentro de max-height definido</div>
+    </div>
+
+  </div>
+
+  <!-- ===== SECTION 4: LINKS ===== -->
+  <p class="section-title">04 — Links</p>
+  <div class="links-list">
+    <a class="link-item" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma" target="_blank">
+      <div class="link-icon">F</div>
+      <div>
+        <div class="link-label">Arquivo Figma — MCP-Figma</div>
+        <div class="link-url">https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma</div>
+      </div>
+    </a>
+    <a class="link-item" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=98-2" target="_blank">
+      <div class="link-icon">1</div>
+      <div>
+        <div class="link-label">Frame 1 — Idle (board com cards)</div>
+        <div class="link-url">node-id=98-2</div>
+      </div>
+    </a>
+    <a class="link-item" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=98-62" target="_blank">
+      <div class="link-icon">2</div>
+      <div>
+        <div class="link-label">Frame 2 — Empty (coluna sem cards)</div>
+        <div class="link-url">node-id=98-62</div>
+      </div>
+    </a>
+    <a class="link-item" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=98-117" target="_blank">
+      <div class="link-icon">3</div>
+      <div>
+        <div class="link-label">Frame 3 — Modal criar card (erro de validacao)</div>
+        <div class="link-url">node-id=98-117</div>
+      </div>
+    </a>
+    <a class="link-item" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=98-193" target="_blank">
+      <div class="link-icon">4</div>
+      <div>
+        <div class="link-label">Frame 4 — Drag (mover card entre colunas)</div>
+        <div class="link-url">node-id=98-193</div>
+      </div>
+    </a>
+    <a class="link-item" href="https://www.figma.com/design/R5xegLRiow00Mwgq392bpt/Design-System-Vitrine" target="_blank">
+      <div class="link-icon">DS</div>
+      <div>
+        <div class="link-label">Design System Vitrine (somente leitura)</div>
+        <div class="link-url">https://www.figma.com/design/R5xegLRiow00Mwgq392bpt/Design-System-Vitrine</div>
+      </div>
+    </a>
+    <a class="link-item" href="https://code-agents-brq.atlassian.net/browse/KAN-76" target="_blank">
+      <div class="link-icon">J</div>
+      <div>
+        <div class="link-label">Card Jira — KAN-76</div>
+        <div class="link-url">https://code-agents-brq.atlassian.net/browse/KAN-76</div>
+      </div>
+    </a>
+  </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  Gerado pelo Agente Designer em 06/04/2026 &mdash; KAN-76: Tela de board de gerenciamento de cards &mdash; MCP-Figma
+</div>
+
+</body>
+</html>
