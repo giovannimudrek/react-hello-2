@@ -1,0 +1,152 @@
+<form [formGroup]="form" (ngSubmit)="onContinuar()" novalidate>
+
+  <!-- Label de etapa -->
+  <p class="step-label">ETAPA 1 DE 2</p>
+
+  <!-- Barra de progresso -->
+  <div class="progress-track">
+    <div class="progress-fill" style="width: 50%"></div>
+  </div>
+
+  <!-- Titulo -->
+  <h1 class="form-title">Dados pessoais</h1>
+
+  <!-- Subtitulo -->
+  <p class="form-subtitle">Preencha seus dados para criar sua conta na plataforma BRQ Digital.</p>
+
+  <!-- Campo: Nome completo -->
+  <div class="field-group">
+    <label class="field-label" for="nomeCompleto">Nome completo</label>
+    <input
+      id="nomeCompleto"
+      class="field-input"
+      [class.field-input--error]="nomeCompleto.invalid && nomeCompleto.touched"
+      type="text"
+      placeholder="ex: Jo&#xE3;o Silva"
+      formControlName="nomeCompleto"
+      autocomplete="name"
+    />
+    @if (nomeCompleto.invalid && nomeCompleto.touched) {
+      <span class="field-error">
+        @if (nomeCompleto.hasError('required')) { Campo obrigat&#xF3;rio }
+        @else if (nomeCompleto.hasError('minlength')) { Nome deve ter no m&#xED;nimo 3 caracteres }
+      </span>
+    }
+  </div>
+
+  <!-- Campo: E-mail -->
+  <div class="field-group">
+    <label class="field-label" for="email">E-mail</label>
+    <input
+      id="email"
+      class="field-input"
+      [class.field-input--error]="email.invalid && email.touched"
+      type="email"
+      placeholder="ex: joao&#x40;empresa.com.br"
+      formControlName="email"
+      autocomplete="email"
+    />
+    @if (email.invalid && email.touched) {
+      <span class="field-error">
+        @if (email.hasError('required')) { Campo obrigat&#xF3;rio }
+        @else if (email.hasError('email')) { E-mail inv&#xE1;lido }
+      </span>
+    }
+  </div>
+
+  <!-- Campos lado a lado: Senha + Confirmar senha -->
+  <div class="field-row">
+    <!-- Senha -->
+    <div class="field-group field-group--half">
+      <label class="field-label" for="senha">Senha</label>
+      <div class="input-wrapper">
+        <input
+          id="senha"
+          class="field-input"
+          [class.field-input--error]="senha.invalid && senha.touched"
+          [type]="showSenha ? 'text' : 'password'"
+          placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;"
+          formControlName="senha"
+          autocomplete="new-password"
+        />
+        <button type="button" class="toggle-password" (click)="toggleSenha()" tabindex="-1" aria-label="Mostrar senha">
+          {{ showSenha ? '&#128065;' : '&#128064;' }}
+        </button>
+      </div>
+      @if (senha.invalid && senha.touched) {
+        <span class="field-error">
+          @if (senha.hasError('required')) { Campo obrigat&#xF3;rio }
+          @else if (senha.hasError('minlength')) { Senha deve ter no m&#xED;nimo 8 caracteres }
+        </span>
+      }
+    </div>
+
+    <!-- Confirmar senha -->
+    <div class="field-group field-group--half">
+      <label class="field-label" for="confirmarSenha">Confirmar senha</label>
+      <div class="input-wrapper">
+        <input
+          id="confirmarSenha"
+          class="field-input"
+          [class.field-input--error]="confirmarSenha.invalid && confirmarSenha.touched"
+          [type]="showConfirmarSenha ? 'text' : 'password'"
+          placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;"
+          formControlName="confirmarSenha"
+          autocomplete="new-password"
+        />
+        <button type="button" class="toggle-password" (click)="toggleConfirmarSenha()" tabindex="-1" aria-label="Mostrar confirmar senha">
+          {{ showConfirmarSenha ? '&#128065;' : '&#128064;' }}
+        </button>
+      </div>
+      @if (confirmarSenha.invalid && confirmarSenha.touched) {
+        <span class="field-error">
+          @if (confirmarSenha.hasError('required')) { Campo obrigat&#xF3;rio }
+          @else if (confirmarSenha.hasError('senhasNaoCoincidem')) { As senhas n&#xE3;o coincidem }
+        </span>
+      }
+    </div>
+  </div>
+
+  <!-- Indicador de forca da senha -->
+  @if (senha.value) {
+    <div class="password-strength">
+      <div class="password-strength-track">
+        <div
+          class="password-strength-fill"
+          [style.width]="forcaSenhaLargura"
+          [style.background-color]="forcaSenhaCor">
+        </div>
+      </div>
+      <span class="password-strength-label" [style.color]="forcaSenhaCor">
+        For&#xE7;a da senha: {{ forcaSenhaLabel }}
+      </span>
+    </div>
+  }
+
+  <!-- Botao Continuar -->
+  <button
+    type="submit"
+    class="btn-primary"
+    [disabled]="form.invalid">
+    Continuar
+  </button>
+
+  <!-- Separador "ou" -->
+  <div class="separator">
+    <div class="separator-line"></div>
+    <span class="separator-text">ou</span>
+    <div class="separator-line"></div>
+  </div>
+
+  <!-- Link Entrar -->
+  <div class="login-link">
+    <span class="login-link-text">J&#xE1; tem uma conta?&nbsp;</span>
+    <button type="button" class="login-link-btn" (click)="onEntrar()">Entrar</button>
+  </div>
+
+  <!-- Nota de termos -->
+  <p class="terms-note">
+    Ao continuar, voc&#xEA; concorda com nossos Termos de Uso e Pol&#xED;tica de Privacidade.
+  </p>
+
+</form>

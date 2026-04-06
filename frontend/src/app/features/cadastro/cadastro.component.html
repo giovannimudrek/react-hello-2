@@ -1,0 +1,114 @@
+<div class="cadastro-page">
+  <!-- Brand Panel (painel esquerdo) -->
+  <div class="brand-panel">
+    <!-- Header com logo -->
+    <div class="brand-header">
+      <div class="brand-logo">
+        <span class="brand-logo-text">BRQ</span>
+      </div>
+      <span class="brand-name">BRQ Digital</span>
+    </div>
+
+    <!-- Card de preview — Etapa 1 -->
+    @if (etapa === 1) {
+      <div class="brand-preview-card">
+        <div class="preview-ellipse preview-ellipse--tl"></div>
+        <div class="preview-ellipse preview-ellipse--br"></div>
+        <div class="preview-form-mock">
+          <div class="preview-field-mock">
+            <span>Nome completo</span>
+          </div>
+          <div class="preview-field-mock">
+            <span>E-mail</span>
+          </div>
+          <div class="preview-field-mock">
+            <span>Senha</span>
+          </div>
+          <div class="preview-btn-mock">
+            <span>Continuar &rarr;</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Card de features — Etapa 2 -->
+    @if (etapa === 2) {
+      <div class="brand-features-card">
+        <div class="preview-ellipse preview-ellipse--tr"></div>
+        <div class="feature-item">
+          <span>&#10003;&nbsp; Gest&atilde;o de projetos &aacute;geis</span>
+        </div>
+        <div class="feature-item">
+          <span>&#10003;&nbsp; Quadros Kanban ilimitados</span>
+        </div>
+        <div class="feature-item">
+          <span>&#10003;&nbsp; Relat&oacute;rios em tempo real</span>
+        </div>
+        <div class="feature-item">
+          <span>&#10003;&nbsp; Integra&ccedil;&otilde;es nativas</span>
+        </div>
+      </div>
+    }
+
+    <!-- Titulo e subtitulo -->
+    @if (etapa === 1) {
+      <div class="brand-copy">
+        <h2 class="brand-title">Crie sua conta<br>e comece agora.</h2>
+        <p class="brand-subtitle">Acesse todos os recursos da plataforma<br>em poucos passos simples.</p>
+      </div>
+    }
+
+    @if (etapa === 2) {
+      <div class="brand-copy brand-copy--etapa2">
+        <h2 class="brand-title">Quase l&aacute;!<br>Configure sua empresa.</h2>
+        <p class="brand-subtitle">Seus dados s&atilde;o protegidos com criptografia<br>de ponta a ponta.</p>
+      </div>
+    }
+
+    <!-- Rodape com indicador de etapa -->
+    <div class="brand-footer">
+      <span class="brand-step-label">Etapa {{ etapa }} de 2</span>
+      <div class="brand-progress-track">
+        <div class="brand-progress-fill" [style.width]="etapa === 1 ? '90px' : '180px'"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Panel (painel direito) -->
+  <div class="form-panel">
+    <div class="form-panel-inner">
+
+      <!-- Mensagem de erro de rede -->
+      @if (networkError) {
+        <div class="network-error-banner">
+          <span>Falha na conex&atilde;o. Tente novamente.</span>
+          <button class="retry-btn" (click)="retry()">Tentar novamente</button>
+        </div>
+      }
+
+      <!-- Mensagem de erro da API -->
+      @if (errorMessage) {
+        <div class="api-error-banner">{{ errorMessage }}</div>
+      }
+
+      <!-- Etapa 1 -->
+      @if (etapa === 1) {
+        <app-cadastro-etapa1
+          (concluido)="onEtapa1Concluida($event)"
+          (navigateToLogin)="onNavigateToLogin()">
+        </app-cadastro-etapa1>
+      }
+
+      <!-- Etapa 2 -->
+      @if (etapa === 2) {
+        <app-cadastro-etapa2
+          [isLoading]="isLoading"
+          (voltar)="onVoltar()"
+          (criarConta)="onCriarConta($event)"
+          (navigateToLogin)="onNavigateToLogin()">
+        </app-cadastro-etapa2>
+      }
+
+    </div>
+  </div>
+</div>
