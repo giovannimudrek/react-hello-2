@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Design Report — KAN-75: Tela de cadastro e de login</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+    background: #0f1117;
+    color: #e2e8f0;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  .header {
+    background: linear-gradient(135deg, #1a1d27 0%, #161927 100%);
+    border-bottom: 1px solid #2d3148;
+    padding: 40px 48px;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .badge {
+    background: #7f56d9;
+    color: #fcfaff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .badge-jira {
+    background: #0052cc;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 8px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    font-size: 13px;
+    color: #94a3b8;
+    flex-wrap: wrap;
+  }
+  .header-meta a {
+    color: #a78bfa;
+    text-decoration: none;
+  }
+  .header-meta a:hover { text-decoration: underline; }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 48px;
+  }
+  .section {
+    margin-bottom: 48px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1e2337;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background: #7f56d9;
+    border-radius: 2px;
+  }
+  /* Story section */
+  .story-box {
+    background: #1a1d27;
+    border: 1px solid #2d3148;
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .story-box h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 11px;
+  }
+  .story-text {
+    font-size: 15px;
+    color: #94a3b8;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+  .context-text {
+    font-size: 14px;
+    color: #94a3b8;
+    margin-bottom: 20px;
+  }
+  .criteria-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .criteria-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 14px;
+    color: #cbd5e1;
+  }
+  .criteria-num {
+    background: #7f56d9;
+    color: #fcfaff;
+    font-size: 11px;
+    font-weight: 700;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  /* Screens section */
+  .screens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+    gap: 28px;
+  }
+  .screen-card {
+    background: #1a1d27;
+    border: 1px solid #2d3148;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .screen-card:hover {
+    border-color: #7f56d9;
+  }
+  .screen-img-wrap {
+    background: #f5f5f7;
+    padding: 0;
+    overflow: hidden;
+    border-bottom: 1px solid #2d3148;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 280px;
+    position: relative;
+  }
+  .screen-img-wrap img {
+    width: 100%;
+    display: block;
+  }
+  .screen-img-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 280px;
+    background: #f0f0f5;
+    color: #999;
+    font-size: 13px;
+    gap: 8px;
+  }
+  .screen-figma-link {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    backdrop-filter: blur(4px);
+  }
+  .screen-info {
+    padding: 20px;
+  }
+  .screen-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 6px;
+  }
+  .screen-state-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  .tag-idle { background: #1e3a5f; color: #60a5fa; }
+  .tag-error { background: #4a1c1c; color: #f87171; }
+  .tag-warning { background: #3d2b06; color: #fbbf24; }
+  .tag-success { background: #134e2e; color: #4ade80; }
+  .screen-components {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 12px;
+  }
+  .screen-components span {
+    color: #94a3b8;
+    font-weight: 500;
+  }
+  .criteria-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .chip {
+    background: #1e2337;
+    border: 1px solid #2d3148;
+    color: #94a3b8;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .chip-match {
+    background: #1e2d45;
+    border-color: #3b4f6e;
+    color: #60a5fa;
+  }
+  /* DS tokens table */
+  .tokens-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .tokens-table th {
+    background: #161927;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #2d3148;
+  }
+  .tokens-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #1e2337;
+    color: #cbd5e1;
+    vertical-align: middle;
+  }
+  .tokens-table tr:last-child td {
+    border-bottom: none;
+  }
+  .color-dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    margin-right: 8px;
+    vertical-align: middle;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .mono {
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 12px;
+    color: #a78bfa;
+  }
+  /* Links section */
+  .links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .link-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #1a1d27;
+    border: 1px solid #2d3148;
+    border-radius: 10px;
+    font-size: 14px;
+    text-decoration: none;
+    color: #cbd5e1;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .link-item:hover {
+    border-color: #7f56d9;
+    background: #1e1f32;
+    color: #f1f5f9;
+  }
+  .link-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-figma { background: #1e173a; }
+  .icon-jira  { background: #0a2040; }
+  .link-label {
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .link-url {
+    font-size: 12px;
+    color: #64748b;
+    font-family: monospace;
+  }
+  /* Figma frame embeds */
+  .frame-embed {
+    width: 100%;
+    height: 320px;
+    border: none;
+    border-radius: 0;
+  }
+  footer {
+    text-align: center;
+    padding: 32px;
+    font-size: 12px;
+    color: #334155;
+    border-top: 1px solid #1e2337;
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <span class="badge-jira">KAN-75</span>
+    <span class="badge">Design Report</span>
+  </div>
+  <h1>Tela de cadastro e de login</h1>
+  <div class="header-meta">
+    <span>Data: 2026-04-06</span>
+    <span>Agente: Jira Designer</span>
+    <a href="https://code-agents-brq.atlassian.net/browse/KAN-75" target="_blank">Abrir no Jira</a>
+    <a href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma" target="_blank">Abrir no Figma</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SECAO 1: Story do PO -->
+  <div class="section">
+    <div class="section-title">Story do PO</div>
+    <div class="story-box">
+      <h3>Contexto</h3>
+      <p class="context-text">O sistema e um gerenciador de cards no estilo Kanban. Para acessar e gerenciar seus cards, o usuario precisa se autenticar, o que requer telas de cadastro e de login.</p>
+
+      <h3>Historia</h3>
+      <p class="story-text">Como usuario do sistema de gerenciamento de cards,<br>quero me cadastrar e realizar login na aplicacao,<br>para acessar meus cards de forma segura e personalizada.</p>
+
+      <h3>Criterios de Aceitacao</h3>
+      <ul class="criteria-list">
+        <li>
+          <span class="criteria-num">1</span>
+          <span>A tela de cadastro deve conter campos de nome, e-mail e senha, com validacao de formato de e-mail e senha minima de 6 caracteres.</span>
+        </li>
+        <li>
+          <span class="criteria-num">2</span>
+          <span>Ao concluir o cadastro com dados validos, o usuario deve ser redirecionado para a tela de login ou direto para o sistema.</span>
+        </li>
+        <li>
+          <span class="criteria-num">3</span>
+          <span>A tela de login deve conter campos de e-mail e senha, com botao de entrar.</span>
+        </li>
+        <li>
+          <span class="criteria-num">4</span>
+          <span>Ao realizar login com credenciais validas, o usuario deve ser redirecionado para o board de gerenciamento de cards.</span>
+        </li>
+        <li>
+          <span class="criteria-num">5</span>
+          <span>Mensagens de erro claras devem ser exibidas para campos invalidos ou credenciais incorretas em ambas as telas.</span>
+        </li>
+        <li>
+          <span class="criteria-num">6</span>
+          <span>Ambas as telas devem possuir link de navegacao entre si (ex: "Nao tem conta? Cadastre-se" e "Ja tem conta? Entrar").</span>
+        </li>
+      </ul>
+
+      <br>
+      <h3>Cenarios de Teste</h3>
+      <br>
+      <p style="font-size:13px;color:#64748b;font-weight:600;margin-bottom:6px;">Happy Path</p>
+      <ul style="font-size:14px;color:#94a3b8;padding-left:20px;margin-bottom:12px;">
+        <li>Usuario preenche nome, e-mail valido e senha com 6+ caracteres no cadastro e e redirecionado com sucesso.</li>
+        <li>Usuario cadastrado insere e-mail e senha corretos no login e acessa o board.</li>
+      </ul>
+      <p style="font-size:13px;color:#64748b;font-weight:600;margin-bottom:6px;">Edge Cases</p>
+      <ul style="font-size:14px;color:#94a3b8;padding-left:20px;margin-bottom:12px;">
+        <li>Usuario tenta cadastrar com e-mail ja existente — sistema exibe mensagem de erro adequada.</li>
+        <li>Usuario deixa campos obrigatorios em branco e tenta submeter — campos sao sinalizados como invalidos.</li>
+        <li>Usuario insere senha com menos de 6 caracteres — sistema impede o envio e informa o requisito minimo.</li>
+      </ul>
+      <p style="font-size:13px;color:#64748b;font-weight:600;margin-bottom:6px;">Erros</p>
+      <ul style="font-size:14px;color:#94a3b8;padding-left:20px;">
+        <li>Usuario insere credenciais incorretas no login — sistema exibe mensagem "E-mail ou senha invalidos" sem revelar qual dos dois esta errado.</li>
+        <li>Falha de conexao ao tentar cadastrar ou logar — sistema exibe mensagem de erro generica e nao trava a tela.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECAO 2: Telas Criadas -->
+  <div class="section">
+    <div class="section-title">Telas Criadas</div>
+    <div class="screens-grid">
+
+      <!-- Frame 1: Login Idle -->
+      <div class="screen-card">
+        <div class="screen-img-wrap">
+          <iframe class="frame-embed" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FxXnK8j2N9C66BZTg3TKAyD%2FMCP-Figma%3Fnode-id%3D93-3" allowfullscreen></iframe>
+          <a class="screen-figma-link" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=93-3" target="_blank">Ver no Figma</a>
+        </div>
+        <div class="screen-info">
+          <div class="screen-name">Login — Estado inicial</div>
+          <span class="screen-state-tag tag-idle">Idle</span>
+          <div class="screen-components">
+            <span>Componentes DS:</span> Input field (E-mail, Senha), Button/Primary, NavLink
+          </div>
+          <div class="criteria-chips">
+            <span class="chip chip-match">Criterio 3</span>
+            <span class="chip chip-match">Criterio 6</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Frame 2: Login Erro -->
+      <div class="screen-card">
+        <div class="screen-img-wrap">
+          <iframe class="frame-embed" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FxXnK8j2N9C66BZTg3TKAyD%2FMCP-Figma%3Fnode-id%3D93-20" allowfullscreen></iframe>
+          <a class="screen-figma-link" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=93-20" target="_blank">Ver no Figma</a>
+        </div>
+        <div class="screen-info">
+          <div class="screen-name">Login — Erro de credenciais</div>
+          <span class="screen-state-tag tag-error">Erro</span>
+          <div class="screen-components">
+            <span>Componentes DS:</span> Alert/Error banner, Input field (borda vermelha), Button/Primary, NavLink
+          </div>
+          <div class="criteria-chips">
+            <span class="chip chip-match">Criterio 3</span>
+            <span class="chip chip-match">Criterio 5</span>
+            <span class="chip chip-match">Criterio 6</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Frame 3: Cadastro Idle -->
+      <div class="screen-card">
+        <div class="screen-img-wrap">
+          <iframe class="frame-embed" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FxXnK8j2N9C66BZTg3TKAyD%2FMCP-Figma%3Fnode-id%3D93-39" allowfullscreen></iframe>
+          <a class="screen-figma-link" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=93-39" target="_blank">Ver no Figma</a>
+        </div>
+        <div class="screen-info">
+          <div class="screen-name">Cadastro — Estado inicial</div>
+          <span class="screen-state-tag tag-idle">Idle</span>
+          <div class="screen-components">
+            <span>Componentes DS:</span> Input field (Nome, E-mail, Senha c/ placeholder "Minimo 6 caracteres"), Button/Primary, NavLink
+          </div>
+          <div class="criteria-chips">
+            <span class="chip chip-match">Criterio 1</span>
+            <span class="chip chip-match">Criterio 6</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Frame 4: Cadastro Validacao -->
+      <div class="screen-card">
+        <div class="screen-img-wrap">
+          <iframe class="frame-embed" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FxXnK8j2N9C66BZTg3TKAyD%2FMCP-Figma%3Fnode-id%3D93-60" allowfullscreen></iframe>
+          <a class="screen-figma-link" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=93-60" target="_blank">Ver no Figma</a>
+        </div>
+        <div class="screen-info">
+          <div class="screen-name">Cadastro — Erro de validacao</div>
+          <span class="screen-state-tag tag-error">Erro</span>
+          <div class="screen-components">
+            <span>Componentes DS:</span> Input field c/ mensagem de erro inline (e-mail invalido, senha curta), Button/Primary, NavLink
+          </div>
+          <div class="criteria-chips">
+            <span class="chip chip-match">Criterio 1</span>
+            <span class="chip chip-match">Criterio 5</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Frame 5: Cadastro Email Existente -->
+      <div class="screen-card">
+        <div class="screen-img-wrap">
+          <iframe class="frame-embed" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FxXnK8j2N9C66BZTg3TKAyD%2FMCP-Figma%3Fnode-id%3D93-83" allowfullscreen></iframe>
+          <a class="screen-figma-link" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=93-83" target="_blank">Ver no Figma</a>
+        </div>
+        <div class="screen-info">
+          <div class="screen-name">Cadastro — Email ja existente</div>
+          <span class="screen-state-tag tag-error">Erro</span>
+          <div class="screen-components">
+            <span>Componentes DS:</span> Alert/Error banner, Input field e-mail c/ erro inline, Button/Primary, NavLink
+          </div>
+          <div class="criteria-chips">
+            <span class="chip chip-match">Criterio 1</span>
+            <span class="chip chip-match">Criterio 2</span>
+            <span class="chip chip-match">Criterio 5</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Frame 6: Erro Conexao -->
+      <div class="screen-card">
+        <div class="screen-img-wrap">
+          <iframe class="frame-embed" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FxXnK8j2N9C66BZTg3TKAyD%2FMCP-Figma%3Fnode-id%3D93-107" allowfullscreen></iframe>
+          <a class="screen-figma-link" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma?node-id=93-107" target="_blank">Ver no Figma</a>
+        </div>
+        <div class="screen-info">
+          <div class="screen-name">Login — Erro de conexao</div>
+          <span class="screen-state-tag tag-warning">Aviso</span>
+          <div class="screen-components">
+            <span>Componentes DS:</span> Alert/Warning banner, Input field, Button/Primary ("Tentar novamente"), NavLink
+          </div>
+          <div class="criteria-chips">
+            <span class="chip chip-match">Criterio 3</span>
+            <span class="chip chip-match">Criterio 5</span>
+            <span class="chip chip-match">Criterio 6</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECAO 3: Design System -->
+  <div class="section">
+    <div class="section-title">Design System Utilizado</div>
+
+    <div style="margin-bottom:24px;">
+      <p style="font-size:13px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Tokens de Cor</p>
+      <table class="tokens-table" style="background:#1a1d27;border:1px solid #2d3148;border-radius:12px;overflow:hidden;">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Valor</th>
+            <th>Uso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="color-dot" style="background:#7f56d9;"></span><span class="mono">brand/primary</span></td><td class="mono">#7F56D9</td><td>Botao primario, links, foco</td></tr>
+          <tr><td><span class="color-dot" style="background:#fcfaff;border:1px solid #333;"></span><span class="mono">text/brand/inverse</span></td><td class="mono">#FCFAFF</td><td>Texto do botao primario</td></tr>
+          <tr><td><span class="color-dot" style="background:#0a0d12;"></span><span class="mono">text/neutral/primary</span></td><td class="mono">#0A0D12</td><td>Titulos do card</td></tr>
+          <tr><td><span class="color-dot" style="background:#414651;"></span><span class="mono">text/neutral/secondary</span></td><td class="mono">#414651</td><td>Labels de input</td></tr>
+          <tr><td><span class="color-dot" style="background:#535862;"></span><span class="mono">text/neutral/tertiary</span></td><td class="mono">#535862</td><td>Subtitulos, textos de apoio</td></tr>
+          <tr><td><span class="color-dot" style="background:#717680;"></span><span class="mono">text/neutral/quaternary</span></td><td class="mono">#717680</td><td>Placeholders</td></tr>
+          <tr><td><span class="color-dot" style="background:#e9eaeb;"></span><span class="mono">border/neutral/primary</span></td><td class="mono">#E9EAEB</td><td>Borda de input padrao</td></tr>
+          <tr><td><span class="color-dot" style="background:#ffffff;border:1px solid #333;"></span><span class="mono">background/neutral/primary</span></td><td class="mono">#FFFFFF</td><td>Fundo do card e inputs</td></tr>
+          <tr><td><span class="color-dot" style="background:#c0382d;"></span><span class="mono">error</span></td><td class="mono">#C0382D</td><td>Borda/texto de erro, bg #FFF3F3</td></tr>
+          <tr><td><span class="color-dot" style="background:#985b08;"></span><span class="mono">warning</span></td><td class="mono">#985B08</td><td>Texto de aviso, bg #FFF8E9</td></tr>
+          <tr><td><span class="color-dot" style="background:#20955b;"></span><span class="mono">success</span></td><td class="mono">#20955B</td><td>Texto de sucesso, bg #EEFCF5</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-bottom:24px;">
+      <p style="font-size:13px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Tipografia</p>
+      <table class="tokens-table" style="background:#1a1d27;border:1px solid #2d3148;border-radius:12px;overflow:hidden;">
+        <thead><tr><th>Variante</th><th>Tamanho</th><th>Peso</th><th>Uso</th></tr></thead>
+        <tbody>
+          <tr><td>Display XS</td><td class="mono">24px</td><td>Semi Bold (600)</td><td>Titulo do card</td></tr>
+          <tr><td>Text SM / Medium</td><td class="mono">14px</td><td>Medium (500)</td><td>Label de input</td></tr>
+          <tr><td>Text MD / Regular</td><td class="mono">16px</td><td>Regular (400)</td><td>Texto de input, placeholder</td></tr>
+          <tr><td>Text SM / Regular</td><td class="mono">14px</td><td>Regular (400)</td><td>Subtitulo, descricao</td></tr>
+          <tr><td>Text SM / Semi Bold</td><td class="mono">14px</td><td>Semi Bold (600)</td><td>Texto do botao, links</td></tr>
+          <tr><td>Text XS / Regular</td><td class="mono">12px</td><td>Regular (400)</td><td>Mensagem de erro inline</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <p style="font-size:13px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Componentes Base</p>
+      <table class="tokens-table" style="background:#1a1d27;border:1px solid #2d3148;border-radius:12px;overflow:hidden;">
+        <thead><tr><th>Componente</th><th>Propriedades do DS</th></tr></thead>
+        <tbody>
+          <tr><td>Input field</td><td>border-radius: 8px, padding: 14px/10px, border: 1px solid #E9EAEB</td></tr>
+          <tr><td>Input field (erro)</td><td>border: 1px solid #C0382D + mensagem 12px abaixo</td></tr>
+          <tr><td>Button / Primary</td><td>bg: #7F56D9, radius: 8px, h: 40px, padding: 18px/10px, texto 14px Semi Bold</td></tr>
+          <tr><td>Alert banner</td><td>radius: 8px, preenchido (cor semantica), borda 1px, padding: 12px/10px</td></tr>
+          <tr><td>Card container</td><td>radius: 12px, bg: #FFFFFF, shadow: 0 20px 24px -4px rgba(10,13,18,0.1)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECAO 4: Links -->
+  <div class="section">
+    <div class="section-title">Links</div>
+    <div class="links-list">
+      <a class="link-item" href="https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma" target="_blank">
+        <div class="link-icon icon-figma">F</div>
+        <div>
+          <div class="link-label">Arquivo Figma — MCP-Figma</div>
+          <div class="link-url">https://www.figma.com/design/xXnK8j2N9C66BZTg3TKAyD/MCP-Figma</div>
+        </div>
+      </a>
+      <a class="link-item" href="https://www.figma.com/design/R5xegLRiow00Mwgq392bpt/Design-System-Vitrine" target="_blank">
+        <div class="link-icon icon-figma">DS</div>
+        <div>
+          <div class="link-label">Design System Vitrine (somente leitura)</div>
+          <div class="link-url">https://www.figma.com/design/R5xegLRiow00Mwgq392bpt/Design-System-Vitrine</div>
+        </div>
+      </a>
+      <a class="link-item" href="https://code-agents-brq.atlassian.net/browse/KAN-75" target="_blank">
+        <div class="link-icon icon-jira">J</div>
+        <div>
+          <div class="link-label">Jira — KAN-75</div>
+          <div class="link-url">https://code-agents-brq.atlassian.net/browse/KAN-75</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Gerado automaticamente pelo Agente Designer em 2026-04-06 | KAN-75 — Tela de cadastro e de login
+</footer>
+
+</body>
+</html>
