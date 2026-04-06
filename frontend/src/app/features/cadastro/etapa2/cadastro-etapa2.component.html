@@ -1,0 +1,168 @@
+<form [formGroup]="form" (ngSubmit)="onCriarConta()" novalidate>
+
+  <!-- Label de etapa -->
+  <p class="step-label">ETAPA 2 DE 2</p>
+
+  <!-- Barra de progresso -->
+  <div class="progress-track">
+    <div class="progress-fill" style="width: 100%"></div>
+  </div>
+
+  <!-- Titulo -->
+  <h1 class="form-title">Dados da empresa</h1>
+
+  <!-- Subtitulo -->
+  <p class="form-subtitle">Personalize sua experi&#xEA;ncia com as informa&#xE7;&otilde;es da sua empresa.</p>
+
+  <!-- Campo: Nome da empresa -->
+  <div class="field-group">
+    <label class="field-label" for="nomeEmpresa">Nome da empresa</label>
+    <input
+      id="nomeEmpresa"
+      class="field-input"
+      [class.field-input--error]="nomeEmpresa.invalid && nomeEmpresa.touched"
+      type="text"
+      placeholder="ex: BRQ Solu&#xE7;&otilde;es LTDA"
+      formControlName="nomeEmpresa"
+      autocomplete="organization"
+    />
+    @if (nomeEmpresa.invalid && nomeEmpresa.touched) {
+      <span class="field-error">Campo obrigat&#xF3;rio</span>
+    }
+  </div>
+
+  <!-- Campos lado a lado: CNPJ + Telefone -->
+  <div class="field-row">
+    <!-- CNPJ -->
+    <div class="field-group field-group--half">
+      <label class="field-label" for="cnpj">CNPJ</label>
+      <input
+        id="cnpj"
+        class="field-input"
+        [class.field-input--error]="cnpj.invalid && cnpj.touched"
+        type="text"
+        placeholder="00.000.000/0001-00"
+        formControlName="cnpj"
+        (input)="onCnpjInput($event)"
+        maxlength="18"
+        autocomplete="off"
+      />
+      @if (cnpj.invalid && cnpj.touched) {
+        <span class="field-error">
+          @if (cnpj.hasError('required')) { Campo obrigat&#xF3;rio }
+          @else if (cnpj.hasError('cnpjInvalido')) { CNPJ inv&#xE1;lido }
+        </span>
+      }
+    </div>
+
+    <!-- Telefone -->
+    <div class="field-group field-group--half">
+      <label class="field-label" for="telefone">Telefone</label>
+      <input
+        id="telefone"
+        class="field-input"
+        [class.field-input--error]="telefone.invalid && telefone.touched"
+        type="tel"
+        placeholder="(00) 00000-0000"
+        formControlName="telefone"
+        (input)="onTelefoneInput($event)"
+        maxlength="16"
+        autocomplete="tel"
+      />
+      @if (telefone.invalid && telefone.touched) {
+        <span class="field-error">
+          @if (telefone.hasError('required')) { Campo obrigat&#xF3;rio }
+          @else if (telefone.hasError('minlength')) { Telefone inv&#xE1;lido }
+        </span>
+      }
+    </div>
+  </div>
+
+  <!-- Campo: Cargo / Funcao (select) -->
+  <div class="field-group">
+    <label class="field-label" for="cargo">Cargo / Fun&#xE7;&atilde;o</label>
+    <div class="select-wrapper" [class.select-wrapper--error]="cargo.invalid && cargo.touched">
+      <select
+        id="cargo"
+        class="field-select"
+        [class.field-select--placeholder]="!cargo.value"
+        formControlName="cargo"
+      >
+        <option value="" disabled selected hidden>Selecione seu cargo...</option>
+        @for (opcao of cargosOpcoes; track opcao) {
+          <option [value]="opcao">{{ opcao }}</option>
+        }
+      </select>
+      <span class="select-arrow">&#8964;</span>
+    </div>
+    @if (cargo.invalid && cargo.touched) {
+      <span class="field-error">Campo obrigat&#xF3;rio</span>
+    }
+  </div>
+
+  <!-- Checkboxes -->
+  <div class="checkbox-group">
+    <!-- Aceito os Termos -->
+    <label class="checkbox-label" for="aceitaTermos">
+      <div class="checkbox-custom" [class.checkbox-custom--checked]="aceitaTermos.value">
+        @if (aceitaTermos.value) {
+          <span class="checkbox-check">&#10003;</span>
+        }
+        <input
+          id="aceitaTermos"
+          type="checkbox"
+          formControlName="aceitaTermos"
+          class="checkbox-input"
+        />
+      </div>
+      <span class="checkbox-text">Aceito os Termos de Uso e a Pol&#xED;tica de Privacidade</span>
+    </label>
+    @if (aceitaTermos.invalid && aceitaTermos.touched) {
+      <span class="field-error checkbox-error">Voc&#xEA; deve aceitar os Termos de Uso para continuar</span>
+    }
+
+    <!-- Quero receber novidades -->
+    <label class="checkbox-label" for="receberNovidades">
+      <div class="checkbox-custom" [class.checkbox-custom--checked]="receberNovidades.value">
+        @if (receberNovidades.value) {
+          <span class="checkbox-check">&#10003;</span>
+        }
+        <input
+          id="receberNovidades"
+          type="checkbox"
+          formControlName="receberNovidades"
+          class="checkbox-input"
+        />
+      </div>
+      <span class="checkbox-text">Quero receber novidades e atualiza&#xE7;&otilde;es por e-mail</span>
+    </label>
+  </div>
+
+  <!-- Botoes: Voltar + Criar conta -->
+  <div class="btn-row">
+    <button
+      type="button"
+      class="btn-secondary"
+      (click)="onVoltar()">
+      &larr; Voltar
+    </button>
+    <button
+      type="submit"
+      class="btn-primary"
+      [disabled]="form.invalid || isLoading">
+      @if (isLoading) {
+        <span class="spinner"></span>
+        Aguarde...
+      } @else {
+        Criar conta &rarr;
+      }
+    </button>
+  </div>
+
+  <!-- Link Entrar -->
+  <div class="login-link">
+    <span class="login-link-text">J&#xE1; tem uma conta?&nbsp;</span>
+    <button type="button" class="login-link-btn" (click)="onEntrar()">Entrar</button>
+  </div>
+
+</form>
